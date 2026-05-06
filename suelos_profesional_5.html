@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Técnico del Suelo Agrícola</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --soil-dark:   #0d0700;
+            --soil-mid:    #2a1a0a;
+            --soil-warm:   #6b4423;
+            --earth-amber: #b87820;
+            --earth-gold:  #d49a35;
+            --leaf-green:  #3d6b34;
+            --leaf-light:  #5c8f4e;
+            --clay-red:    #8c3522;
+            --sand-cream:  #c8b898;
+            --parchment:   #1a1008;
+            --text-dark:   #c8b898;
+            --text-mid:    #a89070;
+            --white:       #241808;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Source Serif 4', Georgia, serif;
+            background-color: var(--parchment);
+            color: var(--text-dark);
+            line-height: 1.75;
+            overflow-x: hidden;
+        }
+
+        /* ── GRAIN TEXTURE OVERLAY ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            background-color: var(--soil-dark);
+            background-image:
+                radial-gradient(ellipse 80% 60% at 20% 50%, rgba(107,68,35,0.5) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 80% at 80% 30%, rgba(74,124,63,0.25) 0%, transparent 60%);
+            color: var(--sand-cream);
+            padding: 80px 40px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0; right: 0;
+            height: 60px;
+            background: #1a1008;
+            clip-path: polygon(0 60%, 15% 20%, 30% 55%, 45% 10%, 60% 50%, 75% 15%, 90% 45%, 100% 5%, 100% 100%, 0 100%);
+        }
+
+        .hero-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--earth-gold);
+            margin-bottom: 16px;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.4rem, 6vw, 4.2rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--earth-gold);
+        }
+
+        .hero-sub {
+            font-size: 1.05rem;
+            font-weight: 300;
+            color: rgba(245,237,216,0.75);
+            max-width: 560px;
+            margin-bottom: 36px;
+        }
+
+        .hero-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            background: rgba(232,176,75,0.15);
+            border: 1px solid rgba(232,176,75,0.35);
+            color: var(--earth-gold);
+            padding: 5px 12px;
+            border-radius: 2px;
+        }
+
+        /* ── LAYOUT ── */
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        section {
+            padding: 60px 0;
+            border-bottom: 1px solid rgba(184,120,32,0.12);
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--earth-amber);
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 700;
+            color: var(--sand-cream);
+            line-height: 1.2;
+            margin-bottom: 32px;
+        }
+
+        /* ── PILAR CARDS ── */
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-top: 8px;
+        }
+
+        .pillar {
+            background: #2a1a0c;
+            border-top: 4px solid var(--earth-amber);
+            padding: 28px 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .pillar:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.6);
+        }
+
+        .pillar.green  { border-color: var(--leaf-green); }
+        .pillar.red    { border-color: var(--clay-red); }
+        .pillar.amber  { border-color: var(--earth-amber); }
+
+        .pillar-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .pillar h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--sand-cream);
+            margin-bottom: 4px;
+        }
+
+        .pillar .sub {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--earth-amber);
+            margin-bottom: 14px;
+        }
+
+        .pillar p {
+            font-size: 0.92rem;
+            color: #a89070;
+            line-height: 1.65;
+        }
+
+        .pillar ul {
+            margin-top: 10px;
+            padding-left: 18px;
+            font-size: 0.88rem;
+            color: #a89070;
+        }
+
+        .pillar ul li { margin-bottom: 4px; }
+
+        /* ── PH TABLE ── */
+        .ph-strip {
+            display: flex;
+            width: 100%;
+            height: 36px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 16px 0 8px;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        .ph-zone {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: #c8b898;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+            flex: 1;
+        }
+
+        .ph-legend {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 0.8rem;
+            color: #9a8060;
+            margin-bottom: 20px;
+        }
+
+        .ph-legend span { display: flex; align-items: center; gap: 6px; }
+        .ph-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+        .nutrient-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            margin-top: 20px;
+        }
+
+        .nutrient-table thead tr {
+            background: var(--soil-mid);
+            color: var(--sand-cream);
+        }
+
+        .nutrient-table th {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 10px 14px;
+            text-align: left;
+        }
+
+        .nutrient-table td {
+            padding: 9px 14px;
+            border-bottom: 1px solid rgba(184,120,32,0.12);
+        }
+
+        .nutrient-table tr:nth-child(even) td { background: rgba(184,120,32,0.1); }
+        .nutrient-table tr:hover td { background: rgba(184,120,32,0.18); }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 2px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .tag-macro { background: rgba(74,124,63,0.15); color: var(--leaf-green); }
+        .tag-secondary { background: rgba(200,133,42,0.15); color: var(--earth-amber); }
+        .tag-micro { background: rgba(160,65,45,0.12); color: var(--clay-red); }
+
+        /* ── TEXTURA TRIANGLE ── */
+        .texture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .texture-card {
+            background: #2a1a0c;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+            border-bottom: 3px solid var(--earth-amber);
+        }
+
+        .texture-card h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--sand-cream);
+        }
+
+        .texture-card .ratio {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            color: var(--earth-amber);
+            margin-bottom: 10px;
+        }
+
+        .texture-bar-wrap {
+            display: flex;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .bar-sand  { background: #e8d5a3; }
+        .bar-silt  { background: #a07850; }
+        .bar-clay  { background: #7d3c20; }
+
+        .texture-card p {
+            font-size: 0.82rem;
+            color: #9a8060;
+            line-height: 1.5;
+        }
+
+        /* ── MATERIA ORGANICA ── */
+        .mo-scale {
+            display: flex;
+            gap: 2px;
+            margin: 20px 0 8px;
+            align-items: flex-end;
+            height: 80px;
+        }
+
+        .mo-bar-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .mo-bar {
+            width: 100%;
+            border-radius: 3px 3px 0 0;
+            transition: opacity 0.3s;
+        }
+
+        .mo-bar-wrap span {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.58rem;
+            color: #7a6040;
+            text-align: center;
+        }
+
+        /* ── CALENDARIO ── */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 3px;
+            margin-top: 16px;
+        }
+
+        .month-cell {
+            background: rgba(184,120,32,0.12);
+            border-radius: 3px;
+            padding: 6px 4px;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 0.05em;
+            color: #7a6040;
+            text-transform: uppercase;
+        }
+
+        .month-cell.active-analysis { background: var(--leaf-green); color: #c8b898; }
+        .month-cell.active-compost  { background: var(--earth-amber); color: #c8b898; }
+        .month-cell.active-cover    { background: var(--soil-mid); color: var(--sand-cream); }
+
+        .cal-legend {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 0.78rem;
+            color: #9a8060;
+            margin-top: 10px;
+        }
+
+        .cal-dot {
+            width: 10px; height: 10px;
+            border-radius: 2px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 4px;
+        }
+
+        /* ── REGLA DE ORO ── */
+        .golden-rule {
+            background: var(--soil-dark);
+            background-image: radial-gradient(ellipse 80% 60% at 30% 50%, rgba(107,68,35,0.6) 0%, transparent 70%);
+            color: var(--sand-cream);
+            padding: 56px 40px;
+            text-align: center;
+            margin: 60px 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .golden-rule::before {
+            content: '"';
+            font-family: 'Playfair Display', serif;
+            font-size: 20rem;
+            line-height: 1;
+            position: absolute;
+            top: -60px; left: -20px;
+            color: rgba(232,176,75,0.06);
+            pointer-events: none;
+        }
+
+        .golden-rule .gr-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--earth-gold);
+            margin-bottom: 20px;
+        }
+
+        .golden-rule blockquote {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.4rem, 3.5vw, 2rem);
+            font-style: italic;
+            font-weight: 400;
+            line-height: 1.5;
+            max-width: 640px;
+            margin: 0 auto 24px;
+            color: var(--sand-cream);
+        }
+
+        .golden-rule p {
+            font-size: 0.9rem;
+            color: rgba(245,237,216,0.6);
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* ── RECOMENDACIONES ── */
+        .rec-list {
+            display: grid;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .rec-item {
+            display: grid;
+            grid-template-columns: 48px 1fr;
+            gap: 16px;
+            align-items: start;
+            background: #2a1a0c;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            border-radius: 2px;
+            transition: box-shadow 0.25s;
+        }
+
+        .rec-item:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.5); }
+
+        .rec-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: rgba(200,133,42,0.25);
+            line-height: 1;
+            text-align: right;
+        }
+
+        .rec-item h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--sand-cream);
+            margin-bottom: 4px;
+        }
+
+        .rec-item p {
+            font-size: 0.88rem;
+            color: #9a8060;
+            line-height: 1.6;
+        }
+
+        /* ── ALERTA / ADVERTENCIA ── */
+        .alert {
+            border-left: 4px solid var(--clay-red);
+            background: rgba(140,53,34,0.2);
+            padding: 16px 20px;
+            border-radius: 0 4px 4px 0;
+            margin: 20px 0;
+        }
+
+        .alert strong {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--clay-red);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .alert p { font-size: 0.88rem; color: #a89070; }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--soil-mid);
+            color: rgba(245,237,216,0.5);
+            padding: 32px 24px;
+            text-align: center;
+        }
+
+        footer p { font-size: 0.8rem; line-height: 1.8; }
+
+        footer strong {
+            font-family: 'Playfair Display', serif;
+            color: var(--earth-gold);
+            font-style: italic;
+        }
+
+        /* ── FIRMA LOBO/DEYFZ ── */
+        .firma-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(232,176,75,0.08);
+            border: 1px solid rgba(232,176,75,0.3);
+            padding: 8px 18px 8px 12px;
+            border-radius: 3px;
+            margin-top: 28px;
+            transition: background 0.3s;
+        }
+        .firma-badge:hover { background: rgba(232,176,75,0.16); }
+        .firma-wolf {
+            font-size: 1.5rem;
+            line-height: 1;
+            animation: wolfPulse 3s ease-in-out infinite;
+        }
+        @keyframes wolfPulse {
+            0%,100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+        .firma-text {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+        .firma-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 900;
+            font-style: italic;
+            color: var(--earth-gold);
+            letter-spacing: 0.04em;
+            line-height: 1;
+        }
+        .firma-sub {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(232,176,75,0.55);
+        }
+
+        /* Firma en footer */
+        .firma-footer {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(232,176,75,0.1);
+            border: 1px solid rgba(232,176,75,0.25);
+            padding: 10px 20px;
+            border-radius: 3px;
+            margin-bottom: 20px;
+        }
+        .firma-footer .firma-name { font-size: 1.3rem; }
+
+        /* ── INTERACTIVE: COLLAPSIBLE ── */
+        .collapsible-header { 
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 20px;
+            background: #2a1a0c;
+            border-left: 4px solid var(--earth-amber);
+            box-shadow: 0 2px 8px rgba(26,15,0,0.06);
+            margin-bottom: 3px;
+            transition: background 0.2s;
+            user-select: none;
+        }
+        .collapsible-header:hover { background: rgba(184,120,32,0.1); }
+        .collapsible-header h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--sand-cream);
+        }
+        .collapsible-arrow {
+            font-size: 0.8rem;
+            color: var(--earth-amber);
+            transition: transform 0.35s ease;
+            flex-shrink: 0;
+        }
+        .collapsible-arrow.open { transform: rotate(180deg); }
+        .collapsible-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s;
+            background: #2a1a0c;
+            padding: 0 20px;
+            font-size: 0.88rem;
+            color: #a89070;
+            line-height: 1.7;
+            margin-bottom: 6px;
+            box-shadow: 0 4px 10px rgba(26,15,0,0.05);
+        }
+        .collapsible-body.open {
+            max-height: 400px;
+            padding: 16px 20px 20px;
+        }
+        .collapsible-body ul { padding-left: 18px; margin-top: 8px; }
+        .collapsible-body ul li { margin-bottom: 5px; }
+
+        /* ── INTERACTIVE: CALCULADORA PH ── */
+        .calc-box {
+            background: var(--soil-dark);
+            background-image: radial-gradient(ellipse 70% 60% at 20% 50%, rgba(107,68,35,0.5) 0%, transparent 70%);
+            color: var(--sand-cream);
+            padding: 36px 32px;
+            border-radius: 4px;
+            margin: 40px 0;
+        }
+        .calc-box h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--earth-gold);
+            margin-bottom: 6px;
+        }
+        .calc-box p { font-size: 0.85rem; color: rgba(245,237,216,0.6); margin-bottom: 24px; }
+        .calc-slider-wrap {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .calc-slider-wrap label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--earth-gold);
+            min-width: 30px;
+        }
+        input[type=range] {
+            -webkit-appearance: none;
+            appearance: none;
+            flex: 1;
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(to right, #d32f2f, #ff8f00, #4caf50, #4caf50, #ff8f00, #d32f2f);
+            outline: none;
+            cursor: pointer;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            background: var(--earth-gold);
+            border: 3px solid var(--soil-dark);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+            cursor: pointer;
+        }
+        .ph-value-display {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: var(--earth-gold);
+            min-width: 56px;
+            text-align: right;
+            line-height: 1;
+        }
+        .ph-result {
+            background: rgba(255,255,255,0.06);
+            border-left: 3px solid var(--earth-gold);
+            padding: 14px 18px;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.88rem;
+            color: var(--sand-cream);
+            transition: all 0.3s ease;
+            min-height: 60px;
+        }
+        .ph-result strong {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        /* ── INTERACTIVE: QUIZ ── */
+        .quiz-box {
+            background: #2a1a0c;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            border-radius: 4px;
+            margin: 40px 0;
+        }
+        .quiz-box h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--sand-cream);
+            margin-bottom: 4px;
+        }
+        .quiz-intro {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--earth-amber);
+            margin-bottom: 20px;
+        }
+        .quiz-question {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--sand-cream);
+            margin-bottom: 14px;
+            line-height: 1.4;
+        }
+        .quiz-progress {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            color: #6a5030;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .quiz-progress-bar {
+            height: 3px;
+            background: rgba(200,133,42,0.15);
+            border-radius: 2px;
+            margin-bottom: 20px;
+        }
+        .quiz-progress-fill {
+            height: 100%;
+            background: var(--earth-amber);
+            border-radius: 2px;
+            transition: width 0.4s ease;
+        }
+        .quiz-options {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .quiz-opt {
+            padding: 12px 16px;
+            border: 1px solid rgba(184,120,32,0.2);
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #a89070;
+            transition: all 0.2s;
+            background: #2a1a0c;
+            text-align: left;
+        }
+        .quiz-opt:hover { border-color: var(--earth-amber); background: rgba(184,120,32,0.1); color: var(--sand-cream); }
+        .quiz-opt.correct { background: rgba(74,124,63,0.1); border-color: var(--leaf-green); color: var(--leaf-green); font-weight: 600; }
+        .quiz-opt.wrong { background: rgba(160,65,45,0.08); border-color: var(--clay-red); color: var(--clay-red); }
+        .quiz-feedback {
+            font-size: 0.85rem;
+            padding: 12px 16px;
+            border-radius: 3px;
+            margin-bottom: 12px;
+            display: none;
+            line-height: 1.5;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.ok { background: rgba(74,124,63,0.1); color: var(--leaf-green); border-left: 3px solid var(--leaf-green); }
+        .quiz-feedback.fail { background: rgba(160,65,45,0.08); color: var(--clay-red); border-left: 3px solid var(--clay-red); }
+        .quiz-next {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            background: var(--soil-mid);
+            color: var(--sand-cream);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 2px;
+            cursor: pointer;
+            display: none;
+            transition: background 0.2s;
+        }
+        .quiz-next.show { display: inline-block; }
+        .quiz-next:hover { background: var(--earth-amber); color: var(--soil-dark); }
+        .quiz-result {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+        .quiz-result.show { display: block; }
+        .quiz-score {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--earth-amber);
+        }
+        .quiz-result p { color: #9a8060; font-size: 0.9rem; margin: 8px 0 16px; }
+        .quiz-restart {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            background: none;
+            border: 1px solid var(--earth-amber);
+            color: var(--earth-amber);
+            padding: 8px 16px;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-restart:hover { background: var(--earth-amber); color: var(--soil-dark); }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h1, .hero-sub, .hero-badges, .section-title {
+            animation: fadeUp 0.7s ease both;
+        }
+
+        .hero-sub    { animation-delay: 0.1s; }
+        .hero-badges { animation-delay: 0.2s; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 600px) {
+            .hero { padding: 60px 24px 50px; }
+            .calendar-grid { grid-template-columns: repeat(6, 1fr); }
+            .pillars { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+    <div class="container">
+        <p class="hero-label">🌱 Guía Técnica · Edición Profesional · 2026</p>
+        <h1>El Suelo:<br><em>Base de Todo</em></h1>
+        <p class="hero-sub">Una referencia técnica integral para el agricultor moderno — desde la física del perfil hasta la biología microbiana y el manejo agronómico avanzado.</p>
+        <div class="firma-badge">
+            <span class="firma-wolf">🐺</span>
+            <div class="firma-text">
+                <span class="firma-name">Lobo/DeyFz</span>
+                <span class="firma-sub">Autor · Agro Edition</span>
+            </div>
+        </div>
+
+        <div class="hero-badges" style="margin-top:20px;">
+            <span class="badge">Física del Suelo</span>
+            <span class="badge">Química Edáfica</span>
+            <span class="badge">Microbiología</span>
+            <span class="badge">Manejo Sostenible</span>
+            <span class="badge">Interpretación de Análisis</span>
+        </div>
+    </div>
+</header>
+
+<!-- SECCIÓN 1: LOS TRES PILARES -->
+<section>
+    <div class="container">
+        <p class="section-label">// 01 — Fundamentos</p>
+        <h2 class="section-title">Los Tres Pilares del Suelo Productivo</h2>
+        <p style="color:#9a8060; margin-bottom: 28px; max-width:620px;">El suelo es un sistema vivo de tres dimensiones interconectadas. Un fallo en cualquiera de ellas compromete la productividad, aunque las otras dos sean perfectas.</p>
+
+        <div class="pillars">
+
+            <!-- FÍSICO -->
+            <div class="pillar amber">
+                <span class="pillar-icon">🪨</span>
+                <h3>Pilar Físico</h3>
+                <p class="sub">El esqueleto del suelo</p>
+                <p>La <strong>estructura y textura</strong> determinan el movimiento del agua, el aire y las raíces. Un suelo con buena estructura tiene entre 25-30% de espacio poroso con aire, esencial para las raíces.</p>
+                <ul>
+                    <li>Densidad aparente ideal: <strong>1.1–1.4 g/cm³</strong></li>
+                    <li>Porosidad total ideal: <strong>45–60%</strong></li>
+                    <li>Compactación crítica: densidad >1.6 g/cm³ bloquea raíces</li>
+                    <li>Profundidad radicular mínima útil: <strong>30–45 cm</strong></li>
+                </ul>
+            </div>
+
+            <!-- QUÍMICO -->
+            <div class="pillar red">
+                <span class="pillar-icon">⚗️</span>
+                <h3>Pilar Químico</h3>
+                <p class="sub">El menú de nutrientes</p>
+                <p>El <strong>pH regula la disponibilidad</strong> de todos los nutrientes. Un suelo con pH 5.0 puede bloquear hasta el 60% de los fertilizantes aplicados, y el aluminio libre se vuelve tóxico para las raíces.</p>
+                <ul>
+                    <li>Rango óptimo general: <strong>6.0–6.8</strong></li>
+                    <li>CIC ideal (arcillosos): <strong>20–40 meq/100g</strong></li>
+                    <li>Relación Ca:Mg:K ideal: <strong>65:15:4</strong> (% saturación)</li>
+                    <li>Conductividad eléctrica segura: <strong>&lt;2 dS/m</strong></li>
+                </ul>
+            </div>
+
+            <!-- BIOLÓGICO -->
+            <div class="pillar green">
+                <span class="pillar-icon">🪱</span>
+                <h3>Pilar Biológico</h3>
+                <p class="sub">El motor invisible</p>
+                <p>Un gramo de suelo fértil contiene <strong>entre 100 millones y 1,000 millones de bacterias</strong>. Los hongos micorrícicos conectan raíces de plantas distintas y pueden ampliar la zona de absorción hasta <strong>700 veces</strong>.</p>
+                <ul>
+                    <li>Materia orgánica mínima útil: <strong>2.5%</strong></li>
+                    <li>Lombrices en suelo sano: <strong>200–400 por m²</strong></li>
+                    <li>Tasa de respiración indica actividad microbiana</li>
+                    <li>Micorrizas reducen necesidad de fósforo hasta un 40%</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- SECCIÓN 2: PH Y NUTRIENTES -->
+<section>
+    <div class="container">
+        <p class="section-label">// 02 — Química Edáfica</p>
+        <h2 class="section-title">pH y Disponibilidad de Nutrientes</h2>
+        <p style="color:#9a8060; max-width:600px; margin-bottom:20px;">La disponibilidad de cada elemento varía drásticamente con el pH. Este es el concepto más subestimado en fertilización.</p>
+
+        <!-- PH STRIP -->
+        <div class="ph-strip">
+            <div class="ph-zone" style="background:#d32f2f; flex:1;" title="Muy ácido">4.0–4.5</div>
+            <div class="ph-zone" style="background:#e57373; flex:0.5;" title="Ácido fuerte">5.0</div>
+            <div class="ph-zone" style="background:#ff8f00; flex:1;" title="Ácido moderado">5.5</div>
+            <div class="ph-zone" style="background:#a5c94b; flex:0.5;" title="Ligeramente ácido">6.0</div>
+            <div class="ph-zone" style="background:#4caf50; flex:1; font-weight:700;" title="ÓPTIMO">6.0–6.8</div>
+            <div class="ph-zone" style="background:#a5c94b; flex:0.5;" title="Neutro">7.0</div>
+            <div class="ph-zone" style="background:#ff8f00; flex:1;" title="Alcalino">7.5</div>
+            <div class="ph-zone" style="background:#d32f2f; flex:0.5;" title="Muy alcalino">8.0+</div>
+        </div>
+        <div class="ph-legend">
+            <span><span class="ph-dot" style="background:#d32f2f;"></span> Tóxico/Deficiencias graves</span>
+            <span><span class="ph-dot" style="background:#ff8f00;"></span> Subóptimo</span>
+            <span><span class="ph-dot" style="background:#4caf50;"></span> Rango ideal</span>
+        </div>
+
+        <div class="alert">
+            <strong>⚠ Efecto Encadenado del pH</strong>
+            <p>Cuando el pH cae por debajo de 5.5 en suelos con aluminio (muy común en trópicos), el Al³⁺ se solubiliza y daña directamente los meristemos radiculares. Las plantas muestran síntomas similares a déficit de P o Ca, aunque ambos estén presentes en el suelo. <strong>Encalar primero, fertilizar después.</strong></p>
+        </div>
+
+        <!-- TABLA DE NUTRIENTES -->
+        <table class="nutrient-table">
+            <thead>
+                <tr>
+                    <th>Nutriente</th>
+                    <th>Tipo</th>
+                    <th>pH óptimo</th>
+                    <th>Función Principal</th>
+                    <th>Deficiencia clásica</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Nitrógeno (N)</strong></td>
+                    <td><span class="tag tag-macro">Macro</span></td>
+                    <td>6.0–7.0</td>
+                    <td>Crecimiento vegetativo, clorofila</td>
+                    <td>Amarillamiento desde hojas viejas</td>
+                </tr>
+                <tr>
+                    <td><strong>Fósforo (P)</strong></td>
+                    <td><span class="tag tag-macro">Macro</span></td>
+                    <td>6.0–7.0</td>
+                    <td>Raíces, floración, energía (ATP)</td>
+                    <td>Hojas púrpura, raíz débil</td>
+                </tr>
+                <tr>
+                    <td><strong>Potasio (K)</strong></td>
+                    <td><span class="tag tag-macro">Macro</span></td>
+                    <td>6.0–7.5</td>
+                    <td>Osmorregulación, resistencia</td>
+                    <td>Quema de bordes foliares</td>
+                </tr>
+                <tr>
+                    <td><strong>Calcio (Ca)</strong></td>
+                    <td><span class="tag tag-secondary">Secundario</span></td>
+                    <td>6.0–8.5</td>
+                    <td>Paredes celulares, estructura raíz</td>
+                    <td>Pudrición apical (tomate, pimiento)</td>
+                </tr>
+                <tr>
+                    <td><strong>Magnesio (Mg)</strong></td>
+                    <td><span class="tag tag-secondary">Secundario</span></td>
+                    <td>6.0–8.0</td>
+                    <td>Centro de la molécula de clorofila</td>
+                    <td>Clorosis intervenal en hojas viejas</td>
+                </tr>
+                <tr>
+                    <td><strong>Azufre (S)</strong></td>
+                    <td><span class="tag tag-secondary">Secundario</span></td>
+                    <td>6.0–7.5</td>
+                    <td>Proteínas, aceites esenciales</td>
+                    <td>Clorosis en hojas jóvenes</td>
+                </tr>
+                <tr>
+                    <td><strong>Hierro (Fe)</strong></td>
+                    <td><span class="tag tag-micro">Micro</span></td>
+                    <td>4.5–6.5</td>
+                    <td>Transporte de electrones, clorofila</td>
+                    <td>Clorosis intervenal en hojas nuevas</td>
+                </tr>
+                <tr>
+                    <td><strong>Zinc (Zn)</strong></td>
+                    <td><span class="tag tag-micro">Micro</span></td>
+                    <td>5.0–7.0</td>
+                    <td>Síntesis de auxinas, enzimas</td>
+                    <td>Hojas pequeñas, entrenudos cortos</td>
+                </tr>
+                <tr>
+                    <td><strong>Boro (B)</strong></td>
+                    <td><span class="tag tag-micro">Micro</span></td>
+                    <td>6.0–7.5</td>
+                    <td>Polinización, transporte de azúcares</td>
+                    <td>Falla en cuaje, frutos deformes</td>
+                </tr>
+                <tr>
+                    <td><strong>Manganeso (Mn)</strong></td>
+                    <td><span class="tag tag-micro">Micro</span></td>
+                    <td>5.0–6.5</td>
+                    <td>Fotosíntesis, activación enzimática</td>
+                    <td>Manchas necróticas en hojas jóvenes</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- SECCIÓN 3: TEXTURA -->
+<section>
+    <div class="container">
+        <p class="section-label">// 03 — Física del Suelo</p>
+        <h2 class="section-title">Textura: Las Partículas que Definen Todo</h2>
+        <p style="color:#9a8060; max-width:600px; margin-bottom:8px;">La textura es permanente: no se puede cambiar, solo manejar. Determina la retención de agua, aireación y facilidad de labranza.</p>
+
+        <div class="texture-grid">
+            <div class="texture-card">
+                <h4>Arenoso</h4>
+                <p class="ratio">Arena &gt;70% · Arcilla &lt;15%</p>
+                <div class="texture-bar-wrap">
+                    <div class="bar-sand" style="width:100%; height:8px; border-radius:4px;"></div>
+                </div>
+                <p>Drena muy rápido, se calienta rápido. Bajo poder de retención de agua y nutrientes (baja CIC). Requiere riegos y fertilizaciones más frecuentes. Ideal para cultivos de raíces y zanahoria.</p>
+            </div>
+            <div class="texture-card">
+                <h4>Franco (Ideal)</h4>
+                <p class="ratio">Arena 25–50% · Limo 25–50% · Arcilla 10–27%</p>
+                <div class="texture-bar-wrap" style="gap:2px;">
+                    <div class="bar-sand" style="width:40%; height:8px; border-radius:4px 0 0 4px;"></div>
+                    <div class="bar-silt" style="width:35%; height:8px;"></div>
+                    <div class="bar-clay" style="width:25%; height:8px; border-radius:0 4px 4px 0;"></div>
+                </div>
+                <p>El suelo ideal para la mayoría de cultivos. Buen balance entre retención de agua, aireación y trabajo de raíces. Responde bien a materia orgánica. Base de los mejores suelos agrícolas del mundo.</p>
+            </div>
+            <div class="texture-card">
+                <h4>Arcilloso</h4>
+                <p class="ratio">Arcilla &gt;40%</p>
+                <div class="texture-bar-wrap">
+                    <div class="bar-clay" style="width:100%; height:8px; border-radius:4px;"></div>
+                </div>
+                <p>Alta retención de agua y nutrientes (CIC alta), pero mal drenaje y aireación. Se compacta fácilmente. Laboreo en humedad incorrecta lo daña. Requiere enmiendas orgánicas y manejo cuidadoso.</p>
+            </div>
+            <div class="texture-card">
+                <h4>Limoso</h4>
+                <p class="ratio">Limo &gt;50%</p>
+                <div class="texture-bar-wrap">
+                    <div class="bar-silt" style="width:100%; height:8px; border-radius:4px;"></div>
+                </div>
+                <p>Retención media de agua. Propenso a costrarse (sellado superficial) impidiendo emergencia. Alta erosionabilidad con lluvia o riego. Frecuente en zonas aluviales y valles. Sensible al pisoteo.</p>
+            </div>
+        </div>
+
+        <div class="alert" style="border-color: var(--earth-amber); background: rgba(184,120,32,0.15); margin-top:24px;">
+            <strong>💧 Capacidad de Campo y PMP</strong>
+            <p>La <strong>Capacidad de Campo (CC)</strong> es la humedad máxima que el suelo retiene después de drenar por gravedad (generalmente -0.1 a -0.3 bar). El <strong>Punto de Marchitez Permanente (PMP)</strong> es el umbral donde la planta ya no puede extraer agua (-15 bar). El agua disponible para la planta = CC − PMP. En suelos francos este rango es 15–20% de humedad volumétrica; en arcillas puede superar el 25%.</p>
+        </div>
+    </div>
+</section>
+
+<!-- SECCIÓN 4: MATERIA ORGÁNICA -->
+<section>
+    <div class="container">
+        <p class="section-label">// 04 — Biología del Suelo</p>
+        <h2 class="section-title">Materia Orgánica: El Indicador Maestro</h2>
+        <p style="color:#9a8060; max-width:620px; margin-bottom: 20px;">La materia orgánica (MO) mejora simultáneamente la física, química y biología del suelo. Es el único indicador que, si mejora, garantiza mejora integral.</p>
+
+        <!-- ESCALA MO -->
+        <div style="background:#221408; padding:24px; box-shadow: 0 2px 10px rgba(0,0,0,0.4); border-radius:4px; margin-bottom:20px;">
+            <p style="font-family:'JetBrains Mono',monospace; font-size:0.65rem; letter-spacing:0.2em; color:var(--earth-amber); text-transform:uppercase; margin-bottom:12px;">Escala de Materia Orgánica en Suelos Tropicales</p>
+            <div style="display:flex; gap:4px; align-items:flex-end; height:80px; margin-bottom:6px;">
+                <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                    <div style="width:100%; height:16px; background:#d32f2f; border-radius:2px 2px 0 0;"></div>
+                    <span style="font-family:'JetBrains Mono',monospace; font-size:0.58rem; color:#7a6040; text-align:center;">&lt;1%<br>Crítico</span>
+                </div>
+                <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                    <div style="width:100%; height:32px; background:#ff8f00; border-radius:2px 2px 0 0;"></div>
+                    <span style="font-family:'JetBrains Mono',monospace; font-size:0.58rem; color:#7a6040; text-align:center;">1–2%<br>Bajo</span>
+                </div>
+                <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                    <div style="width:100%; height:52px; background:#a5c94b; border-radius:2px 2px 0 0;"></div>
+                    <span style="font-family:'JetBrains Mono',monospace; font-size:0.58rem; color:#7a6040; text-align:center;">2–3.5%<br>Aceptable</span>
+                </div>
+                <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                    <div style="width:100%; height:72px; background:#4caf50; border-radius:2px 2px 0 0; position:relative;">
+                        <span style="position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:0.7rem;">✓</span>
+                    </div>
+                    <span style="font-family:'JetBrains Mono',monospace; font-size:0.58rem; color:var(--leaf-green); text-align:center; font-weight:600;">3.5–5%<br>Óptimo</span>
+                </div>
+                <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                    <div style="width:100%; height:80px; background:#2e7d32; border-radius:2px 2px 0 0;"></div>
+                    <span style="font-family:'JetBrains Mono',monospace; font-size:0.58rem; color:#7a6040; text-align:center;">&gt;5%<br>Excelente</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="rec-list" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+            <div class="rec-item">
+                <div class="rec-num">01</div>
+                <div>
+                    <h4>Compostaje Aeróbico de Calidad</h4>
+                    <p>Relación C:N entre 25:1 y 30:1 en la mezcla. Pilas de 1.5m de ancho por 1m de alto mínimo para alcanzar 55–65°C y eliminar patógenos. Voltear cada 7–10 días. El compost maduro tarda 2–4 meses. Aplicar 3–5 t/ha/año.</p>
+                </div>
+            </div>
+            <div class="rec-item">
+                <div class="rec-num">02</div>
+                <div>
+                    <h4>Abonos Verdes como Cultivos de Cobertura</h4>
+                    <p>Leguminosas como <em>Mucuna pruriens</em>, <em>Crotalaria juncea</em> o <em>Canavalia</em> fijan 80–200 kg N/ha/ciclo y producen biomasa que protege y nutre el suelo. Incorporar antes de florecer maximiza N.</p>
+                </div>
+            </div>
+            <div class="rec-item">
+                <div class="rec-num">03</div>
+                <div>
+                    <h4>Bocashi y Biofertilizantes</h4>
+                    <p>El bocashi (compost fermentado aeróbico de origen japonés) es aplicable en 15–21 días. Dosis de 1–2 t/ha. Complementar con <em>Trichoderma</em> spp. y bacterias PGPR (<em>Azospirillum</em>, <em>Bacillus subtilis</em>) para activar microbioma.</p>
+                </div>
+            </div>
+            <div class="rec-item">
+                <div class="rec-num">04</div>
+                <div>
+                    <h4>Mulching Permanente</h4>
+                    <p>Una capa de 5–8 cm de residuos orgánicos reduce la temperatura superficial del suelo hasta 10°C, baja la evapotranspiración un 30–50%, suprime malezas y alimenta gradualmente la fauna edáfica.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECCIÓN 5: ANÁLISIS DE SUELO -->
+<section>
+    <div class="container">
+        <p class="section-label">// 05 — Diagnóstico</p>
+        <h2 class="section-title">Cómo Leer e Interpretar un Análisis de Suelo</h2>
+
+        <p style="color:#9a8060; max-width:620px; margin-bottom:24px;">El análisis de laboratorio es la herramienta más rentable en agricultura. Cuesta menos que 20 kg de fertilizante y puede ahorrarte aplicar varios cientos.</p>
+
+        <div class="rec-list">
+            <div class="rec-item">
+                <div class="rec-num">①</div>
+                <div>
+                    <h4>Muestreo Correcto: el 80% del éxito</h4>
+                    <p>Tomá 15–20 submuestras en zigzag por unidad de manejo homogénea. Profundidad: 0–20 cm para cultivos anuales; 0–30 cm para permanentes. Evitá zonas de volteo de tractor, bordos o charcos. Mezclar bien en balde limpio y enviar ≈500g al laboratorio. <strong>Muestrear a la misma hora del día y en la misma época para comparar entre años.</strong></p>
+                </div>
+            </div>
+            <div class="rec-item">
+                <div class="rec-num">②</div>
+                <div>
+                    <h4>Parámetros Mínimos a Solicitar</h4>
+                    <p>pH en agua, Materia Orgánica (%), P disponible (Bray o Olsen), K, Ca, Mg, Na intercambiables, CIC, acidez intercambiable (Al+H), micronutrientes (Zn, Fe, Mn, Cu, B), y conductividad eléctrica. En suelos volcánicos tropicales, siempre incluir <strong>aluminio intercambiable</strong>.</p>
+                </div>
+            </div>
+            <div class="rec-item">
+                <div class="rec-num">③</div>
+                <div>
+                    <h4>La CIC: Capacidad de Intercambio Catiónico</h4>
+                    <p>Mide cuántos nutrientes puede retener tu suelo. CIC baja (&lt;10 meq/100g): arenas, poca retención, fertilizar más seguido. CIC alta (&gt;25 meq/100g): arcillas y MO alta, puede sobre-acumularse K y Mg. La <strong>saturación de bases</strong> (porcentaje de Ca, Mg, K, Na respecto a CIC) es más informativa que los valores absolutos.</p>
+                </div>
+            </div>
+            <div class="rec-item">
+                <div class="rec-num">④</div>
+                <div>
+                    <h4>Frecuencia y Seguimiento</h4>
+                    <p>Análisis básico cada <strong>1–2 años</strong>. Si estás en proceso de corrección (encalado, enmiendas intensivas), analizá a los 6 meses post-aplicación para verificar el cambio. Conservá todos los reportes históricos: la <em>tendencia</em> en el tiempo dice más que un resultado aislado.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECCIÓN 6: MANEJO INTEGRADO -->
+<section>
+    <div class="container">
+        <p class="section-label">// 06 — Manejo Agronómico</p>
+        <h2 class="section-title">Prácticas de Manejo Sostenible</h2>
+
+        <div class="pillars" style="margin-bottom:24px;">
+            <div class="pillar green">
+                <span class="pillar-icon">🔄</span>
+                <h3>Rotación de Cultivos</h3>
+                <p class="sub">Biodiversidad temporal</p>
+                <p>Rotar por <strong>familias botánicas</strong> rompe el ciclo de plagas y enfermedades específicas, diversifica la rizósfera y aprovecha diferencial de profundidad radicular. Intercalar gramíneas con leguminosas regenera N naturalmente.</p>
+            </div>
+            <div class="pillar amber">
+                <span class="pillar-icon">🚜</span>
+                <h3>Labranza Mínima o Cero</h3>
+                <p class="sub">Preservar la arquitectura</p>
+                <p>Cada volteo de suelo destruye redes de micelio fúngico que tardan meses en reconstruirse. La labranza vertical (subsolado) solo cuando hay compactación comprobada (&gt;1.6 g/cm³ o penetrometría &gt;300 psi). Nunca labrar suelo húmedo.</p>
+            </div>
+            <div class="pillar red">
+                <span class="pillar-icon">💧</span>
+                <h3>Manejo del Riego</h3>
+                <p class="sub">Agua en el momento exacto</p>
+                <p>El exceso de agua desplaza el oxígeno del suelo y activa condiciones anaeróbicas que generan metano, H₂S y óxido nitroso. Usar sensores de humedad o tanque evaporímetro. Riego por goteo reduce uso de agua hasta 50% vs aspersión.</p>
+            </div>
+        </div>
+
+        <!-- CALENDARIO -->
+        <div style="background:#221408; padding:24px; box-shadow: 0 2px 10px rgba(0,0,0,0.4); border-radius:4px;">
+            <p style="font-family:'JetBrains Mono',monospace; font-size:0.65rem; letter-spacing:0.2em; color:var(--earth-amber); text-transform:uppercase; margin-bottom:12px;">Calendario Anual de Manejo Básico del Suelo</p>
+            <div class="calendar-grid">
+                <!-- Análisis de suelo: meses 1, 7 -->
+                <div class="month-cell active-analysis">ENE</div>
+                <div class="month-cell">FEB</div>
+                <div class="month-cell">MAR</div>
+                <div class="month-cell">ABR</div>
+                <div class="month-cell">MAY</div>
+                <div class="month-cell">JUN</div>
+                <div class="month-cell active-analysis">JUL</div>
+                <div class="month-cell">AGO</div>
+                <div class="month-cell">SET</div>
+                <div class="month-cell">OCT</div>
+                <div class="month-cell">NOV</div>
+                <div class="month-cell">DIC</div>
+                <!-- Compostaje: todos -->
+                <div class="month-cell active-compost">COM</div>
+                <div class="month-cell active-compost">COM</div>
+                <div class="month-cell active-compost">COM</div>
+                <div class="month-cell active-compost">COM</div>
+                <div class="month-cell active-compost">COM</div>
+                <div class="month-cell active-compost">COM</div>
+                <div class="month-cell active-compost">COM</div>
+                <div class="month-cell active-compost">COM</div>
+                <div class="month-cell active-compost">COM</div>
+                <div class="month-cell active-compost">COM</div>
+                <div class="month-cell active-compost">COM</div>
+                <div class="month-cell active-compost">COM</div>
+                <!-- Cobertura: meses secos típicos -->
+                <div class="month-cell">—</div>
+                <div class="month-cell active-cover">COB</div>
+                <div class="month-cell active-cover">COB</div>
+                <div class="month-cell active-cover">COB</div>
+                <div class="month-cell active-cover">COB</div>
+                <div class="month-cell">—</div>
+                <div class="month-cell">—</div>
+                <div class="month-cell">—</div>
+                <div class="month-cell">—</div>
+                <div class="month-cell">—</div>
+                <div class="month-cell active-cover">COB</div>
+                <div class="month-cell active-cover">COB</div>
+            </div>
+            <div class="cal-legend">
+                <span><span class="cal-dot" style="background:var(--leaf-green);"></span> Análisis de suelo</span>
+                <span><span class="cal-dot" style="background:var(--earth-amber);"></span> Aplicación de compost/enmiendas</span>
+                <span><span class="cal-dot" style="background:var(--soil-mid);"></span> Establecer cultivos de cobertura</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- REGLA DE ORO -->
+<div class="golden-rule">
+    <div class="container">
+        <p class="gr-label">// La Filosofía Fundamental</p>
+        <blockquote>
+            "No alimentés a la planta. Alimentá al suelo. La planta se alimentará sola."
+        </blockquote>
+        <p>Esta máxima — popularizada por Sir Albert Howard y William Albrecht — resume décadas de investigación edáfica: un suelo biológicamente activo, con estructura física sana y equilibrio químico, produce cosechas superiores con menor insumo externo. El suelo es el capital, la planta es el interés.</p>
+    </div>
+</div>
+
+<!-- SECCIÓN 7: ERRORES COMUNES -->
+<section>
+    <div class="container">
+        <p class="section-label">// 07 — Lo que nadie te dice</p>
+        <h2 class="section-title">Los 5 Errores Más Costosos en el Manejo del Suelo</h2>
+
+        <div class="rec-list">
+            <div class="rec-item">
+                <div class="rec-num">✗</div>
+                <div>
+                    <h4>Fertilizar sin corregir el pH primero</h4>
+                    <p>Aplicar fertilizantes NPK en suelo con pH 5.0–5.3 es quemar dinero. El fósforo precipita con el aluminio y queda inmovilizado. El encalado debe hacerse al menos 30–60 días antes de fertilizar para que el calcio reaccione con la acidez.</p>
+                </div>
+            </div>
+            <div class="rec-item">
+                <div class="rec-num">✗</div>
+                <div>
+                    <h4>Sobredosis de nitrógeno repetidas</h4>
+                    <p>El exceso de N soluble acidifica el suelo a largo plazo (los amononios nitrificados liberan H⁺), suprime la fijación biológica de N y aumenta el riesgo de lixiviación de nitratos al agua freática. No superar los 200 kg N/ha/año fraccionado en al menos 3 aplicaciones.</p>
+                </div>
+            </div>
+            <div class="rec-item">
+                <div class="rec-num">✗</div>
+                <div>
+                    <h4>Labrar suelo mojado</h4>
+                    <p>La labranza en suelo saturado destruye los agregados (glomeruli) formados por hongos y bacterias, creando capas compactadas (piso de arado) a 20–30 cm que pueden durar décadas. Esperar a que el suelo tenga humedad de "migajón" (se desmenuza al apretarse).</p>
+                </div>
+            </div>
+            <div class="rec-item">
+                <div class="rec-num">✗</div>
+                <div>
+                    <h4>Suelo desnudo bajo el sol tropical</h4>
+                    <p>La temperatura superficial de un suelo sin cobertura puede superar 60°C en trópicos, matando la microbiota superficial y acelerando la oxidación de materia orgánica. Una hora de sol intenso sobre suelo desnudo puede destruir más hongos benéficos que semanas de recolonización.</p>
+                </div>
+            </div>
+            <div class="rec-item">
+                <div class="rec-num">✗</div>
+                <div>
+                    <h4>Ignorar la salinidad en riego frecuente</h4>
+                    <p>El riego con agua de mediana calidad (CE &gt;0.5 dS/m) acumula sales progresivamente. Monitorear la CE del suelo anualmente en zonas áridas o de riego intensivo. La salinidad &gt;4 dS/m reduce rendimientos en la mayoría de cultivos; &gt;8 dS/m es letal para casi todos.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECCIÓN INTERACTIVA: CALCULADORA PH + QUIZ + ACORDEÓN -->
+<section>
+    <div class="container">
+        <p class="section-label">// 08 — Herramientas Interactivas</p>
+        <h2 class="section-title">Explorá y Aprendé</h2>
+
+        <!-- CALCULADORA PH -->
+        <div class="calc-box">
+            <h3>🧪 Calculadora de pH del Suelo</h3>
+            <p>Mové el slider para ver qué pasa en tu suelo según el pH medido.</p>
+            <div class="calc-slider-wrap">
+                <label>3.5</label>
+                <input type="range" id="phSlider" min="35" max="90" value="65" step="1">
+                <label>9.0</label>
+                <span class="ph-value-display" id="phDisplay">6.5</span>
+            </div>
+            <div class="ph-result" id="phResult">
+                <strong>Cargando...</strong>
+            </div>
+        </div>
+
+        <!-- QUIZ -->
+        <div class="quiz-box">
+            <p class="quiz-intro">// Quiz Interactivo</p>
+            <h3>¿Cuánto sabés del suelo?</h3>
+
+            <div id="quizMain">
+                <div class="quiz-progress" id="quizProgress">Pregunta 1 de 6</div>
+                <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizFill" style="width:0%"></div></div>
+                <p class="quiz-question" id="quizQ"></p>
+                <div class="quiz-options" id="quizOpts"></div>
+                <div class="quiz-feedback" id="quizFeedback"></div>
+                <button class="quiz-next" id="quizNext" onclick="nextQuestion()">Siguiente →</button>
+            </div>
+
+            <div class="quiz-result" id="quizResult">
+                <div class="quiz-score" id="quizScore"></div>
+                <p id="quizMsg"></p>
+                <button class="quiz-restart" onclick="startQuiz()">↺ Intentar de nuevo</button>
+            </div>
+        </div>
+
+        <!-- ACORDEÓN: PREGUNTAS FRECUENTES -->
+        <h3 style="font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--soil-mid); margin:36px 0 16px; font-style:italic;">Preguntas Frecuentes del Agricultor</h3>
+
+        <div class="collapsible-item">
+            <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                <h4>¿Cada cuánto debo analizar mi suelo?</h4>
+                <span class="collapsible-arrow">▼</span>
+            </div>
+            <div class="collapsible-body">
+                <p>Para cultivos anuales, un análisis cada <strong>1–2 años</strong> es suficiente. Si estás haciendo correcciones activas (encalado, enmiendas de fósforo), analizá a los 6 meses después de la aplicación para verificar el cambio real. Siempre tomá la muestra en la misma época del año para poder comparar resultados históricos correctamente.</p>
+            </div>
+        </div>
+
+        <div class="collapsible-item">
+            <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                <h4>¿Cuánta cal necesito aplicar para subir el pH?</h4>
+                <span class="collapsible-arrow">▼</span>
+            </div>
+            <div class="collapsible-body">
+                <p>Depende del pH actual, el pH objetivo, la textura del suelo y el tipo de cal. Como referencia general:</p>
+                <ul>
+                    <li>Para subir 1 unidad de pH en suelo franco: aproximadamente <strong>2–3 t/ha de cal agrícola (CaCO₃)</strong></li>
+                    <li>Cal dolomítica (CaCO₃ + MgCO₃): preferible cuando el Mg también es bajo</li>
+                    <li>Cal hidratada (Ca(OH)₂): actúa más rápido pero es más cara</li>
+                    <li>Siempre aplicar basándose en el <strong>requerimiento de encalado</strong> que da el laboratorio, no solo en el pH</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="collapsible-item">
+            <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                <h4>¿Qué diferencia hay entre fertilizante y enmienda?</h4>
+                <span class="collapsible-arrow">▼</span>
+            </div>
+            <div class="collapsible-body">
+                <p><strong>Fertilizante:</strong> aporta nutrientes específicos en forma disponible para la planta (NPK, micronutrientes). Su efecto es relativamente rápido y directo. Ejemplo: urea, MAP, KCl.</p>
+                <p style="margin-top:8px;"><strong>Enmienda:</strong> modifica las propiedades del suelo a largo plazo — pH, CIC, estructura, actividad biológica. Su efecto es lento pero permanente. Ejemplo: cal agrícola, yeso agrícola, materia orgánica, biochar.</p>
+                <p style="margin-top:8px;">La clave: las enmiendas crean las condiciones para que los fertilizantes funcionen. Sin enmienda correcta, el fertilizante se pierde.</p>
+            </div>
+        </div>
+
+        <div class="collapsible-item">
+            <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                <h4>¿Por qué mis plantas se ven amarillas si fertilicé bien?</h4>
+                <span class="collapsible-arrow">▼</span>
+            </div>
+            <div class="collapsible-body">
+                <p>Este es el síntoma más común de un suelo con <strong>pH incorrecto</strong>. Si el pH está por debajo de 5.5, el hierro y manganeso pueden volverse excesivamente disponibles (toxicidad), mientras que el fósforo queda bloqueado. Otros diagnósticos posibles:</p>
+                <ul>
+                    <li>Amarillamiento en hojas viejas → deficiencia de N o Mg (móviles)</li>
+                    <li>Amarillamiento en hojas nuevas → deficiencia de Fe, Mn, S (inmóviles)</li>
+                    <li>Bordes amarillos o quemados → exceso de K o salinidad</li>
+                    <li>Venas verdes con limbo amarillo → deficiencia de hierro (clorosis intervenal)</li>
+                </ul>
+                <p style="margin-top:8px;">Siempre hacer análisis de suelo Y análisis foliar juntos para diagnóstico preciso.</p>
+            </div>
+        </div>
+
+        <div class="collapsible-item">
+            <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                <h4>¿El biochar realmente funciona?</h4>
+                <span class="collapsible-arrow">▼</span>
+            </div>
+            <div class="collapsible-body">
+                <p>Sí, pero con matices. El <strong>biochar</strong> (carbón vegetal activado) tiene efectos documentados en:</p>
+                <ul>
+                    <li>Aumentar la CIC en suelos arenosos (+15–30%)</li>
+                    <li>Mejorar retención de agua</li>
+                    <li>Elevar el pH en suelos ácidos moderadamente</li>
+                    <li>Secuestrar carbono a largo plazo (hasta 1000 años)</li>
+                </ul>
+                <p style="margin-top:8px;">Sin embargo, NO es un fertilizante por sí solo. Funciona mejor cuando se <strong>inocula con compost o biofertilizantes</strong> antes de aplicar. Dosis típica: 1–5 t/ha. En suelos ya alcalinos puede ser contraproducente.</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <div class="firma-footer">
+            <span style="font-size:1.6rem; animation: wolfPulse 3s ease-in-out infinite;">🐺</span>
+            <div class="firma-text">
+                <span class="firma-name">Lobo/DeyFz</span>
+                <span class="firma-sub">Agro Edition · 2026</span>
+            </div>
+        </div>
+        <p>
+            <strong>Manual Técnico del Suelo Agrícola</strong><br>
+            Basado en principios de edafología, agronomía tropical y manejo sostenible de suelos.<br>
+            Referencias: FAO Soil Portal · USDA NRCS · CIAT · UCR CICA · William Albrecht (1958) · Sir Albert Howard (1943)<br><br>
+            <span style="font-size:0.75rem; opacity:0.5;">© 2026 · Lobo/DeyFz · Para el Agricultor Moderno · Información técnica de referencia</span>
+        </p>
+    </div>
+</footer>
+
+<script>
+// ── CALCULADORA PH ──
+const phData = {
+    35: { label: "Extremadamente ácido (3.5)", color: "#d32f2f", msg: "⛔ Nivel tóxico. Aluminio libre daña raíces. pH inutilizable sin encalado agresivo. Muy pocos cultivos sobreviven. Aplicar cal dolomítica a razón de 5–8 t/ha y re-analizar en 3 meses." },
+    40: { label: "Muy fuertemente ácido (4.0)", color: "#c62828", msg: "⛔ Aluminio (Al³⁺) y manganeso tóxicos. Bacterias nitrificantes paralizadas. Fósforo completamente bloqueado. Requiere encalado urgente antes de cualquier cultivo." },
+    45: { label: "Fuertemente ácido (4.5)", color: "#e53935", msg: "⚠️ Alta saturación de aluminio. Fe y Mn en exceso. P y Mo inaccesibles. Bacterias fijadoras de N no funcionan. Cal agrícola: 3–5 t/ha recomendado." },
+    50: { label: "Ácido (5.0)", color: "#e57373", msg: "⚠️ pH peligroso en trópicos. Al intercambiable activo. La mayoría de fertilizantes aplicados se pierden. P precipita con Al y Fe. Encalar antes de fertilizar es mandatorio." },
+    55: { label: "Moderadamente ácido (5.5)", color: "#ff8f00", msg: "⚠️ Subóptimo. P, Ca y Mg con disponibilidad reducida. N pierde hasta 30% de eficiencia. Microbiología deprimida. Cal agrícola: 1–2 t/ha para ajustar." },
+    60: { label: "Ligeramente ácido (6.0)", color: "#a5c94b", msg: "✅ Aceptable para la mayoría de cultivos. N, P, K disponibles. Microbiología activa. Pequeños ajustes con cal pueden optimizar. Bueno para café, caña, piña." },
+    65: { label: "Óptimo (6.5) ★", color: "#4caf50", msg: "🌟 pH ideal para la mayoría de cultivos. Máxima disponibilidad de N, P, K, Ca, Mg, S. Microbiología plena. Lombrices y hongos micorrícicos activos. ¡Mantené este nivel!" },
+    68: { label: "Neutro (6.8)", color: "#43a047", msg: "✅ Excelente para cultivos que prefieren condiciones neutras: maíz, frijol, soya, hortalizas. Fe y Mn ligeramente menos disponibles pero dentro de rango. Ideal para leguminosas." },
+    70: { label: "Neutro (7.0)", color: "#a5c94b", msg: "⚠️ Neutral. Algunos micronutrientes empiezan a reducir disponibilidad (Fe, Mn, Zn, Cu, B). Bueno para alfalfa, espárragos, col. Vigilar deficiencias de micronutrientes." },
+    75: { label: "Moderadamente alcalino (7.5)", color: "#ff8f00", msg: "⚠️ Fe, Mn, Zn, Cu, B con disponibilidad reducida hasta 50%. Suelos con carbonatos. Clorosis de hierro común. Acidificar con azufre elemental o fertilizantes acidificantes." },
+    80: { label: "Alcalino (8.0)", color: "#e57373", msg: "⛔ Fe, Mn completamente bloqueados. Riesgo de toxicidad de B y Mo. Na puede ser problema. Suelos sódicos posibles. Requiere yeso agrícola + azufre + acidificantes." },
+    85: { label: "Fuertemente alcalino (8.5)", color: "#d32f2f", msg: "⛔ Suelo altamente sódico o calcáreo. Casi todos los micronutrientes inaccesibles. Estructura deteriorada. Solo plantas halófilas sobreviven. Tratamiento intensivo requerido." },
+    90: { label: "Muy alcalino (9.0)", color: "#b71c1c", msg: "⛔ Extremo. Sodio dominante. Suelo prácticamente infértil sin intervención mayor. Drenaje + yeso agrícola + azufre + lavado. Proceso largo y costoso." }
+};
+
+const slider = document.getElementById('phSlider');
+const display = document.getElementById('phDisplay');
+const result = document.getElementById('phResult');
+
+function updatePH() {
+    const val = parseInt(slider.value);
+    const nearest = Math.round(val / 5) * 5;
+    const clamped = Math.min(90, Math.max(35, nearest));
+    const key = clamped;
+    const data = phData[key] || phData[65];
+    const phNum = (val / 10).toFixed(1);
+    display.textContent = phNum;
+    display.style.color = data.color;
+    result.style.borderColor = data.color;
+    result.innerHTML = `<strong style="color:${data.color}">${data.label}</strong>${data.msg}`;
+}
+
+slider.addEventListener('input', updatePH);
+updatePH();
+
+// ── COLLAPSIBLES ──
+function toggleCollapsible(header) {
+    const body = header.nextElementSibling;
+    const arrow = header.querySelector('.collapsible-arrow');
+    const isOpen = body.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.collapsible-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.collapsible-arrow').forEach(a => a.classList.remove('open'));
+    // Open clicked if it was closed
+    if (!isOpen) {
+        body.classList.add('open');
+        arrow.classList.add('open');
+    }
+}
+
+// ── QUIZ ──
+const questions = [
+    {
+        q: "¿Cuál es el rango de pH óptimo para la mayoría de los cultivos?",
+        opts: ["4.5 – 5.5", "6.0 – 6.8", "7.5 – 8.5", "5.0 – 5.8"],
+        correct: 1,
+        feedback: "✅ Correcto. Entre 6.0 y 6.8 se maximiza la disponibilidad de casi todos los nutrientes esenciales. Fuera de este rango, los fertilizantes se vuelven ineficientes."
+    },
+    {
+        q: "¿Qué síntoma clásico indica deficiencia de nitrógeno (N)?",
+        opts: ["Hojas nuevas amarillas", "Manchas púrpuras en el tallo", "Amarillamiento desde las hojas más viejas", "Quema de los bordes de las hojas"],
+        correct: 2,
+        feedback: "✅ Correcto. El N es un nutriente móvil: la planta lo retira de las hojas viejas para enviarlas a las jóvenes, causando amarillamiento basipetal (de abajo hacia arriba)."
+    },
+    {
+        q: "Un suelo con densidad aparente mayor a 1.6 g/cm³ indica:",
+        opts: ["Suelo ideal para raíces", "Exceso de materia orgánica", "Compactación crítica que bloquea raíces", "Alta fertilidad biológica"],
+        correct: 2,
+        feedback: "✅ Exacto. Con densidad >1.6 g/cm³, los poros del suelo se reducen tanto que las raíces no pueden penetrar y la aireación es insuficiente para la vida microbiana."
+    },
+    {
+        q: "¿Cuántas bacterias puede contener UN SOLO gramo de suelo fértil?",
+        opts: ["Entre 100 y 1,000", "Entre 10,000 y 100,000", "Entre 1 millón y 10 millones", "Entre 100 millones y 1,000 millones"],
+        correct: 3,
+        feedback: "✅ Impresionante pero real. Un suelo fértil alberga entre 100 millones y 1,000 millones de bacterias por gramo. Esta densidad microbiana es la que hace funcionar el ciclo de nutrientes."
+    },
+    {
+        q: "¿Qué significa CIC en el análisis de suelo?",
+        opts: ["Centro de Intercambio de Calcio", "Capacidad de Intercambio Catiónico", "Control de Iones y Compuestos", "Coeficiente de Infiltración en Cultivos"],
+        correct: 1,
+        feedback: "✅ Correcto. La Capacidad de Intercambio Catiónico mide cuántos nutrientes con carga positiva (Ca, Mg, K, Na) puede retener el suelo. Cuanto más alta, más 'esponja' es para nutrientes."
+    },
+    {
+        q: "Si el pH de tu suelo es 5.0 y aplicás fertilizante fosfatado, ¿qué pasa?",
+        opts: ["El P es absorbido inmediatamente", "El P se lixivia con el agua", "El P precipita con aluminio y queda inaccesible", "El P sube el pH del suelo"],
+        correct: 2,
+        feedback: "✅ Así es. A pH 5.0, el aluminio libre reacciona con el fósforo formando fosfato de aluminio insoluble. Es como tirar el fertilizante al suelo para que no lo use nadie. Encalar primero, fertilizar después."
+    }
+];
+
+let current = 0;
+let score = 0;
+let answered = false;
+
+function startQuiz() {
+    current = 0; score = 0; answered = false;
+    document.getElementById('quizMain').style.display = 'block';
+    document.getElementById('quizResult').classList.remove('show');
+    renderQuestion();
+}
+
+function renderQuestion() {
+    answered = false;
+    const q = questions[current];
+    document.getElementById('quizProgress').textContent = `Pregunta ${current + 1} de ${questions.length}`;
+    document.getElementById('quizFill').style.width = `${(current / questions.length) * 100}%`;
+    document.getElementById('quizQ').textContent = q.q;
+    document.getElementById('quizFeedback').className = 'quiz-feedback';
+    document.getElementById('quizFeedback').textContent = '';
+    document.getElementById('quizNext').className = 'quiz-next';
+
+    const opts = document.getElementById('quizOpts');
+    opts.innerHTML = '';
+    q.opts.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt';
+        btn.textContent = opt;
+        btn.onclick = () => selectAnswer(i);
+        opts.appendChild(btn);
+    });
+}
+
+function selectAnswer(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[current];
+    const btns = document.querySelectorAll('.quiz-opt');
+    btns[q.correct].classList.add('correct');
+    const fb = document.getElementById('quizFeedback');
+    if (idx === q.correct) {
+        score++;
+        btns[idx].classList.add('correct');
+        fb.textContent = q.feedback;
+        fb.className = 'quiz-feedback show ok';
+    } else {
+        btns[idx].classList.add('wrong');
+        fb.textContent = `❌ Incorrecto. ${q.feedback}`;
+        fb.className = 'quiz-feedback show fail';
+    }
+    document.getElementById('quizNext').className = 'quiz-next show';
+}
+
+function nextQuestion() {
+    current++;
+    if (current >= questions.length) {
+        showResult();
+    } else {
+        renderQuestion();
+    }
+}
+
+function showResult() {
+    document.getElementById('quizMain').style.display = 'none';
+    const res = document.getElementById('quizResult');
+    res.classList.add('show');
+    document.getElementById('quizScore').textContent = `${score}/${questions.length}`;
+    const msgs = [
+        "Seguí aprendiendo, el suelo tiene mucho que enseñarte 🌱",
+        "Buen inicio. Con práctica y análisis, llegarás lejos 💪",
+        "¡Sólido conocimiento agronómico! Tu suelo está en buenas manos 🌿",
+        "¡Excelente! Dominás los fundamentos del suelo como un profesional 🏆"
+    ];
+    const pct = score / questions.length;
+    const msgIdx = pct < 0.4 ? 0 : pct < 0.6 ? 1 : pct < 0.9 ? 2 : 3;
+    document.getElementById('quizMsg').textContent = msgs[msgIdx];
+}
+
+startQuiz();
+</script>
+
+</body>
+</html>

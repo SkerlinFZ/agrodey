@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGRODEY · Portal Agrícola · Lobo/DeyFz</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,300&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   RESET & VARIABLES
+═══════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;height:100%}
+
+:root{
+  --bg:       #070400;
+  --bg-1:     #0e0902;
+  --bg-2:     #171008;
+  --bg-3:     #1d1508;
+  --text:     #c8b898;
+  --text-dim: #8a7858;
+  --text-muted:#5a4a30;
+  --border:   rgba(212,149,42,0.12);
+  --border-hi:rgba(212,149,42,0.30);
+  --gold:     #d4952a;
+  --gold-hi:  #f0c84a;
+  --gold-dim: #7a5010;
+  --cream:    #ece0c0;
+
+  --c-suelos:  #d4952a;
+  --c-biblio:  #5dbea3;
+  --c-plagas:  #e8504a;
+}
+
+body{
+  font-family:'Source Serif 4',Georgia,serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.75;
+  overflow-x:hidden;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* GRAIN OVERLAY */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:0.025;
+}
+
+/* ═══════════════════════════════════════════
+   TOP NAV
+═══════════════════════════════════════════ */
+.topnav{
+  position:fixed;top:0;left:0;right:0;z-index:2000;
+  height:62px;
+  background:rgba(5,3,0,0.9);
+  backdrop-filter:blur(22px) saturate(180%);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;
+  padding:0 28px;gap:18px;
+  transition:box-shadow 0.4s,border-color 0.4s;
+}
+.topnav.scrolled{
+  box-shadow:0 4px 40px rgba(0,0,0,0.65);
+  border-color:var(--border-hi);
+}
+
+.nav-brand{
+  display:flex;align-items:center;gap:12px;
+  background:none;border:none;cursor:pointer;
+  text-decoration:none;flex-shrink:0;padding:5px 0;
+}
+.nav-wolf{
+  font-size:1.5rem;display:inline-block;
+  animation:wolfPulse 4s ease-in-out infinite;
+  filter:drop-shadow(0 0 10px rgba(212,149,42,0.45));
+}
+@keyframes wolfPulse{
+  0%,100%{transform:scale(1) rotate(0deg);}
+  50%{transform:scale(1.09) rotate(-4deg);}
+}
+.brand-col{display:flex;flex-direction:column;line-height:1;}
+.brand-name{
+  font-family:'Playfair Display',serif;
+  font-size:1.2rem;font-weight:900;font-style:italic;
+  color:var(--gold-hi);letter-spacing:0.02em;
+}
+.brand-sub{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.46rem;letter-spacing:0.3em;text-transform:uppercase;
+  color:rgba(212,149,42,0.35);margin-top:3px;
+}
+
+.nav-sep{width:1px;height:26px;background:var(--border);flex-shrink:0;}
+
+.nav-tabs{display:flex;gap:2px;flex:1;align-items:center;}
+
+.tab-btn{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.57rem;letter-spacing:0.1em;text-transform:uppercase;
+  padding:8px 16px;border-radius:4px;
+  border:1px solid transparent;
+  background:transparent;color:var(--text-muted);
+  cursor:pointer;
+  transition:all 0.24s;
+  display:flex;align-items:center;gap:7px;
+  position:relative;overflow:hidden;
+  white-space:nowrap;
+}
+.tab-btn::before{
+  content:'';position:absolute;bottom:0;left:50%;right:50%;
+  height:2px;border-radius:2px 2px 0 0;
+  background:var(--tc, var(--gold));
+  transition:left 0.24s,right 0.24s,opacity 0.24s;
+  opacity:0;
+}
+.tab-btn:hover{color:var(--text);background:rgba(255,255,255,0.04);border-color:var(--border);}
+.tab-btn.active{color:var(--tc,var(--gold-hi));background:rgba(255,255,255,0.05);border-color:var(--border-hi);}
+.tab-btn.active::before{left:10%;right:10%;opacity:1;}
+
+.tab-btn.ts{--tc:var(--c-suelos);}
+.tab-btn.tb{--tc:var(--c-biblio);}
+.tab-btn.tp{--tc:var(--c-plagas);}
+
+.tab-pip{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--tc,var(--gold));
+  opacity:0.45;transition:opacity 0.2s;
+  flex-shrink:0;
+}
+.tab-btn:hover .tab-pip,.tab-btn.active .tab-pip{opacity:1;}
+
+.home-btn{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.54rem;letter-spacing:0.14em;text-transform:uppercase;
+  padding:8px 16px;border-radius:4px;
+  border:1px solid var(--border);
+  background:transparent;color:var(--text-dim);
+  cursor:pointer;transition:all 0.22s;flex-shrink:0;
+}
+.home-btn:hover{color:var(--gold);border-color:var(--border-hi);}
+
+/* ═══════════════════════════════════════════
+   SPLASH
+═══════════════════════════════════════════ */
+#splash{flex:1;display:flex;flex-direction:column;padding-top:62px;}
+
+/* ────────────────── HERO ────────────────── */
+.hero{
+  position:relative;
+  min-height:100svh;min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;
+  padding:80px 32px 120px;
+  overflow:hidden;
+  background:var(--bg);
+}
+.hero-bg{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 85% 70% at 15% 65%,rgba(130,76,28,0.52) 0%,transparent 62%),
+    radial-gradient(ellipse 70% 80% at 85% 32%,rgba(55,106,48,0.26) 0%,transparent 58%),
+    radial-gradient(ellipse 55% 55% at 58% 82%,rgba(212,149,42,0.16) 0%,transparent 52%),
+    radial-gradient(ellipse 45% 42% at 28% 18%,rgba(232,80,74,0.07) 0%,transparent 50%);
+}
+/* Terrain edge */
+.hero-terrain{
+  position:absolute;bottom:0;left:0;right:0;
+  height:110px;pointer-events:none;
+  background:var(--bg-1);
+  clip-path:polygon(
+    0 75%,4% 42%,9% 62%,14% 24%,20% 55%,
+    26% 10%,32% 44%,37% 7%,43% 38%,49% 3%,
+    54% 35%,59% 16%,65% 48%,70% 6%,76% 40%,
+    82% 14%,87% 46%,92% 18%,97% 42%,100% 28%,
+    100% 100%,0 100%
+  );
+}
+
+/* Floating ambient orbs */
+.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
+.orb-a{width:500px;height:500px;top:-10%;left:-12%;background:rgba(120,72,28,0.2);animation:orbA 24s ease-in-out infinite alternate;}
+.orb-b{width:380px;height:380px;top:40%;right:-10%;background:rgba(55,106,48,0.16);animation:orbB 18s ease-in-out infinite alternate;}
+.orb-c{width:280px;height:280px;bottom:15%;left:35%;background:rgba(212,149,42,0.12);animation:orbC 20s ease-in-out infinite alternate;}
+.orb-d{width:200px;height:200px;top:15%;right:18%;background:rgba(93,190,163,0.09);animation:orbD 15s ease-in-out infinite alternate;}
+@keyframes orbA{from{transform:translate(0,0);}to{transform:translate(40px,30px);}}
+@keyframes orbB{from{transform:translate(0,0);}to{transform:translate(-30px,40px);}}
+@keyframes orbC{from{transform:translate(0,0);}to{transform:translate(20px,-25px);}}
+@keyframes orbD{from{transform:translate(0,0);}to{transform:translate(-20px,20px);}}
+
+/* Particle field */
+#particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.pdot{
+  position:absolute;border-radius:50%;
+  background:rgba(212,149,42,0.7);
+  animation:pdrift linear infinite;
+}
+@keyframes pdrift{
+  0%{transform:translateY(0) translateX(0);opacity:0;}
+  8%{opacity:1;}
+  85%{opacity:0.5;}
+  100%{transform:translateY(-140px) translateX(var(--dx,15px));opacity:0;}
+}
+
+/* Hero content */
+.hero-content{position:relative;z-index:1;max-width:820px;width:100%;}
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:14px;
+  background:rgba(212,149,42,0.055);
+  border:1px solid rgba(212,149,42,0.20);
+  padding:11px 24px 11px 18px;border-radius:6px;
+  margin-bottom:44px;
+  animation:fadeUp 0.9s ease both 0.05s;
+  position:relative;overflow:hidden;
+}
+.hero-badge::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(212,149,42,0.06) 0%,transparent 60%);
+}
+.badge-wolf{
+  font-size:2rem;
+  animation:wolfPulse 4s ease-in-out infinite;
+  filter:drop-shadow(0 0 12px rgba(212,149,42,0.5));
+  position:relative;z-index:1;
+}
+.badge-info{position:relative;z-index:1;text-align:left;}
+.badge-name{
+  font-family:'Playfair Display',serif;
+  font-size:1.15rem;font-weight:900;font-style:italic;
+  color:var(--gold-hi);display:block;line-height:1.1;
+}
+.badge-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.52rem;letter-spacing:0.25em;text-transform:uppercase;
+  color:rgba(212,149,42,0.42);display:block;margin-top:3px;
+}
+
+.hero-eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.68rem;letter-spacing:0.4em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:22px;
+  animation:fadeUp 0.9s ease both 0.2s;
+}
+.hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(3.8rem,11vw,7.5rem);
+  font-weight:900;line-height:0.92;
+  letter-spacing:-0.03em;
+  color:var(--cream);
+  margin-bottom:24px;
+  animation:fadeUp 1s ease both 0.3s;
+}
+.hero-title em{font-style:italic;color:var(--gold);}
+.hero-title .sub-line{
+  display:block;
+  font-size:clamp(1.3rem,3.2vw,2.2rem);
+  font-weight:400;font-style:italic;
+  color:rgba(236,224,192,0.38);
+  margin-top:10px;letter-spacing:0.01em;
+}
+.hero-desc{
+  font-size:1.02rem;font-weight:300;
+  color:rgba(200,184,152,0.55);
+  max-width:520px;margin:0 auto 52px;
+  line-height:1.95;
+  animation:fadeUp 1s ease both 0.42s;
+}
+
+/* Stats row */
+.hero-stats{
+  display:inline-flex;
+  border:1px solid var(--border);
+  border-radius:6px;overflow:hidden;
+  background:rgba(0,0,0,0.35);
+  animation:fadeUp 1s ease both 0.55s;
+}
+.stat{
+  padding:16px 28px;
+  border-right:1px solid var(--border);
+  text-align:center;
+  position:relative;
+  transition:background 0.2s;
+}
+.stat:last-child{border-right:none;}
+.stat:hover{background:rgba(255,255,255,0.03);}
+.stat-n{
+  font-family:'Playfair Display',serif;
+  font-size:1.9rem;font-weight:900;
+  color:var(--cream);line-height:1;display:block;
+}
+.stat-n em{color:var(--gold);font-style:normal;}
+.stat-l{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.48rem;letter-spacing:0.24em;text-transform:uppercase;
+  color:var(--text-muted);display:block;margin-top:6px;
+}
+
+/* Scroll cue */
+.scroll-cue{
+  position:absolute;bottom:26px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  opacity:0;animation:fadeIn 1s ease 1.8s forwards;
+  cursor:pointer;
+}
+.scroll-cue span{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.46rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--text-muted);
+}
+.scroll-arrow{
+  width:18px;height:18px;
+  border-right:1px solid rgba(212,149,42,0.4);
+  border-bottom:1px solid rgba(212,149,42,0.4);
+  transform:rotate(45deg);
+  animation:cueArrow 2s ease-in-out infinite;
+}
+@keyframes cueArrow{0%,100%{transform:rotate(45deg) translate(0,0);}50%{transform:rotate(45deg) translate(4px,4px);}}
+
+/* ────────────────── MODULES ────────────────── */
+.modules{
+  background:var(--bg-1);
+  padding:110px 32px 110px;
+  position:relative;
+}
+.modules::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 0%,var(--gold-dim) 50%,transparent 100%);
+}
+
+.sec-head{text-align:center;margin-bottom:72px;}
+.sec-eye{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem;letter-spacing:0.38em;text-transform:uppercase;
+  color:var(--gold);opacity:0.7;margin-bottom:16px;display:block;
+}
+.sec-h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.9rem,4vw,2.8rem);font-weight:700;
+  color:var(--cream);letter-spacing:-0.02em;margin-bottom:12px;
+}
+.sec-p{font-size:0.9rem;color:var(--text-muted);max-width:440px;margin:0 auto;}
+
+/* Cards */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(310px,1fr));
+  gap:22px;
+  max-width:1120px;margin:0 auto;
+}
+
+.mcard{
+  background:var(--bg-2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:
+    transform 0.32s cubic-bezier(0.22,1,0.36,1),
+    box-shadow 0.32s cubic-bezier(0.22,1,0.36,1),
+    border-color 0.32s;
+  display:flex;flex-direction:column;
+  position:relative;
+}
+.mcard::after{
+  content:'';position:absolute;inset:0;border-radius:8px;
+  box-shadow:inset 0 0 0 1px var(--cc);
+  opacity:0;transition:opacity 0.3s;pointer-events:none;
+}
+.mcard:hover{
+  transform:translateY(-10px) scale(1.01);
+  box-shadow:0 24px 60px rgba(0,0,0,0.6), 0 0 0 1px var(--cc-dim);
+  border-color:var(--cc-dim);
+}
+.mcard:hover::after{opacity:1;}
+
+/* Per-card colors */
+.mcard.ms{--cc:var(--c-suelos);--cc-dim:rgba(212,149,42,0.3);--cc-bg:rgba(212,149,42,0.07);}
+.mcard.mb{--cc:var(--c-biblio); --cc-dim:rgba(93,190,163,0.3); --cc-bg:rgba(93,190,163,0.06);}
+.mcard.mp{--cc:var(--c-plagas); --cc-dim:rgba(232,80,74,0.3);  --cc-bg:rgba(232,80,74,0.06);}
+
+/* Top accent */
+.mcard-accent{
+  height:3px;
+  background:linear-gradient(90deg,var(--cc),transparent 70%);
+  position:relative;overflow:hidden;
+}
+.mcard-accent::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.5),transparent);
+  transform:translateX(-200%);
+  transition:transform 0.7s ease;
+}
+.mcard:hover .mcard-accent::after{transform:translateX(200%);}
+
+/* Card head */
+.mcard-head{
+  padding:30px 28px 22px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(140deg,var(--cc-bg) 0%,transparent 55%);
+  display:flex;align-items:flex-start;gap:18px;
+}
+.mcard-ico{
+  width:58px;height:58px;border-radius:10px;
+  border:1px solid rgba(255,255,255,0.07);
+  background:rgba(255,255,255,0.04);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.9rem;flex-shrink:0;
+  transition:transform 0.28s cubic-bezier(0.22,1,0.36,1),
+             box-shadow 0.28s;
+}
+.mcard:hover .mcard-ico{
+  transform:scale(1.12) rotate(-5deg);
+  box-shadow:0 8px 24px rgba(0,0,0,0.4);
+}
+.mcard-hinfo{flex:1;}
+.mcard-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.52rem;letter-spacing:0.28em;text-transform:uppercase;
+  color:var(--cc);opacity:0.7;margin-bottom:7px;display:block;
+  transition:opacity 0.2s;
+}
+.mcard:hover .mcard-num{opacity:1;}
+.mcard-title{
+  font-family:'Playfair Display',serif;
+  font-size:1.25rem;font-weight:700;
+  color:var(--cream);line-height:1.22;
+}
+
+/* Card body */
+.mcard-body{padding:24px 28px;flex:1;display:flex;flex-direction:column;}
+.mcard-desc{
+  font-size:0.85rem;color:var(--text-dim);
+  line-height:1.8;margin-bottom:22px;
+}
+.mcard-feats{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:24px;flex:1;}
+.mcard-feats li{
+  display:flex;align-items:flex-start;gap:9px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.575rem;letter-spacing:0.05em;
+  color:var(--text-muted);line-height:1.5;
+  transition:color 0.2s;
+}
+.mcard:hover .mcard-feats li{color:var(--text-dim);}
+.fdot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--cc);flex-shrink:0;margin-top:5px;
+  opacity:0.55;transition:opacity 0.2s;
+}
+.mcard:hover .fdot{opacity:1;}
+
+.mcard-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:0;}
+.mtag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.5rem;letter-spacing:0.09em;text-transform:uppercase;
+  padding:3px 10px;border-radius:3px;
+  border:1px solid var(--cc-dim);
+  color:var(--cc);background:transparent;
+  opacity:0.65;transition:opacity 0.2s;
+}
+.mcard:hover .mtag{opacity:1;}
+
+/* Card footer */
+.mcard-foot{
+  padding:15px 28px;
+  border-top:1px solid var(--border);
+  background:rgba(0,0,0,0.18);
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background 0.22s;
+}
+.mcard:hover .mcard-foot{background:rgba(0,0,0,0.28);}
+.mcard-cta{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.57rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--cc);opacity:0.75;
+  transition:opacity 0.22s,letter-spacing 0.22s;
+}
+.mcard:hover .mcard-cta{opacity:1;letter-spacing:0.26em;}
+.mcard-arr{
+  width:30px;height:30px;border-radius:50%;
+  border:1px solid var(--cc-dim);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--cc);font-size:0.85rem;
+  transition:background 0.22s,transform 0.22s,border-color 0.22s;
+}
+.mcard:hover .mcard-arr{
+  background:var(--cc-bg);
+  border-color:var(--cc);
+  transform:translateX(4px);
+}
+
+/* ────────────────── FEATURES BAND ────────────────── */
+.band{
+  background:var(--bg);
+  padding:80px 32px;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.band-grid{
+  max-width:1120px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  border-radius:8px;overflow:hidden;
+}
+.band-item{
+  background:var(--bg-1);
+  padding:34px 28px;
+  display:flex;flex-direction:column;gap:12px;
+  transition:background 0.22s;
+  cursor:default;
+}
+.band-item:hover{background:var(--bg-2);}
+.band-ico{font-size:1.7rem;line-height:1;}
+.band-title{
+  font-family:'Playfair Display',serif;
+  font-size:1.02rem;font-weight:700;color:var(--cream);
+}
+.band-text{font-size:0.81rem;color:var(--text-muted);line-height:1.72;}
+
+/* ────────────────── QUOTE ────────────────── */
+.quote-sec{
+  padding:100px 32px;
+  background:var(--bg-1);
+  position:relative;overflow:hidden;
+}
+.quote-sec::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 65% 90% at 82% 48%,rgba(120,72,28,0.14) 0%,transparent 68%),
+    radial-gradient(ellipse 55% 65% at 18% 50%,rgba(55,106,48,0.1) 0%,transparent 62%);
+}
+.quote-wrap{
+  max-width:820px;margin:0 auto;
+  text-align:center;position:relative;z-index:1;
+}
+.qmark{
+  font-family:'Playfair Display',serif;
+  font-size:9rem;line-height:0.65;
+  color:var(--gold-dim);opacity:0.35;display:block;
+}
+.qtext{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.25rem,3.2vw,1.85rem);
+  font-style:italic;font-weight:400;
+  color:rgba(236,224,192,0.72);
+  line-height:1.72;margin-bottom:34px;
+}
+.qline{
+  width:52px;height:2px;margin:0 auto 20px;
+  background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);
+}
+.qcite{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.56rem;letter-spacing:0.28em;text-transform:uppercase;
+  color:var(--gold-dim);
+}
+
+/* ────────────────── PILLARS ────────────────── */
+.pillars-sec{
+  background:var(--bg);
+  padding:90px 32px;
+}
+.pillars-inner{max-width:1120px;margin:0 auto;}
+.pillars-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:20px;margin-top:56px;
+}
+.pillar{
+  padding:32px 26px;
+  border:1px solid var(--border);border-radius:6px;
+  background:var(--bg-2);text-align:center;
+  transition:border-color 0.24s,transform 0.28s cubic-bezier(0.22,1,0.36,1),background 0.24s;
+  cursor:default;
+}
+.pillar:hover{
+  border-color:var(--border-hi);
+  transform:translateY(-6px);
+  background:var(--bg-3);
+}
+.pillar-ico{font-size:2.2rem;display:block;margin-bottom:18px;}
+.pillar-name{
+  font-family:'Playfair Display',serif;
+  font-size:1.05rem;font-weight:700;
+  color:var(--cream);margin-bottom:10px;
+}
+.pillar-text{font-size:0.81rem;color:var(--text-muted);line-height:1.75;}
+
+/* ────────────────── FOOTER ────────────────── */
+.footer{
+  background:#030200;
+  border-top:1px solid var(--border);
+  padding:52px 32px 34px;
+}
+.footer-top{
+  max-width:1120px;margin:0 auto;
+  display:grid;grid-template-columns:1fr auto;
+  gap:40px;align-items:start;margin-bottom:36px;
+}
+.footer-brand-row{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.footer-wolf{font-size:1.7rem;filter:drop-shadow(0 0 10px rgba(212,149,42,0.32));}
+.footer-bname{
+  font-family:'Playfair Display',serif;
+  font-size:1.3rem;font-weight:900;font-style:italic;
+  color:var(--gold-hi);
+}
+.footer-tagline{font-size:0.82rem;color:var(--text-muted);max-width:380px;line-height:1.75;}
+.footer-right{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.52rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--text-muted);text-align:right;
+}
+.footer-right p{margin-bottom:6px;opacity:0.45;}
+.footer-right p:first-child{opacity:0.85;color:var(--gold-dim);}
+.footer-bottom{
+  max-width:1120px;margin:0 auto;
+  padding-top:22px;
+  border-top:1px solid rgba(212,149,42,0.06);
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:10px;
+}
+.fcopy{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.48rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--text-muted);opacity:0.3;
+}
+.fpills{display:flex;gap:8px;}
+.fpill{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.48rem;letter-spacing:0.1em;text-transform:uppercase;
+  padding:4px 12px;border-radius:3px;
+  border:1px solid var(--border);color:var(--text-muted);
+  cursor:pointer;transition:all 0.2s;background:transparent;
+}
+.fpill:hover{color:var(--gold);border-color:var(--border-hi);}
+
+/* ═══════════════════════════════════════════
+   IFRAME PANEL
+═══════════════════════════════════════════ */
+#frame-wrap{
+  display:none;flex:1;flex-direction:column;
+  padding-top:62px;
+  height:100vh;
+  position:relative;
+}
+#frame-wrap.open{display:flex;}
+
+.frame-bar{
+  height:40px;flex-shrink:0;
+  background:rgba(4,2,0,0.97);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 20px;gap:14px;
+  backdrop-filter:blur(12px);
+}
+.f-crumb{display:flex;align-items:center;gap:8px;flex:1;}
+.f-home{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.52rem;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--text-muted);cursor:pointer;transition:color 0.2s;
+}
+.f-home:hover{color:var(--gold);}
+.f-sep{color:var(--border-hi);font-size:0.75rem;}
+.f-cur{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.52rem;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--text);
+}
+.f-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--frame-cc,var(--gold));
+  margin-left:4px;
+}
+.f-btn{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.5rem;letter-spacing:0.16em;text-transform:uppercase;
+  padding:5px 14px;border-radius:3px;
+  border:1px solid var(--border);
+  background:transparent;color:var(--text-muted);
+  cursor:pointer;transition:all 0.2s;
+}
+.f-btn:hover{color:var(--gold);border-color:var(--border-hi);}
+
+.frame-loader{
+  position:absolute;
+  top:102px;left:0;right:0;bottom:0;
+  background:var(--bg-1);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:20px;z-index:10;
+  transition:opacity 0.45s;
+}
+.frame-loader.gone{opacity:0;pointer-events:none;}
+.spin-ring{
+  width:44px;height:44px;border-radius:50%;
+  border:2px solid var(--border);
+  border-top-color:var(--gold);
+  animation:spin 0.85s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.spin-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.56rem;letter-spacing:0.26em;text-transform:uppercase;
+  color:var(--text-muted);
+}
+#main-frame{flex:1;border:none;width:100%;background:var(--bg);}
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS & REVEAL
+═══════════════════════════════════════════ */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(28px);}
+  to  {opacity:1;transform:translateY(0);}
+}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+.reveal{
+  opacity:0;transform:translateY(34px);
+  transition:opacity 0.7s cubic-bezier(0.22,1,0.36,1),
+             transform 0.7s cubic-bezier(0.22,1,0.36,1);
+}
+.reveal.vis{opacity:1;transform:none;}
+.rd1{transition-delay:0.08s;}
+.rd2{transition-delay:0.18s;}
+.rd3{transition-delay:0.28s;}
+
+/* ═══════════════════════════════════════════
+   MOBILE BOTTOM NAV
+═══════════════════════════════════════════ */
+.mobile-nav{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;
+  z-index:1500;
+  background:rgba(4,2,0,0.97);
+  border-top:1px solid var(--border);
+  backdrop-filter:blur(22px) saturate(160%);
+  -webkit-backdrop-filter:blur(22px) saturate(160%);
+  padding-bottom:env(safe-area-inset-bottom,4px);
+}
+.mobile-nav-inner{
+  display:flex;justify-content:space-around;align-items:stretch;
+}
+.mnav-btn{
+  flex:1;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;padding:10px 6px 8px;
+  background:none;border:none;cursor:pointer;
+  position:relative;
+  transition:background 0.2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.mnav-btn:active{background:rgba(255,255,255,0.05);}
+/* barra activa en la parte superior de cada botón */
+.mnav-btn::before{
+  content:'';
+  position:absolute;top:0;left:20%;right:20%;
+  height:2px;border-radius:0 0 2px 2px;
+  background:var(--tc,var(--gold));
+  opacity:0;transition:opacity 0.22s;
+}
+.mnav-btn.active::before{opacity:1;}
+.mnav-ico{font-size:1.35rem;line-height:1;transition:transform 0.2s;}
+.mnav-btn.active .mnav-ico{transform:scale(1.12);}
+.mnav-lbl{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.44rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-muted);transition:color 0.2s;
+  white-space:nowrap;
+}
+.mnav-btn.active .mnav-lbl{color:var(--tc,var(--gold));}
+.mnav-btn.mn-home{--tc:var(--gold);}
+.mnav-btn.mn-s   {--tc:var(--c-suelos);}
+.mnav-btn.mn-b   {--tc:var(--c-biblio);}
+.mnav-btn.mn-p   {--tc:var(--c-plagas);}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+
+/* Tablet ancha */
+@media(max-width:1024px){
+  .cards{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
+}
+
+/* Tablet */
+@media(max-width:860px){
+  .pillars-grid{grid-template-columns:1fr 1fr;}
+  .cards{grid-template-columns:1fr 1fr;}
+  .band-grid{grid-template-columns:1fr 1fr;}
+}
+
+/* Tablet pequeña */
+@media(max-width:680px){
+  .cards{grid-template-columns:1fr;}
+  .pillars-grid{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr;}
+  .footer-right{text-align:left;}
+  .footer-bottom{flex-direction:column;align-items:flex-start;}
+}
+
+/* ── Móvil: activa bottom nav, simplifica topnav ── */
+@media(max-width:600px){
+  /* Mostrar nav inferior, ocultar elementos del nav superior */
+  .mobile-nav{display:block;}
+  .nav-tabs,.home-btn,.nav-sep{display:none;}
+  .topnav{padding:0 16px;gap:10px;height:54px;}
+
+  /* Ajuste de padding-top para el nav más pequeño */
+  #splash{padding-top:54px;}
+  #frame-wrap{padding-top:54px;}
+
+  /* Espacio inferior para la bottom nav */
+  .footer{padding-bottom:80px;}
+  .pillars-sec{padding-bottom:100px;}
+
+  /* ── Hero ── */
+  .hero{padding:44px 18px 80px;min-height:auto;}
+  .hero-badge{
+    margin-bottom:24px;
+    padding:8px 16px 8px 12px;
+    gap:10px;
+  }
+  .badge-wolf{font-size:1.4rem;}
+  .badge-name{font-size:0.9rem;}
+  .badge-tag{display:none;}
+  .hero-eyebrow{font-size:0.58rem;letter-spacing:0.28em;margin-bottom:14px;}
+  .hero-title{
+    font-size:clamp(2.6rem,12vw,3.6rem);
+    margin-bottom:16px;
+  }
+  .hero-title .sub-line{
+    font-size:clamp(0.95rem,4vw,1.2rem);
+    margin-top:6px;
+  }
+  .hero-desc{
+    font-size:0.88rem;
+    margin-bottom:32px;
+    padding:0 4px;
+  }
+  /* Stats: grid 2×2 */
+  .hero-stats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    width:100%;border-radius:6px;
+  }
+  .stat{padding:14px 8px;}
+  .stat:nth-child(odd){border-right:1px solid var(--border);}
+  .stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--border);}
+  .stat-n{font-size:1.55rem;}
+  .stat-l{font-size:0.42rem;}
+
+  /* ── Secciones ── */
+  .modules{padding:52px 16px 90px;}
+  .sec-eye{font-size:0.54rem;}
+  .sec-h2{font-size:1.5rem;}
+  .sec-p{font-size:0.82rem;}
+  .cards{gap:12px;}
+
+  /* Tarjetas */
+  .mcard-head{padding:20px 18px 16px;gap:12px;}
+  .mcard-ico{width:46px;height:46px;font-size:1.5rem;border-radius:8px;}
+  .mcard-num{font-size:0.48rem;margin-bottom:5px;}
+  .mcard-title{font-size:1.08rem;}
+  .mcard-body{padding:16px 18px;}
+  .mcard-desc{font-size:0.82rem;margin-bottom:16px;}
+  .mcard-feats li{font-size:0.54rem;}
+  .mcard-foot{padding:12px 18px;}
+  .mcard-cta{font-size:0.52rem;}
+
+  /* Features band */
+  .band{padding:44px 16px;}
+  .band-grid{grid-template-columns:1fr;}
+  .band-item{padding:22px 18px;gap:10px;}
+  .band-ico{font-size:1.5rem;}
+  .band-title{font-size:0.95rem;}
+  .band-text{font-size:0.78rem;}
+
+  /* Quote */
+  .quote-sec{padding:52px 20px;}
+  .qmark{font-size:5rem;line-height:0.7;}
+  .qtext{font-size:1.05rem;line-height:1.65;}
+
+  /* Pilares */
+  .pillars-sec{padding:52px 16px 100px;}
+  .pillar{padding:24px 20px;}
+  .pillar-ico{font-size:1.8rem;margin-bottom:12px;}
+
+  /* Footer */
+  .footer{padding:36px 16px 20px;}
+  .footer-brand-row{margin-bottom:10px;}
+  .footer-tagline{font-size:0.78rem;}
+  .fpills{display:none;} /* ya existe el mobile nav */
+
+  /* Brand */
+  .brand-sub{display:none;}
+
+  /* Frame bar en módulos */
+  .frame-bar{height:34px;padding:0 14px;}
+  .f-home{font-size:0.46rem;}
+  .f-cur{
+    font-size:0.46rem;
+    max-width:140px;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .f-btn{font-size:0.46rem;padding:4px 10px;}
+
+  /* Settings drawer: ancho completo */
+  .cfg-drawer{width:100%;border-left:none;border-top:1px solid var(--border);}
+  .cfg-body{padding:18px;}
+}
+
+/* ── Teléfonos muy pequeños (SE, Galaxy A) ── */
+@media(max-width:380px){
+  .hero-title{font-size:2.4rem;}
+  .badge-wolf{font-size:1.25rem;}
+  .badge-name{font-size:0.82rem;}
+  .hero-desc{font-size:0.82rem;}
+  .stat-n{font-size:1.35rem;}
+  .mcard-title{font-size:1rem;}
+  .mnav-lbl{font-size:0.4rem;}
+  .mnav-ico{font-size:1.2rem;}
+}
+
+/* ═══════════════════════════════════════════
+   SETTINGS PANEL
+═══════════════════════════════════════════ */
+.cfg-btn{
+  font-size:1.05rem;
+  width:36px;height:36px;border-radius:6px;
+  border:1px solid var(--border);
+  background:transparent;color:var(--text-dim);
+  cursor:pointer;transition:all 0.22s;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.cfg-btn:hover{color:var(--gold);border-color:var(--border-hi);background:rgba(212,149,42,0.07);}
+.cfg-btn.open{color:var(--gold);border-color:var(--border-hi);background:rgba(212,149,42,0.1);}
+
+/* Backdrop */
+.cfg-backdrop{
+  position:fixed;inset:0;z-index:3000;
+  background:rgba(0,0,0,0.55);
+  backdrop-filter:blur(4px);
+  opacity:0;pointer-events:none;
+  transition:opacity 0.3s;
+}
+.cfg-backdrop.show{opacity:1;pointer-events:all;}
+
+/* Drawer */
+.cfg-drawer{
+  position:fixed;top:0;right:0;bottom:0;
+  width:320px;max-width:94vw;
+  z-index:3100;
+  background:#0e0a04;
+  border-left:1px solid var(--border);
+  display:flex;flex-direction:column;
+  transform:translateX(100%);
+  transition:transform 0.34s cubic-bezier(0.22,1,0.36,1);
+  overflow:hidden;
+}
+.cfg-drawer.show{transform:translateX(0);}
+
+/* Drawer header */
+.cfg-head{
+  padding:20px 22px 16px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(0,0,0,0.25);
+  flex-shrink:0;
+}
+.cfg-head-title{
+  font-family:'Playfair Display',serif;
+  font-size:1rem;font-weight:700;color:var(--cream);
+  display:flex;align-items:center;gap:8px;
+}
+.cfg-close{
+  width:30px;height:30px;border-radius:4px;
+  border:1px solid var(--border);
+  background:transparent;color:var(--text-muted);
+  cursor:pointer;font-size:1rem;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;
+}
+.cfg-close:hover{color:var(--gold);border-color:var(--border-hi);}
+
+/* Drawer body */
+.cfg-body{flex:1;overflow-y:auto;padding:22px;}
+.cfg-body::-webkit-scrollbar{width:4px;}
+.cfg-body::-webkit-scrollbar-track{background:transparent;}
+.cfg-body::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:2px;}
+
+/* Section label */
+.cfg-section{margin-bottom:28px;}
+.cfg-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.52rem;letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--gold);opacity:0.7;margin-bottom:14px;display:block;
+}
+
+/* Slider */
+.cfg-slider-row{display:flex;align-items:center;gap:10px;}
+.cfg-slider-val{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.6rem;letter-spacing:0.1em;
+  color:var(--gold-hi);min-width:36px;text-align:right;
+}
+input[type=range].cfg-range{
+  -webkit-appearance:none;appearance:none;
+  flex:1;height:4px;border-radius:2px;
+  background:rgba(212,149,42,0.18);outline:none;cursor:pointer;
+}
+input[type=range].cfg-range::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--gold);border:2px solid var(--bg);
+  cursor:pointer;transition:transform 0.15s;
+}
+input[type=range].cfg-range::-webkit-slider-thumb:hover{transform:scale(1.2);}
+input[type=range].cfg-range::-moz-range-thumb{
+  width:16px;height:16px;border-radius:50%;
+  background:var(--gold);border:2px solid var(--bg);cursor:pointer;
+}
+
+/* Color swatches */
+.cfg-swatches{display:flex;flex-wrap:wrap;gap:8px;}
+.cfg-swatch{
+  width:32px;height:32px;border-radius:6px;
+  cursor:pointer;border:2px solid transparent;
+  transition:transform 0.18s,border-color 0.18s;
+  position:relative;
+}
+.cfg-swatch:hover{transform:scale(1.12);}
+.cfg-swatch.active{border-color:#fff;}
+.cfg-swatch.active::after{
+  content:'✓';position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;color:#fff;font-weight:700;
+  text-shadow:0 1px 3px rgba(0,0,0,0.8);
+}
+
+/* Font family buttons */
+.cfg-fonts{display:flex;flex-direction:column;gap:7px;}
+.cfg-font-btn{
+  padding:10px 14px;border-radius:4px;
+  border:1px solid var(--border);
+  background:transparent;color:var(--text-dim);
+  cursor:pointer;transition:all 0.2s;text-align:left;
+}
+.cfg-font-btn:hover{border-color:var(--border-hi);color:var(--text);}
+.cfg-font-btn.active{
+  border-color:var(--gold);
+  background:rgba(212,149,42,0.08);
+  color:var(--gold-hi);
+}
+.cfg-font-name{font-size:0.9rem;display:block;margin-bottom:2px;}
+.cfg-font-sub{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.48rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--text-muted);
+}
+
+/* Theme buttons */
+.cfg-themes{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.cfg-theme-btn{
+  padding:12px 10px;border-radius:4px;
+  border:1px solid var(--border);
+  background:transparent;color:var(--text-dim);
+  cursor:pointer;transition:all 0.2s;text-align:center;
+}
+.cfg-theme-btn:hover{border-color:var(--border-hi);}
+.cfg-theme-btn.active{border-color:var(--gold);background:rgba(212,149,42,0.08);color:var(--gold-hi);}
+.cfg-theme-ico{font-size:1.2rem;display:block;margin-bottom:5px;}
+.cfg-theme-name{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.5rem;letter-spacing:0.15em;text-transform:uppercase;
+}
+
+/* Reset btn */
+.cfg-reset{
+  width:100%;padding:11px;border-radius:4px;
+  border:1px solid var(--border);
+  background:transparent;color:var(--text-muted);
+  cursor:pointer;transition:all 0.2s;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.54rem;letter-spacing:0.18em;text-transform:uppercase;
+  margin-top:6px;
+}
+.cfg-reset:hover{color:var(--gold);border-color:var(--border-hi);}
+
+/* Separator */
+.cfg-sep{height:1px;background:var(--border);margin-bottom:24px;}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     NAV
+════════════════════════════════════ -->
+<nav class="topnav" id="topnav">
+  <button class="nav-brand" onclick="showHome()">
+    <span class="nav-wolf">🐺</span>
+    <div class="brand-col">
+      <span class="brand-name">AGRODEY</span>
+      <span class="brand-sub">Portal Agrícola · Costa Rica · 2026</span>
+    </div>
+  </button>
+
+  <div class="nav-sep"></div>
+
+  <div class="nav-tabs">
+    <button class="tab-btn ts" id="tab-s"
+      onclick="openMod('suelos_profesional_5.html','Manual de Suelos','tab-s','var(--c-suelos)')">
+      <span class="tab-pip"></span>
+      <span class="tab-label">Suelos</span>
+      🪨
+    </button>
+    <button class="tab-btn tb" id="tab-b"
+      onclick="openMod('biblioteca_agricola.html','Biblioteca Agrícola','tab-b','var(--c-biblio)')">
+      <span class="tab-pip"></span>
+      <span class="tab-label">Biblioteca</span>
+      📚
+    </button>
+    <button class="tab-btn tp" id="tab-p"
+      onclick="openMod('plagas_mis_cultivos_1.html','Plagas &amp; Enfermedades','tab-p','var(--c-plagas)')">
+      <span class="tab-pip"></span>
+      <span class="tab-label">Plagas</span>
+      🌿
+    </button>
+  </div>
+
+  <button class="home-btn" onclick="showHome()">⌂ Inicio</button>
+  <button class="cfg-btn" id="cfg-toggle" onclick="toggleCfg()" title="Ajustes de apariencia">⚙</button>
+</nav>
+
+<!-- ════════════════════════════════════
+     SPLASH
+════════════════════════════════════ -->
+<div id="splash">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
+    <div class="orb orb-c"></div>
+    <div class="orb orb-d"></div>
+    <div id="particles"></div>
+    <div class="hero-terrain"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-wolf">🐺</span>
+        <div class="badge-info">
+          <span class="badge-name">Lobo / DeyFz</span>
+          <span class="badge-tag">Productor · Costa Rica · 2026</span>
+        </div>
+      </div>
+
+      <p class="hero-eyebrow">Sistema de Referencia Agrícola</p>
+
+      <h1 class="hero-title">
+        AGRO<em>DEY</em>
+        <span class="sub-line">Conocimiento que produce resultados</span>
+      </h1>
+
+      <p class="hero-desc">
+        Tres módulos técnicos integrados para la gestión profesional de
+        la finca — suelos, nutrición vegetal y manejo de plagas.
+      </p>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-n"><em>3</em></span>
+          <span class="stat-l">Módulos</span>
+        </div>
+        <div class="stat">
+          <span class="stat-n"><em>10</em></span>
+          <span class="stat-l">Cultivos</span>
+        </div>
+        <div class="stat">
+          <span class="stat-n"><em>18</em></span>
+          <span class="stat-l">Nutrientes</span>
+        </div>
+        <div class="stat">
+          <span class="stat-n"><em>60</em><em style="font-size:1.1rem;vertical-align:middle">+</em></span>
+          <span class="stat-l">Plagas & Enf.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-cue" onclick="document.querySelector('.modules').scrollIntoView({behavior:'smooth'})">
+      <span>Ver módulos</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- MODULES -->
+  <section class="modules">
+    <div class="sec-head reveal">
+      <span class="sec-eye">Módulos de consulta técnica</span>
+      <h2 class="sec-h2">Tres pilares del conocimiento agrícola</h2>
+      <p class="sec-p">Selecciona un módulo para abrirlo en pantalla completa</p>
+    </div>
+
+    <div class="cards">
+
+      <!-- SUELOS -->
+      <article class="mcard ms reveal rd1"
+        onclick="openMod('suelos_profesional_5.html','Manual de Suelos','tab-s','var(--c-suelos)')">
+        <div class="mcard-accent"></div>
+        <div class="mcard-head">
+          <div class="mcard-ico">🪨</div>
+          <div class="mcard-hinfo">
+            <span class="mcard-num">01 · Edafología</span>
+            <h3 class="mcard-title">Manual Técnico del Suelo Agrícola</h3>
+          </div>
+        </div>
+        <div class="mcard-body">
+          <p class="mcard-desc">
+            Guía profesional completa sobre la ciencia del suelo: entiende
+            y optimiza la base de toda producción agrícola sostenible.
+          </p>
+          <ul class="mcard-feats">
+            <li><span class="fdot"></span>Tres pilares: físico, químico y biológico del suelo</li>
+            <li><span class="fdot"></span>Escala de pH interactiva (3.5 – 9.0) con disponibilidad de nutrientes</li>
+            <li><span class="fdot"></span>Tipos de textura: arenoso, franco, arcilloso y limoso</li>
+            <li><span class="fdot"></span>Interpretación de análisis de laboratorio (CIC, saturaciones)</li>
+            <li><span class="fdot"></span>Quiz de autoevaluación + calculadora de pH interactiva</li>
+            <li><span class="fdot"></span>Los 5 errores más costosos en el manejo del suelo</li>
+          </ul>
+          <div class="mcard-tags">
+            <span class="mtag">pH</span>
+            <span class="mtag">Textura</span>
+            <span class="mtag">M.O.</span>
+            <span class="mtag">CIC</span>
+            <span class="mtag">Rotación</span>
+            <span class="mtag">Quiz</span>
+          </div>
+        </div>
+        <div class="mcard-foot">
+          <span class="mcard-cta">Abrir módulo</span>
+          <span class="mcard-arr">→</span>
+        </div>
+      </article>
+
+      <!-- BIBLIOTECA -->
+      <article class="mcard mb reveal rd2"
+        onclick="openMod('biblioteca_agricola.html','Biblioteca Agrícola','tab-b','var(--c-biblio)')">
+        <div class="mcard-accent"></div>
+        <div class="mcard-head">
+          <div class="mcard-ico">📚</div>
+          <div class="mcard-hinfo">
+            <span class="mcard-num">02 · Nutrición Vegetal</span>
+            <h3 class="mcard-title">Biblioteca Agrícola</h3>
+          </div>
+        </div>
+        <div class="mcard-body">
+          <p class="mcard-desc">
+            Referencia enciclopédica de todos los elementos que intervienen
+            en la nutrición vegetal, desde macros hasta bioestimulantes.
+          </p>
+          <ul class="mcard-feats">
+            <li><span class="fdot"></span>Macronutrientes: N, P, K, Ca, Mg, S — síntomas y pH óptimo</li>
+            <li><span class="fdot"></span>Micronutrientes: Zn, B, Fe, Mn, Cu, Mo, Cl, Ni</li>
+            <li><span class="fdot"></span>Ácidos húmicos, fúlvicos, aminoácidos y orgánicos</li>
+            <li><span class="fdot"></span>Bioestimulantes: extractos de algas, quitosano, vitaminas</li>
+            <li><span class="fdot"></span>Fitohormonas: auxinas, citoquininas, giberelinas, ABA, etileno</li>
+            <li><span class="fdot"></span>Bacterias benéficas, hongos micorrízicos y minerales</li>
+          </ul>
+          <div class="mcard-tags">
+            <span class="mtag">N-P-K</span>
+            <span class="mtag">Micronutrientes</span>
+            <span class="mtag">Bioestimulantes</span>
+            <span class="mtag">Fitohormonas</span>
+            <span class="mtag">Hongos</span>
+          </div>
+        </div>
+        <div class="mcard-foot">
+          <span class="mcard-cta">Abrir módulo</span>
+          <span class="mcard-arr">→</span>
+        </div>
+      </article>
+
+      <!-- PLAGAS -->
+      <article class="mcard mp reveal rd3"
+        onclick="openMod('plagas_mis_cultivos_1.html','Plagas &amp; Enfermedades','tab-p','var(--c-plagas)')">
+        <div class="mcard-accent"></div>
+        <div class="mcard-head">
+          <div class="mcard-ico">🌿</div>
+          <div class="mcard-hinfo">
+            <span class="mcard-num">03 · M.I.P.</span>
+            <h3 class="mcard-title">Plagas y Enfermedades · Mis Cultivos</h3>
+          </div>
+        </div>
+        <div class="mcard-body">
+          <p class="mcard-desc">
+            Manejo Integrado de Plagas personalizado para los 10 cultivos
+            de la finca, con calendarios fenológicos y umbrales de acción.
+          </p>
+          <ul class="mcard-feats">
+            <li><span class="fdot"></span>Chile dulce, maracuyá, culantro, vainica, frijol tierno</li>
+            <li><span class="fdot"></span>Chayote, berenjena, cas, maíz dulce y limón ácido</li>
+            <li><span class="fdot"></span>Plagas con nombre científico, daño y umbrales de acción</li>
+            <li><span class="fdot"></span>Enfermedades fungosas, bacterianas y virales por cultivo</li>
+            <li><span class="fdot"></span>Control biológico: Beauveria, Trichoderma, Bacillus subtilis</li>
+            <li><span class="fdot"></span>Calendarios fenológicos con zonas de riesgo estacional</li>
+          </ul>
+          <div class="mcard-tags">
+            <span class="mtag">🌶️ Chile</span>
+            <span class="mtag">🌽 Maíz</span>
+            <span class="mtag">🫘 Frijol</span>
+            <span class="mtag">🍋 Limón</span>
+            <span class="mtag">Bio-control</span>
+          </div>
+        </div>
+        <div class="mcard-foot">
+          <span class="mcard-cta">Abrir módulo</span>
+          <span class="mcard-arr">→</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- FEATURES BAND -->
+  <section class="band">
+    <div class="band-grid">
+      <div class="band-item reveal">
+        <span class="band-ico">🔬</span>
+        <span class="band-title">Base Científica</span>
+        <span class="band-text">Información respaldada por agronomía moderna y adaptada a las condiciones tropicales de Costa Rica.</span>
+      </div>
+      <div class="band-item reveal rd1">
+        <span class="band-ico">📱</span>
+        <span class="band-title">Diseño Responsivo</span>
+        <span class="band-text">Consulta en campo desde cualquier dispositivo — optimizado para celular, tablet y desktop.</span>
+      </div>
+      <div class="band-item reveal rd2">
+        <span class="band-ico">⚡</span>
+        <span class="band-title">Herramientas Interactivas</span>
+        <span class="band-text">Calculadora de pH, quiz de autoevaluación y navegación inteligente dentro de cada módulo.</span>
+      </div>
+      <div class="band-item reveal rd3">
+        <span class="band-ico">🗓️</span>
+        <span class="band-title">Calendarios de Riesgo</span>
+        <span class="band-text">Períodos críticos de plagas visualizados por cultivo, con zonas de alta, media y baja presión.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE -->
+  <section class="quote-sec">
+    <div class="quote-wrap reveal">
+      <span class="qmark">"</span>
+      <p class="qtext">
+        No alimentes la planta. Alimenta el suelo.<br>
+        El suelo se encargará de alimentar la planta<br>
+        mejor de lo que tú jamás podrías hacerlo.
+      </p>
+      <div class="qline"></div>
+      <span class="qcite">Manual Técnico del Suelo Agrícola · Lobo/DeyFz · 2026</span>
+    </div>
+  </section>
+
+  <!-- PILLARS -->
+  <section class="pillars-sec">
+    <div class="pillars-inner">
+      <div class="sec-head reveal">
+        <span class="sec-eye">Filosofía de la finca</span>
+        <h2 class="sec-h2">El suelo como ecosistema vivo</h2>
+      </div>
+      <div class="pillars-grid">
+        <div class="pillar reveal rd1">
+          <span class="pillar-ico">🪨</span>
+          <span class="pillar-name">Pilar Físico</span>
+          <p class="pillar-text">Estructura, textura, compactación, drenaje y retención hídrica. La arquitectura donde vive la raíz.</p>
+        </div>
+        <div class="pillar reveal rd2">
+          <span class="pillar-ico">⚗️</span>
+          <span class="pillar-name">Pilar Químico</span>
+          <p class="pillar-text">pH, CIC, macro y micronutrientes, salinidad. El lenguaje molecular que determina qué puede absorber la planta.</p>
+        </div>
+        <div class="pillar reveal rd3">
+          <span class="pillar-ico">🪱</span>
+          <span class="pillar-name">Pilar Biológico</span>
+          <p class="pillar-text">Microbios, hongos, lombrices, materia orgánica. El motor invisible que transforma minerales en vida.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-row">
+          <span class="footer-wolf">🐺</span>
+          <span class="footer-bname">Lobo / DeyFz</span>
+        </div>
+        <p class="footer-tagline">
+          Sistema de referencia agrícola personal para la gestión técnica
+          de la finca en Costa Rica. Contenido de uso privado y educativo.
+        </p>
+      </div>
+      <div class="footer-right">
+        <p>AGRODEY · Portal Agrícola</p>
+        <p>Costa Rica · 2026</p>
+        <p>Versión 2.0</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="fcopy">© 2026 Lobo/DeyFz · Todos los derechos reservados</span>
+      <div class="fpills">
+        <button class="fpill" onclick="openMod('suelos_profesional_5.html','Manual de Suelos','tab-s','var(--c-suelos)')">🪨 Suelos</button>
+        <button class="fpill" onclick="openMod('biblioteca_agricola.html','Biblioteca Agrícola','tab-b','var(--c-biblio)')">📚 Biblioteca</button>
+        <button class="fpill" onclick="openMod('plagas_mis_cultivos_1.html','Plagas &amp; Enfermedades','tab-p','var(--c-plagas)')">🌿 Plagas</button>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /splash -->
+
+<!-- ════════════════════════════════════
+     IFRAME PANEL
+════════════════════════════════════ -->
+<div id="frame-wrap">
+  <div class="frame-bar">
+    <div class="f-crumb">
+      <span class="f-home" onclick="showHome()">AGRODEY</span>
+      <span class="f-sep">›</span>
+      <span class="f-cur" id="f-label">—</span>
+      <span class="f-dot" id="f-dot"></span>
+    </div>
+    <div style="display:flex;gap:6px">
+      <button class="f-btn" onclick="showHome()">← Inicio</button>
+    </div>
+  </div>
+
+  <div class="frame-loader" id="loader">
+    <div class="spin-ring"></div>
+    <span class="spin-label">Cargando módulo...</span>
+  </div>
+
+  <iframe id="main-frame" src="" title="Módulo agrícola"></iframe>
+</div>
+
+<!-- ════════════════════════════════════
+     MOBILE BOTTOM NAV
+════════════════════════════════════ -->
+<nav class="mobile-nav" id="mobile-nav" aria-label="Navegación móvil">
+  <div class="mobile-nav-inner">
+    <button class="mnav-btn mn-home active" id="mnav-home" onclick="showHome()">
+      <span class="mnav-ico">⌂</span>
+      <span class="mnav-lbl">Inicio</span>
+    </button>
+    <button class="mnav-btn mn-s" id="mnav-s"
+      onclick="openMod('suelos_profesional_5.html','Manual de Suelos','tab-s','var(--c-suelos)')">
+      <span class="mnav-ico">🪨</span>
+      <span class="mnav-lbl">Suelos</span>
+    </button>
+    <button class="mnav-btn mn-b" id="mnav-b"
+      onclick="openMod('biblioteca_agricola.html','Biblioteca Agrícola','tab-b','var(--c-biblio)')">
+      <span class="mnav-ico">📚</span>
+      <span class="mnav-lbl">Biblioteca</span>
+    </button>
+    <button class="mnav-btn mn-p" id="mnav-p"
+      onclick="openMod('plagas_mis_cultivos_1.html','Plagas &amp; Enfermedades','tab-p','var(--c-plagas)')">
+      <span class="mnav-ico">🌿</span>
+      <span class="mnav-lbl">Plagas</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════
+     SETTINGS PANEL
+════════════════════════════════════ -->
+<div class="cfg-backdrop" id="cfg-backdrop" onclick="closeCfg()"></div>
+
+<aside class="cfg-drawer" id="cfg-drawer">
+  <div class="cfg-head">
+    <span class="cfg-head-title">⚙ Ajustes de Apariencia</span>
+    <button class="cfg-close" onclick="closeCfg()">✕</button>
+  </div>
+
+  <div class="cfg-body">
+
+    <!-- Tamaño de letra -->
+    <div class="cfg-section">
+      <span class="cfg-label">Tamaño de letra</span>
+      <div class="cfg-slider-row">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--text-muted)">A</span>
+        <input type="range" class="cfg-range" id="font-size-range"
+          min="80" max="130" step="5" value="100">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:1rem;color:var(--text-muted)">A</span>
+        <span class="cfg-slider-val" id="font-size-val">100%</span>
+      </div>
+    </div>
+
+    <!-- Espaciado entre líneas -->
+    <div class="cfg-section">
+      <span class="cfg-label">Espaciado de línea</span>
+      <div class="cfg-slider-row">
+        <span style="font-size:0.7rem;color:var(--text-muted)">≡</span>
+        <input type="range" class="cfg-range" id="line-height-range"
+          min="140" max="210" step="5" value="175">
+        <span style="font-size:1rem;color:var(--text-muted)">≡</span>
+        <span class="cfg-slider-val" id="line-height-val">1.75</span>
+      </div>
+    </div>
+
+    <div class="cfg-sep"></div>
+
+    <!-- Color de acento -->
+    <div class="cfg-section">
+      <span class="cfg-label">Color de acento</span>
+      <div class="cfg-swatches" id="accent-swatches">
+        <div class="cfg-swatch active" style="background:#d4952a" data-accent="amber"
+          title="Ámbar (original)" onclick="setAccent('amber','#d4952a','#f0c84a','#7a5010')"></div>
+        <div class="cfg-swatch" style="background:#5dbea3" data-accent="teal"
+          title="Verde teal" onclick="setAccent('teal','#5dbea3','#7edfc8','#2a7060')"></div>
+        <div class="cfg-swatch" style="background:#e8504a" data-accent="rojo"
+          title="Rojo tierra" onclick="setAccent('rojo','#e8504a','#ff7a74','#8c2820')"></div>
+        <div class="cfg-swatch" style="background:#7b9cdc" data-accent="azul"
+          title="Azul cielo" onclick="setAccent('azul','#7b9cdc','#a0bef0','#3a5a90')"></div>
+        <div class="cfg-swatch" style="background:#a87fd4" data-accent="violeta"
+          title="Violeta" onclick="setAccent('violeta','#a87fd4','#caa0f0','#5a3a80')"></div>
+        <div class="cfg-swatch" style="background:#6abf6a" data-accent="verde"
+          title="Verde hoja" onclick="setAccent('verde','#6abf6a','#90df90','#2a6a2a')"></div>
+        <div class="cfg-swatch" style="background:#e0a030" data-accent="oro"
+          title="Oro brillante" onclick="setAccent('oro','#e0a030','#f8c850','#905010')"></div>
+        <div class="cfg-swatch" style="background:#e87a40" data-accent="naranja"
+          title="Naranja" onclick="setAccent('naranja','#e87a40','#ffaa70','#904020')"></div>
+      </div>
+    </div>
+
+    <div class="cfg-sep"></div>
+
+    <!-- Tema de fondo -->
+    <div class="cfg-section">
+      <span class="cfg-label">Tema de fondo</span>
+      <div class="cfg-themes" id="theme-btns">
+        <button class="cfg-theme-btn active" data-theme="oscuro" onclick="setTheme('oscuro')">
+          <span class="cfg-theme-ico">🌑</span>
+          <span class="cfg-theme-name">Oscuro</span>
+        </button>
+        <button class="cfg-theme-btn" data-theme="profundo" onclick="setTheme('profundo')">
+          <span class="cfg-theme-ico">🌚</span>
+          <span class="cfg-theme-name">Profundo</span>
+        </button>
+        <button class="cfg-theme-btn" data-theme="carbon" onclick="setTheme('carbon')">
+          <span class="cfg-theme-ico">⬛</span>
+          <span class="cfg-theme-name">Carbón</span>
+        </button>
+        <button class="cfg-theme-btn" data-theme="tierra" onclick="setTheme('tierra')">
+          <span class="cfg-theme-ico">🟫</span>
+          <span class="cfg-theme-name">Tierra</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="cfg-sep"></div>
+
+    <!-- Tipografía -->
+    <div class="cfg-section">
+      <span class="cfg-label">Tipografía del cuerpo</span>
+      <div class="cfg-fonts" id="font-btns">
+        <button class="cfg-font-btn active" data-font="serif" onclick="setFont('serif')">
+          <span class="cfg-font-name" style="font-family:'Source Serif 4',serif">Source Serif 4</span>
+          <span class="cfg-font-sub">Serif · Original</span>
+        </button>
+        <button class="cfg-font-btn" data-font="mono" onclick="setFont('mono')">
+          <span class="cfg-font-name" style="font-family:'JetBrains Mono',monospace">JetBrains Mono</span>
+          <span class="cfg-font-sub">Monospace · Técnica</span>
+        </button>
+        <button class="cfg-font-btn" data-font="system" onclick="setFont('system')">
+          <span class="cfg-font-name" style="font-family:system-ui">Sistema</span>
+          <span class="cfg-font-sub">Sans-serif · Limpia</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="cfg-sep"></div>
+
+    <!-- Grano de textura -->
+    <div class="cfg-section">
+      <span class="cfg-label">Intensidad del grano</span>
+      <div class="cfg-slider-row">
+        <span style="font-size:0.7rem;color:var(--text-muted)">○</span>
+        <input type="range" class="cfg-range" id="grain-range"
+          min="0" max="6" step="1" value="3">
+        <span style="font-size:1rem;color:var(--text-muted)">◉</span>
+        <span class="cfg-slider-val" id="grain-val">Med</span>
+      </div>
+    </div>
+
+    <button class="cfg-reset" onclick="resetAll()">↺ Restablecer todo</button>
+
+  </div>
+</aside>
+
+<!-- ════════════════════════════════════
+     JS
+════════════════════════════════════ -->
+<script>
+/* refs */
+const splash    = document.getElementById('splash');
+const frameWrap = document.getElementById('frame-wrap');
+const iframe    = document.getElementById('main-frame');
+const fLabel    = document.getElementById('f-label');
+const fDot      = document.getElementById('f-dot');
+const loader    = document.getElementById('loader');
+const topnav    = document.getElementById('topnav');
+const tabs      = document.querySelectorAll('.tab-btn');
+
+/* nav shadow */
+window.addEventListener('scroll',()=>{
+  topnav.classList.toggle('scrolled', window.scrollY > 8);
+},{passive:true});
+
+/* particles */
+(()=>{
+  const p = document.getElementById('particles');
+  for(let i=0;i<32;i++){
+    const d=document.createElement('div');
+    d.className='pdot';
+    const dx=(Math.random()-0.5)*40;
+    d.style.cssText=`
+      left:${Math.random()*100}%;
+      bottom:${Math.random()*50+5}%;
+      width:${1+Math.random()*2.5}px;
+      height:${1+Math.random()*2.5}px;
+      --dx:${dx}px;
+      animation-duration:${6+Math.random()*12}s;
+      animation-delay:${Math.random()*12}s;
+    `;
+    p.appendChild(d);
+  }
+})();
+
+/* scroll reveal */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);}
+  });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* Sincroniza el estado activo del nav inferior */
+const mnavBtns = document.querySelectorAll('.mnav-btn');
+function syncMobileNav(activeId){
+  mnavBtns.forEach(b=>b.classList.remove('active'));
+  const target = document.getElementById(activeId);
+  if(target) target.classList.add('active');
+}
+
+/* open module */
+function openMod(file,label,tabId,color){
+  splash.style.display='none';
+  frameWrap.classList.add('open');
+
+  fLabel.textContent=label;
+  fDot.style.background=color||'var(--gold)';
+
+  tabs.forEach(t=>t.classList.remove('active'));
+  const at=document.getElementById(tabId);
+  if(at) at.classList.add('active');
+
+  /* Mapea tab-s/b/p → mnav-s/b/p */
+  const mId = tabId.replace('tab-','mnav-');
+  syncMobileNav(mId);
+
+  loader.classList.remove('gone');
+  iframe.src=file;
+  iframe.onload=()=>{
+    loader.classList.add('gone');
+    injectIntoIframe(); /* aplicar ajustes al contenido recién cargado */
+  };
+
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+/* show home */
+function showHome(){
+  frameWrap.classList.remove('open');
+  splash.style.display='';
+  iframe.src='';
+  fLabel.textContent='—';
+  tabs.forEach(t=>t.classList.remove('active'));
+  syncMobileNav('mnav-home');
+  document.querySelectorAll('.reveal:not(.vis)').forEach(el=>obs.observe(el));
+}
+
+/* ══════════════════════════════════════
+   SETTINGS — estado central
+══════════════════════════════════════ */
+const cfgToggle   = document.getElementById('cfg-toggle');
+const cfgDrawer   = document.getElementById('cfg-drawer');
+const cfgBackdrop = document.getElementById('cfg-backdrop');
+const root        = document.documentElement;
+
+/* Estado único de todos los ajustes */
+const CFG = {
+  fontSize:   100,
+  lineHeight: 175,
+  font:       'serif',
+  grain:      3,
+  accent:     { name:'amber', base:'#d4952a', hi:'#f0c84a', dim:'#7a5010' },
+  theme:      'oscuro',
+};
+
+const fontMap = {
+  serif:  "'Source Serif 4',Georgia,serif",
+  mono:   "'JetBrains Mono',monospace",
+  system: "system-ui,-apple-system,sans-serif",
+};
+
+/* Temas para el portal (index.html) */
+const portalThemes = {
+  oscuro:  { bg:'#070400', bg1:'#0e0902', bg2:'#171008', bg3:'#1d1508' },
+  profundo:{ bg:'#030200', bg1:'#060300', bg2:'#0c0600', bg3:'#120800' },
+  carbon:  { bg:'#080808', bg1:'#101010', bg2:'#181818', bg3:'#202020' },
+  tierra:  { bg:'#0d0800', bg1:'#180f04', bg2:'#221508', bg3:'#2c1c0c' },
+};
+
+/*
+  Mapeo de variables CSS por archivo:
+  · suelos_profesional_5.html  → --parchment, --soil-dark, --soil-mid, --earth-amber, --earth-gold
+  · biblioteca_agricola.html   → --bg, --bg-card, --bg-card2, --gold, --gold-dim
+  · plagas_mis_cultivos_1.html → --bg, --bg-card, --bg-card2, --gold, --gold-light
+*/
+const iframeThemes = {
+  oscuro:  { bg:'#090600', bgC:'#141008', bgC2:'#1c1508', parch:'#1a1008', sD:'#0d0700', sM:'#2a1a0a' },
+  profundo:{ bg:'#040200', bgC:'#080400', bgC2:'#0e0800', parch:'#0a0600', sD:'#050200', sM:'#140800' },
+  carbon:  { bg:'#070707', bgC:'#0f0f0f', bgC2:'#171717', parch:'#0f0f0f', sD:'#040404', sM:'#1a1a1a' },
+  tierra:  { bg:'#0d0900', bgC:'#1c1208', bgC2:'#241808', parch:'#1e1208', sD:'#100900', sM:'#2e1c0a' },
+};
+
+/* ── Abrir / cerrar panel ── */
+function toggleCfg(){
+  const open = cfgDrawer.classList.toggle('show');
+  cfgBackdrop.classList.toggle('show', open);
+  cfgToggle.classList.toggle('open', open);
+}
+function closeCfg(){
+  cfgDrawer.classList.remove('show');
+  cfgBackdrop.classList.remove('show');
+  cfgToggle.classList.remove('open');
+}
+
+/* ── Aplicar ajustes al portal (index.html) ── */
+function applyToPortal(){
+  const t = portalThemes[CFG.theme];
+  root.style.setProperty('--bg',       t.bg);
+  root.style.setProperty('--bg-1',     t.bg1);
+  root.style.setProperty('--bg-2',     t.bg2);
+  root.style.setProperty('--bg-3',     t.bg3);
+  root.style.setProperty('--gold',     CFG.accent.base);
+  root.style.setProperty('--gold-hi',  CFG.accent.hi);
+  root.style.setProperty('--gold-dim', CFG.accent.dim);
+  root.style.setProperty('--border',   hexToRgba(CFG.accent.base, 0.12));
+  root.style.setProperty('--border-hi',hexToRgba(CFG.accent.base, 0.30));
+  root.style.setProperty('--c-suelos', CFG.accent.base);
+  root.style.fontSize            = CFG.fontSize + '%';
+  document.body.style.lineHeight = (CFG.lineHeight / 100).toFixed(2);
+  document.body.style.fontFamily = fontMap[CFG.font];
+  let gst = document.getElementById('grain-style');
+  if(!gst){ gst=document.createElement('style'); gst.id='grain-style'; document.head.appendChild(gst); }
+  gst.textContent = `body::after{opacity:${(CFG.grain/6)*0.06}!important;}`;
+}
+
+/* ── Inyectar CSS DENTRO del iframe (afecta el contenido real) ── */
+function injectIntoIframe(){
+  try {
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    if(!doc || !doc.head) return;
+
+    let st = doc.getElementById('agrodey-cfg');
+    if(!st){ st=doc.createElement('style'); st.id='agrodey-cfg'; doc.head.appendChild(st); }
+
+    const t   = iframeThemes[CFG.theme] || iframeThemes.oscuro;
+    const acc = CFG.accent;
+    const ff  = fontMap[CFG.font];
+    const lh  = (CFG.lineHeight / 100).toFixed(2);
+    const fs  = CFG.fontSize;
+    const grOp= ((CFG.grain / 6) * 0.06).toFixed(4);
+
+    /*
+      Sobreescribimos TODAS las variables conocidas de los tres archivos.
+      El <style id="agrodey-cfg"> se añade al final del <head>,
+      ganando por orden de cascada sin necesidad de !important en variables.
+    */
+    st.textContent = `
+      :root {
+        /* Fondos — biblioteca_agricola + plagas_mis_cultivos */
+        --bg:       ${t.bg};
+        --bg-card:  ${t.bgC};
+        --bg-card2: ${t.bgC2};
+        /* Fondos — suelos_profesional */
+        --parchment: ${t.parch};
+        --soil-dark: ${t.sD};
+        --soil-mid:  ${t.sM};
+        --white:     ${t.bgC};
+        /* Acento — suelos */
+        --earth-amber: ${acc.base};
+        --earth-gold:  ${acc.hi};
+        --soil-warm:   ${acc.dim};
+        /* Acento — biblioteca + plagas */
+        --gold:       ${acc.base};
+        --gold-dim:   ${acc.dim};
+        --gold-light: ${acc.hi};
+      }
+      html { font-size: ${fs}% !important; }
+      body {
+        font-family: ${ff} !important;
+        line-height: ${lh} !important;
+      }
+      /* Propagar tipografía a todos los elementos de texto */
+      p, li, span, h1, h2, h3, h4, td, th, label, blockquote, a, button, input {
+        font-family: ${ff} !important;
+      }
+      /* Grano de textura */
+      body::before { opacity: ${grOp} !important; }
+    `;
+  } catch(e) { /* iframe no cargado o cross-origin */ }
+}
+
+/* Aplica a portal + iframe en un solo llamado */
+function applyAll(){ applyToPortal(); injectIntoIframe(); }
+
+function hexToRgba(hex,a){
+  const r=parseInt(hex.slice(1,3),16);
+  const g=parseInt(hex.slice(3,5),16);
+  const b=parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+/* ── Controles del panel ── */
+const fsRange    = document.getElementById('font-size-range');
+const fsVal      = document.getElementById('font-size-val');
+const lhRange    = document.getElementById('line-height-range');
+const lhVal      = document.getElementById('line-height-val');
+const grainRange = document.getElementById('grain-range');
+const grainVal   = document.getElementById('grain-val');
+const grainLabels= ['Off','Mín','Bajo','Med','Alto','Máx','Max+'];
+
+fsRange.addEventListener('input',()=>{
+  CFG.fontSize=+fsRange.value;
+  fsVal.textContent=CFG.fontSize+'%';
+  applyAll(); save('fontSize',CFG.fontSize);
+});
+
+lhRange.addEventListener('input',()=>{
+  CFG.lineHeight=+lhRange.value;
+  lhVal.textContent=(CFG.lineHeight/100).toFixed(2);
+  applyAll(); save('lineHeight',CFG.lineHeight);
+});
+
+grainRange.addEventListener('input',()=>{
+  CFG.grain=+grainRange.value;
+  grainVal.textContent=grainLabels[CFG.grain];
+  applyAll(); save('grain',CFG.grain);
+});
+
+function setAccent(name,base,hi,dim){
+  CFG.accent={name,base,hi,dim};
+  document.querySelectorAll('#accent-swatches .cfg-swatch').forEach(s=>
+    s.classList.toggle('active',s.dataset.accent===name));
+  applyAll(); save('accent',JSON.stringify(CFG.accent));
+}
+
+function setTheme(name){
+  CFG.theme=name;
+  document.querySelectorAll('#theme-btns .cfg-theme-btn').forEach(b=>
+    b.classList.toggle('active',b.dataset.theme===name));
+  applyAll(); save('theme',name);
+}
+
+function setFont(name){
+  CFG.font=name;
+  document.querySelectorAll('#font-btns .cfg-font-btn').forEach(b=>
+    b.classList.toggle('active',b.dataset.font===name));
+  applyAll(); save('font',name);
+}
+
+/* ── Persistencia ── */
+function save(k,v){try{localStorage.setItem('agrodey_'+k,v);}catch(e){}}
+function load(k){try{return localStorage.getItem('agrodey_'+k);}catch(e){return null;}}
+
+/* ── Resetear todo ── */
+function resetAll(){
+  ['fontSize','lineHeight','accent','theme','font','grain'].forEach(k=>{
+    try{localStorage.removeItem('agrodey_'+k);}catch(e){}
+  });
+  CFG.fontSize=100; CFG.lineHeight=175; CFG.font='serif';
+  CFG.grain=3; CFG.theme='oscuro';
+  CFG.accent={name:'amber',base:'#d4952a',hi:'#f0c84a',dim:'#7a5010'};
+  fsRange.value=100;  fsVal.textContent='100%';
+  lhRange.value=175;  lhVal.textContent='1.75';
+  grainRange.value=3; grainVal.textContent='Med';
+  root.removeAttribute('style');
+  document.body.removeAttribute('style');
+  const g=document.getElementById('grain-style'); if(g)g.remove();
+  document.querySelectorAll('.cfg-swatch').forEach((s,i)=>s.classList.toggle('active',i===0));
+  document.querySelectorAll('.cfg-theme-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+  document.querySelectorAll('.cfg-font-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+  injectIntoIframe();
+}
+
+/* ── Restaurar ajustes guardados al cargar ── */
+(function restoreSettings(){
+  const fs=load('fontSize');
+  if(fs){CFG.fontSize=+fs; fsRange.value=fs; fsVal.textContent=fs+'%';}
+  const lh=load('lineHeight');
+  if(lh){CFG.lineHeight=+lh; lhRange.value=lh; lhVal.textContent=(lh/100).toFixed(2);}
+  const acc=load('accent');
+  if(acc) CFG.accent=JSON.parse(acc);
+  const th=load('theme');
+  if(th) CFG.theme=th;
+  const ft=load('font');
+  if(ft) CFG.font=ft;
+  const gr=load('grain');
+  if(gr){CFG.grain=+gr; grainRange.value=gr; grainVal.textContent=grainLabels[+gr];}
+
+  /* Sincronizar UI con estado restaurado */
+  document.querySelectorAll('.cfg-swatch').forEach(s=>
+    s.classList.toggle('active',s.dataset.accent===CFG.accent.name));
+  document.querySelectorAll('.cfg-theme-btn').forEach(b=>
+    b.classList.toggle('active',b.dataset.theme===CFG.theme));
+  document.querySelectorAll('.cfg-font-btn').forEach(b=>
+    b.classList.toggle('active',b.dataset.font===CFG.font));
+
+  applyToPortal();
+})();
+</script>
+</body>
+</html>

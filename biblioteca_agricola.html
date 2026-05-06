@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biblioteca Agrícola · Lobo/DeyFz</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+/* TEMA BASE OSCURO */
+:root{
+  --bg:#110c06;
+  --bg-card:#1c1408;
+  --bg-card2:#221a0c;
+  --text:#c8b898;
+  --text-muted:#7a6a50;
+  --border:rgba(200,160,60,0.15);
+  --gold:#d4952a;
+  --gold-dim:#8a5e18;
+}
+
+/* PALETAS POR TEMA */
+.t1{--tc:#4ea8de;--tc2:#1a3a52;--tc3:rgba(78,168,222,0.15);--tcb:#0d2035}
+.t2{--tc:#7ecba1;--tc2:#1a3d2a;--tc3:rgba(126,203,161,0.15);--tcb:#0d2018}
+.t3{--tc:#c9a96e;--tc2:#3d2e10;--tc3:rgba(201,169,110,0.15);--tcb:#201808}
+.t4{--tc:#e07b54;--tc2:#3d1e10;--tc3:rgba(224,123,84,0.15);--tcb:#201008}
+.t5{--tc:#9b72cf;--tc2:#2d1e42;--tc3:rgba(155,114,207,0.15);--tcb:#180e28}
+.t6{--tc:#e8b84b;--tc2:#3d2e08;--tc3:rgba(232,184,75,0.15);--tcb:#201800}
+.t7{--tc:#5dbea3;--tc2:#143028;--tc3:rgba(93,190,163,0.15);--tcb:#081a14}
+.t8{--tc:#d4826a;--tc2:#3a1e15;--tc3:rgba(212,130,106,0.15);--tcb:#1e0e08}
+.t9{--tc:#7ab0d4;--tc2:#1a2e3d;--tc3:rgba(122,176,212,0.15);--tcb:#0c1820}
+.t10{--tc:#a8c86a;--tc2:#2a3810;--tc3:rgba(168,200,106,0.15);--tcb:#141e08}
+
+body{
+  font-family:'Source Serif 4',Georgia,serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.75;
+  overflow-x:hidden;
+}
+
+/* GRAIN */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:0.03;pointer-events:none;z-index:9999;
+}
+
+/* HERO */
+.hero{
+  background:linear-gradient(135deg,#0a0600 0%,#1a1008 50%,#0f0a04 100%);
+  padding:80px 40px 70px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  border-bottom:1px solid var(--border);
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(212,149,42,0.08) 0%,transparent 70%);
+}
+.hero-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.65rem;letter-spacing:0.35em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:18px;opacity:0.8;
+}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.5rem,7vw,5rem);
+  font-weight:900;line-height:1.05;
+  color:#e8d8b0;letter-spacing:-0.02em;margin-bottom:16px;
+}
+.hero h1 em{font-style:italic;color:var(--gold);}
+.hero-sub{
+  font-size:1rem;font-weight:300;
+  color:rgba(200,184,152,0.6);
+  max-width:520px;margin:0 auto 36px;
+}
+.firma-hero{
+  display:inline-flex;align-items:center;gap:10px;
+  background:rgba(212,149,42,0.08);
+  border:1px solid rgba(212,149,42,0.25);
+  padding:9px 20px 9px 14px;border-radius:3px;
+}
+.firma-wolf{font-size:1.6rem;animation:wolfPulse 3s ease-in-out infinite;}
+@keyframes wolfPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}
+.firma-name{
+  font-family:'Playfair Display',serif;
+  font-size:1.1rem;font-weight:900;font-style:italic;
+  color:var(--gold);letter-spacing:0.04em;display:block;line-height:1.1;
+}
+.firma-sub-text{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;
+  color:rgba(212,149,42,0.5);display:block;
+}
+
+/* NAV ÍNDICE */
+.nav-index{
+  background:var(--bg-card);
+  border-bottom:1px solid var(--border);
+  padding:20px 0;
+  position:sticky;top:0;z-index:100;
+  backdrop-filter:blur(10px);
+}
+.nav-inner{
+  max-width:1000px;margin:0 auto;padding:0 24px;
+  display:flex;flex-wrap:wrap;gap:6px;justify-content:center;
+}
+.nav-pill{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;
+  padding:5px 12px;border-radius:2px;
+  border:1px solid;cursor:pointer;
+  text-decoration:none;transition:all 0.2s;
+  background:transparent;
+}
+.nav-pill:hover{opacity:0.85;transform:translateY(-1px);}
+
+/* SECCIONES */
+.section{padding:70px 0;border-bottom:1px solid var(--border);}
+.container{max-width:1000px;margin:0 auto;padding:0 28px;}
+
+.section-header{
+  display:flex;align-items:flex-start;gap:20px;
+  margin-bottom:40px;padding-bottom:24px;
+  border-bottom:1px solid var(--border);
+}
+.section-num{
+  font-family:'Playfair Display',serif;
+  font-size:4rem;font-weight:900;line-height:1;
+  opacity:0.12;flex-shrink:0;margin-top:-8px;
+}
+.section-label-sm{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem;letter-spacing:0.3em;text-transform:uppercase;
+  margin-bottom:8px;opacity:0.8;
+}
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.5rem,3.5vw,2.2rem);
+  font-weight:700;line-height:1.2;color:#e8d8b0;
+}
+.section-desc{
+  font-size:0.9rem;color:var(--text-muted);
+  margin-top:8px;max-width:580px;line-height:1.6;
+}
+
+/* GRID DE CARDS */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;}
+.cards-grid-2{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;}
+
+/* CARD ELEMENTO */
+.elem-card{
+  background:var(--bg-card2);
+  border:1px solid var(--border);
+  border-top:3px solid;
+  padding:22px 20px;
+  border-radius:2px;
+  transition:transform 0.25s,box-shadow 0.25s,border-color 0.25s;
+  position:relative;overflow:hidden;
+}
+.elem-card::before{
+  content:'';position:absolute;top:0;right:0;
+  width:60px;height:60px;
+  background:radial-gradient(circle at top right, var(--tc3,transparent), transparent 70%);
+}
+.elem-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 32px rgba(0,0,0,0.4);
+}
+.elem-symbol{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem;letter-spacing:0.25em;text-transform:uppercase;
+  margin-bottom:4px;opacity:0.7;
+}
+.elem-name{
+  font-family:'Playfair Display',serif;
+  font-size:1.1rem;font-weight:700;
+  color:#e8d8b0;margin-bottom:10px;line-height:1.2;
+}
+.elem-body{font-size:0.85rem;color:var(--text-muted);line-height:1.65;}
+.elem-body strong{color:var(--text);font-weight:600;}
+.elem-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px;}
+.etag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;
+  padding:2px 8px;border-radius:2px;border:1px solid;
+}
+
+/* CARD GRUPO */
+.group-card{
+  background:var(--bg-card2);
+  border:1px solid var(--border);
+  border-left:3px solid;
+  padding:24px 22px;border-radius:2px;
+  margin-bottom:12px;
+}
+.group-title{
+  font-family:'Playfair Display',serif;
+  font-size:1rem;font-weight:700;
+  color:#e8d8b0;margin-bottom:4px;
+}
+.group-sub{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;
+  margin-bottom:14px;opacity:0.6;
+}
+.group-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.group-list li{
+  font-size:0.88rem;color:var(--text-muted);
+  padding-left:16px;position:relative;line-height:1.5;
+}
+.group-list li::before{
+  content:'→';position:absolute;left:0;
+  font-family:'JetBrains Mono',monospace;font-size:0.7rem;
+}
+.group-list li strong{color:var(--text);}
+
+/* ALERT BOX */
+.info-box{
+  border-left:3px solid;
+  padding:16px 20px;border-radius:0 3px 3px 0;
+  margin:20px 0;font-size:0.88rem;line-height:1.65;
+}
+.info-box strong{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;
+  display:block;margin-bottom:6px;
+}
+
+/* STAT ROW */
+.stat-row{
+  display:flex;flex-wrap:wrap;gap:12px;margin:20px 0;
+}
+.stat-box{
+  background:var(--bg-card);border:1px solid var(--border);
+  padding:14px 18px;border-radius:2px;flex:1;min-width:140px;
+}
+.stat-val{
+  font-family:'Playfair Display',serif;
+  font-size:1.6rem;font-weight:900;line-height:1;margin-bottom:4px;
+}
+.stat-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--text-muted);
+}
+
+/* ACCORDION */
+.acc-item{margin-bottom:4px;}
+.acc-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 18px;background:var(--bg-card2);
+  border:1px solid var(--border);border-left:3px solid;
+  cursor:pointer;transition:background 0.2s;user-select:none;
+}
+.acc-head:hover{background:var(--bg-card);}
+.acc-head h4{
+  font-family:'Playfair Display',serif;
+  font-size:0.95rem;font-weight:700;color:#d8c8a0;
+}
+.acc-arrow{font-size:0.7rem;transition:transform 0.3s;}
+.acc-arrow.open{transform:rotate(180deg);}
+.acc-body{
+  max-height:0;overflow:hidden;
+  transition:max-height 0.4s ease,padding 0.3s;
+  background:var(--bg-card);
+  border:0 solid var(--border);
+  border-left:3px solid;
+  font-size:0.86rem;color:var(--text-muted);line-height:1.7;
+}
+.acc-body.open{
+  max-height:500px;
+  padding:16px 18px 20px;
+  border-width:0 1px 1px 3px;
+}
+.acc-body ul{padding-left:16px;margin-top:6px;}
+.acc-body ul li{margin-bottom:4px;}
+
+/* DIVIDER */
+.sub-divider{
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem;letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--text-muted);
+  padding:14px 0 10px;
+  border-top:1px solid var(--border);
+  margin-top:28px;margin-bottom:16px;
+}
+
+/* FOOTER */
+footer{
+  background:#0a0700;
+  padding:48px 28px;
+  text-align:center;
+  border-top:1px solid var(--border);
+}
+.footer-firma{
+  display:inline-flex;align-items:center;gap:10px;
+  background:rgba(212,149,42,0.08);
+  border:1px solid rgba(212,149,42,0.2);
+  padding:10px 22px 10px 16px;border-radius:3px;
+  margin-bottom:24px;
+}
+footer p{font-size:0.8rem;color:var(--text-muted);line-height:1.9;}
+footer strong{font-family:'Playfair Display',serif;color:var(--gold);font-style:italic;}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.hero h1,.hero-sub,.firma-hero{animation:fadeUp 0.7s ease both;}
+.hero-sub{animation-delay:0.1s;}.firma-hero{animation-delay:0.2s;}
+
+@media(max-width:640px){
+  .hero{padding:60px 24px 50px;}
+  .section-header{flex-direction:column;gap:8px;}
+  .section-num{font-size:2.5rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="container">
+    <p class="hero-label">🌱 Biblioteca Técnica · Agronomía Avanzada · 2026</p>
+    <h1>Ciencia al <em>Servicio</em><br>del Campo</h1>
+    <p class="hero-sub">Referencia técnica profesional sobre nutrientes, bioestimulantes, organismos benéficos y compuestos clave en producción agrícola moderna.</p>
+    <div class="firma-hero">
+      <span class="firma-wolf">🐺</span>
+      <div>
+        <span class="firma-name">Lobo/DeyFz</span>
+        <span class="firma-sub-text">Biblioteca Agrícola · 2026</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav-index">
+  <div class="nav-inner">
+    <a class="nav-pill t1" href="#s1" style="color:#4ea8de;border-color:rgba(78,168,222,0.3);">01 Macronutrientes</a>
+    <a class="nav-pill t2" href="#s2" style="color:#7ecba1;border-color:rgba(126,203,161,0.3);">02 Micronutrientes</a>
+    <a class="nav-pill t3" href="#s3" style="color:#c9a96e;border-color:rgba(201,169,110,0.3);">03 Beneficiosos</a>
+    <a class="nav-pill t4" href="#s4" style="color:#e07b54;border-color:rgba(224,123,84,0.3);">04 Ácidos</a>
+    <a class="nav-pill t5" href="#s5" style="color:#9b72cf;border-color:rgba(155,114,207,0.3);">05 Bioestimulantes</a>
+    <a class="nav-pill t6" href="#s6" style="color:#e8b84b;border-color:rgba(232,184,75,0.3);">06 Fitohormonas</a>
+    <a class="nav-pill t7" href="#s7" style="color:#5dbea3;border-color:rgba(93,190,163,0.3);">07 Bacterias</a>
+    <a class="nav-pill t8" href="#s8" style="color:#d4826a;border-color:rgba(212,130,106,0.3);">08 Hongos</a>
+    <a class="nav-pill t9" href="#s9" style="color:#7ab0d4;border-color:rgba(122,176,212,0.3);">09 Minerales</a>
+    <a class="nav-pill t10" href="#s10" style="color:#a8c86a;border-color:rgba(168,200,106,0.3);">10 Otros Compuestos</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     SECCIÓN 1 · MACRONUTRIENTES
+═══════════════════════════════════════════════ -->
+<section class="section t1" id="s1">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num" style="color:var(--tc)">01</div>
+    <div>
+      <p class="section-label-sm" style="color:var(--tc)">// Macronutrientes Esenciales</p>
+      <h2 class="section-title">Requeridos en Grandes Cantidades</h2>
+      <p class="section-desc">Los macronutrientes forman la estructura del tejido vegetal y participan en todos los procesos metabólicos fundamentales. Sin ellos, no hay crecimiento posible.</p>
+    </div>
+  </div>
+
+  <div class="sub-divider" style="color:var(--tc)">▸ Primarios (NPK)</div>
+  <div class="cards-grid">
+
+    <div class="elem-card t1" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">N · Nitrógeno</p>
+      <h3 class="elem-name">Nitrógeno</h3>
+      <p class="elem-body">
+        <strong>El nutriente más limitante en la mayoría de suelos.</strong> Componente central de aminoácidos, proteínas, ácidos nucleicos (ADN/ARN) y clorofila. Sin N suficiente, la fotosíntesis colapsa.<br><br>
+        <strong>Formas absorbidas:</strong> NH₄⁺ (amonio) y NO₃⁻ (nitrato). El amonio es preferido en suelos fríos; el nitrato en suelos cálidos bien oxigenados.<br><br>
+        <strong>Dosis típica:</strong> 80–250 kg N/ha/año según cultivo. Fraccionar en mínimo 3 aplicaciones para reducir pérdidas por lixiviación.<br><br>
+        <strong>Deficiencia:</strong> Amarillamiento desde hojas basales (más viejas), reducción severa del crecimiento. La planta canibaliza el N de tejidos viejos para los nuevos.
+      </p>
+      <div class="elem-tags">
+        <span class="etag" style="color:var(--tc);border-color:rgba(78,168,222,0.3);">Móvil en planta</span>
+        <span class="etag" style="color:var(--tc);border-color:rgba(78,168,222,0.3);">pH óptimo: 6–7</span>
+      </div>
+    </div>
+
+    <div class="elem-card t1" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">P · Fósforo</p>
+      <h3 class="elem-name">Fósforo</h3>
+      <p class="elem-body">
+        <strong>La moneda energética de la planta.</strong> Forma parte del ATP (adenosín trifosfato), ARN, ADN y fosfolípidos de membranas celulares. Crítico en germinación, desarrollo radicular y floración.<br><br>
+        <strong>Problemática clave:</strong> Se fija fácilmente con Fe y Al en suelos ácidos (&lt;5.5) y con Ca en suelos alcalinos (&gt;7.5), quedando inaccesible para la planta.<br><br>
+        <strong>Fuentes:</strong> Superfosfato simple (SSP), MAP, DAP, fosfato de roca, guano.<br><br>
+        <strong>Deficiencia:</strong> Hojas con tonos púrpuras o rojizos (acumulación de antocianinas), raíz débil y poco desarrollada, floración tardía.
+      </p>
+      <div class="elem-tags">
+        <span class="etag" style="color:var(--tc);border-color:rgba(78,168,222,0.3);">Inmóvil en suelo</span>
+        <span class="etag" style="color:var(--tc);border-color:rgba(78,168,222,0.3);">pH óptimo: 6–6.8</span>
+      </div>
+    </div>
+
+    <div class="elem-card t1" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">K · Potasio</p>
+      <h3 class="elem-name">Potasio</h3>
+      <p class="elem-body">
+        <strong>El regulador maestro de la planta.</strong> No forma estructuras orgánicas, pero activa más de 60 enzimas. Regula la apertura y cierre de estomas, el balance hídrico, el transporte de azúcares y la resistencia a heladas, sequías y enfermedades.<br><br>
+        <strong>Clave en calidad:</strong> Aumenta brix (azúcares), tamaño de fruto, firmeza postcosecha y vida útil. Es el "potenciador de calidad" por excelencia.<br><br>
+        <strong>Fuentes:</strong> KCl (cloruro de potasio), K₂SO₄ (sulfato de potasio — preferido en cultivos sensibles al cloro), KNO₃.<br><br>
+        <strong>Deficiencia:</strong> Clorosis y necrosis en bordes de hojas más viejas, frutos pequeños y deformes, mayor susceptibilidad a patógenos.
+      </p>
+      <div class="elem-tags">
+        <span class="etag" style="color:var(--tc);border-color:rgba(78,168,222,0.3);">Móvil en planta</span>
+        <span class="etag" style="color:var(--tc);border-color:rgba(78,168,222,0.3);">pH óptimo: 6–7.5</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-divider" style="color:var(--tc)">▸ Secundarios</div>
+  <div class="cards-grid">
+
+    <div class="elem-card t1" style="border-top-color:rgba(78,168,222,0.5);">
+      <p class="elem-symbol" style="color:var(--tc)">Ca · Calcio</p>
+      <h3 class="elem-name">Calcio</h3>
+      <p class="elem-body">
+        <strong>El arquitecto de la célula.</strong> Componente fundamental de la pared celular (pectato de calcio). Regula la permeabilidad de membranas y actúa como segundo mensajero en señales de estrés.<br><br>
+        <strong>Crítico en:</strong> Calidad de frutos (evita pudrición apical en tomate, blossom-end rot en pimiento), formación de raíces finas absorbentes y resistencia a enfermedades fúngicas.<br><br>
+        <strong>Importante:</strong> El Ca se mueve solo por flujo de transpiración (xilema), nunca por floema. Por eso las hojas jóvenes y frutos —que transpiran poco— sufren primero la deficiencia aunque el suelo tenga Ca suficiente. El riego por goteo y la foliar son clave.
+      </p>
+      <div class="elem-tags">
+        <span class="etag" style="color:var(--tc);border-color:rgba(78,168,222,0.3);">Inmóvil en planta</span>
+        <span class="etag" style="color:var(--tc);border-color:rgba(78,168,222,0.3);">pH óptimo: 6–8.5</span>
+      </div>
+    </div>
+
+    <div class="elem-card t1" style="border-top-color:rgba(78,168,222,0.5);">
+      <p class="elem-symbol" style="color:var(--tc)">Mg · Magnesio</p>
+      <h3 class="elem-name">Magnesio</h3>
+      <p class="elem-body">
+        <strong>El corazón de la clorofila.</strong> El átomo de Mg está en el centro de cada molécula de clorofila — sin él, la fotosíntesis es imposible. También activa fosfatasas y cinasas esenciales para el metabolismo energético.<br><br>
+        <strong>Problema frecuente:</strong> El exceso de K o Ca en suelo bloquea la absorción de Mg por competencia catiónica. Relación Ca:Mg en suelo debe mantenerse entre 4:1 y 6:1.<br><br>
+        <strong>Deficiencia:</strong> Clorosis intervenal característica en hojas viejas (venas verdes, limbo amarillo), reducción de la fotosíntesis, llenado deficiente de granos.
+      </p>
+      <div class="elem-tags">
+        <span class="etag" style="color:var(--tc);border-color:rgba(78,168,222,0.3);">Móvil en planta</span>
+        <span class="etag" style="color:var(--tc);border-color:rgba(78,168,222,0.3);">pH óptimo: 6–8</span>
+      </div>
+    </div>
+
+    <div class="elem-card t1" style="border-top-color:rgba(78,168,222,0.5);">
+      <p class="elem-symbol" style="color:var(--tc)">S · Azufre</p>
+      <h3 class="elem-name">Azufre</h3>
+      <p class="elem-body">
+        <strong>El nutriente olvidado.</strong> Componente de aminoácidos azufrados (cisteína, metionina), vitaminas (biotina, tiamina) y glucosinolatos (responsables del sabor picante en ajo, cebolla, crucíferas).<br><br>
+        <strong>Rol en calidad:</strong> Aumenta el contenido proteico en granos, mejora el aroma de frutas y es esencial para la síntesis de aceites esenciales. Los cultivos de alta demanda: ajo, cebolla, brassicas, colza.<br><br>
+        <strong>Fuentes:</strong> Sulfato de amonio, sulfato de potasio, yeso agrícola (CaSO₄), azufre elemental (acidificante).<br><br>
+        <strong>Deficiencia:</strong> Hojas jóvenes amarillas (a diferencia del N, que afecta las viejas primero), crecimiento reducido, plantas pálidas uniformemente.
+      </p>
+      <div class="elem-tags">
+        <span class="etag" style="color:var(--tc);border-color:rgba(78,168,222,0.3);">Poco móvil</span>
+        <span class="etag" style="color:var(--tc);border-color:rgba(78,168,222,0.3);">pH óptimo: 6–7.5</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box t1" style="border-color:var(--tc);background:var(--tc3);margin-top:24px;">
+    <strong style="color:var(--tc)">💡 Regla del Mínimo — Liebig</strong>
+    El crecimiento vegetal está limitado por el nutriente más escaso, sin importar la abundancia de los demás. Aplicar más NPK no resuelve una deficiencia de Ca o Mg. El análisis de suelo + foliar juntos son la única forma de identificar el "eslabón roto" real.
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SECCIÓN 2 · MICRONUTRIENTES
+═══════════════════════════════════════════════ -->
+<section class="section t2" id="s2">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num" style="color:var(--tc)">02</div>
+    <div>
+      <p class="section-label-sm" style="color:var(--tc)">// Micronutrientes Esenciales</p>
+      <h2 class="section-title">Pequeñas Dosis, Impacto Crítico</h2>
+      <p class="section-desc">Los micronutrientes se requieren en cantidades de gramos o miligramos por hectárea, pero su ausencia es tan limitante como la de cualquier macronutriente. Son cofactores enzimáticos insustituibles.</p>
+    </div>
+  </div>
+  <div class="cards-grid">
+
+    <div class="elem-card t2" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Zn · Zinc</p>
+      <h3 class="elem-name">Zinc</h3>
+      <p class="elem-body"><strong>Síntesis de auxinas y enzimas.</strong> El Zn activa más de 300 enzimas y es esencial para la producción de triptófano, precursor del ácido indolacético (AIA), la principal auxina vegetal.<br><br><strong>Deficiencia más común:</strong> Hojas pequeñas y deformes, entrenudos muy cortos ("roseta"), frutos pequeños. Frecuente en suelos alcalinos y arenosos. Dosis foliar: 200–500 g ZnSO₄/ha.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(126,203,161,0.3);">pH óptimo: 5–7</span><span class="etag" style="color:var(--tc);border-color:rgba(126,203,161,0.3);">Inmóvil en planta</span></div>
+    </div>
+
+    <div class="elem-card t2" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">B · Boro</p>
+      <h3 class="elem-name">Boro</h3>
+      <p class="elem-body"><strong>Polinización y transporte de azúcares.</strong> Esencial para la integridad de la pared celular, el transporte de azúcares (sacarosa) del floema y la germinación del tubo polínico. Sin B suficiente, la fecundación falla.<br><br><strong>Deficiencia:</strong> Muerte del ápice de crecimiento, frutos deformes y "vaciados", cuaje deficiente. <strong>Cuidado:</strong> El margen entre deficiencia y toxicidad es muy estrecho. No superar 1–2 kg B/ha/año.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(126,203,161,0.3);">pH óptimo: 6–7.5</span><span class="etag" style="color:var(--tc);border-color:rgba(126,203,161,0.3);">Muy poco móvil</span></div>
+    </div>
+
+    <div class="elem-card t2" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Fe · Hierro</p>
+      <h3 class="elem-name">Hierro</h3>
+      <p class="elem-body"><strong>Síntesis de clorofila y respiración.</strong> El Fe no forma parte de la clorofila pero es indispensable para su síntesis. Clave en la cadena de transporte de electrones mitocondrial y en la fijación biológica de N (nitrogenasa).<br><br><strong>Paradoja del Fe:</strong> Es el 4° elemento más abundante en la corteza terrestre, pero en suelos alcalinos (&gt;7) precipita como Fe(OH)₃ insoluble. La clorosis férrica es uno de los problemas más comunes en suelos calcáreos. Usar quelatos EDDHA en pH alto.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(126,203,161,0.3);">pH óptimo: 4.5–6.5</span><span class="etag" style="color:var(--tc);border-color:rgba(126,203,161,0.3);">Inmóvil en planta</span></div>
+    </div>
+
+    <div class="elem-card t2" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Mn · Manganeso</p>
+      <h3 class="elem-name">Manganeso</h3>
+      <p class="elem-body"><strong>Fotosíntesis y activación enzimática.</strong> Participa directamente en el proceso de fotólisis del agua (fotosistema II) y activa más de 35 enzimas relacionadas con el ciclo de Krebs y la síntesis de lignina.<br><br><strong>Doble cara:</strong> En suelos muy ácidos (&lt;5.5) el Mn se vuelve soluble en exceso y tóxico. En suelos alcalinos se insolubiliza y causa deficiencia. Foliar: MnSO₄ al 0.2–0.5%.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(126,203,161,0.3);">pH óptimo: 5–6.5</span><span class="etag" style="color:var(--tc);border-color:rgba(126,203,161,0.3);">Inmóvil en planta</span></div>
+    </div>
+
+    <div class="elem-card t2" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Cu · Cobre</p>
+      <h3 class="elem-name">Cobre</h3>
+      <p class="elem-body"><strong>Fotosíntesis, lignificación y defensa.</strong> Componente de plastocianina (transporte de electrones en cloroplastos) y de enzimas de lignificación. La lignina refuerza las paredes celulares contra patógenos.<br><br><strong>Suelos de riesgo:</strong> Suelos turbosos/orgánicos (el Cu se une fuertemente a materia orgánica), suelos arenosos muy lixiviados y suelos alcalinos. El sulfato de cobre es la fuente más económica; los quelatos, la más eficiente.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(126,203,161,0.3);">pH óptimo: 5–7</span><span class="etag" style="color:var(--tc);border-color:rgba(126,203,161,0.3);">Muy poco móvil</span></div>
+    </div>
+
+    <div class="elem-card t2" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Mo · Molibdeno</p>
+      <h3 class="elem-name">Molibdeno</h3>
+      <p class="elem-body"><strong>Fijación de nitrógeno y metabolismo del N.</strong> Cofactor esencial de la nitrogenasa (fijación simbiótica de N₂ por Rhizobium) y de la nitrato reductasa (primera enzima en asimilar el N absorbido). Sin Mo, el N no puede integrarse al metabolismo vegetal.<br><br><strong>Dato clave:</strong> Es el micronutriente requerido en menor cantidad (~0.1 mg/kg en planta). Aumenta su disponibilidad con el pH: a diferencia de todos los demás, el Mo es MÁS disponible en suelos alcalinos.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(126,203,161,0.3);">pH óptimo: 6.5–8</span><span class="etag" style="color:var(--tc);border-color:rgba(126,203,161,0.3);">Móvil en planta</span></div>
+    </div>
+
+    <div class="elem-card t2" style="border-top-color:rgba(126,203,161,0.5);">
+      <p class="elem-symbol" style="color:var(--tc)">Cl · Cloro</p>
+      <h3 class="elem-name">Cloro</h3>
+      <p class="elem-body"><strong>Fotosíntesis y osmorregulación.</strong> Participa en la fotólisis del agua (fotosistema II) junto al Mn, y regula la turgencia de las células guarda de los estomas. También activa la enzima asparagina sintetasa.<br><br><strong>Raramente deficiente</strong> porque está presente en casi toda el agua de lluvia y suelos. Sin embargo, cultivos como tabaco, patata y algunas hortalizas son muy sensibles al EXCESO de cloro (clorosis de toxicidad).</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(126,203,161,0.3);">Muy abundante</span><span class="etag" style="color:var(--tc);border-color:rgba(126,203,161,0.3);">Móvil en planta</span></div>
+    </div>
+
+    <div class="elem-card t2" style="border-top-color:rgba(126,203,161,0.5);">
+      <p class="elem-symbol" style="color:var(--tc)">Ni · Níquel</p>
+      <h3 class="elem-name">Níquel</h3>
+      <p class="elem-body"><strong>El micronutriente más recientemente confirmado (1987).</strong> Cofactor de la ureasa, enzima que convierte urea en amoniaco y CO₂. Sin Ni, la urea se acumula en los tejidos y produce necrosis en las puntas de las hojas.<br><br><strong>Importancia práctica:</strong> Cultivos que dependen de urea como fuente de N (arroz, maíz, frutales) son los más susceptibles. También es esencial para la nodulación efectiva en leguminosas. Requerimiento ultra bajo: 0.05–1 mg/kg tejido vegetal.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(126,203,161,0.3);">Confirmado en 1987</span><span class="etag" style="color:var(--tc);border-color:rgba(126,203,161,0.3);">Cofactor ureasa</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SECCIÓN 3 · ELEMENTOS BENEFICIOSOS
+═══════════════════════════════════════════════ -->
+<section class="section t3" id="s3">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num" style="color:var(--tc)">03</div>
+    <div>
+      <p class="section-label-sm" style="color:var(--tc)">// Elementos Beneficiosos</p>
+      <h2 class="section-title">No Esenciales, Pero Estratégicos</h2>
+      <p class="section-desc">No son esenciales para todas las plantas, pero en las condiciones correctas ofrecen ventajas competitivas significativas en productividad, resistencia y calidad.</p>
+    </div>
+  </div>
+  <div class="cards-grid">
+    <div class="elem-card t3" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Si · Silicio</p>
+      <h3 class="elem-name">Silicio</h3>
+      <p class="elem-body"><strong>El elemento de la resistencia.</strong> El Si se deposita en las paredes celulares formando una capa de sílice amorfa que actúa como barrera física contra hongos, insectos masticadores y estrés abiótico (sequía, metales pesados, UV).<br><br><strong>Cultivos clave:</strong> Arroz, caña de azúcar y cucurbitáceas son las plantas que más Si acumulan y más se benefician. En arroz, reduce la incidencia de Pyricularia hasta un 50%.<br><br><strong>Fuentes:</strong> Silicato de potasio (foliar), silicato de calcio (enmienda edáfica), escoria de siderurgia. Dosis: 100–200 kg SiO₂/ha/año.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(201,169,110,0.3);">Resistencia a plagas</span><span class="etag" style="color:var(--tc);border-color:rgba(201,169,110,0.3);">Estrés abiótico</span></div>
+    </div>
+    <div class="elem-card t3" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Na · Sodio</p>
+      <h3 class="elem-name">Sodio</h3>
+      <p class="elem-body"><strong>Sustituto parcial del K en plantas C4.</strong> En algunas plantas de metabolismo C4 (remolacha azucarera, quinoa, espinaca, amaranto) el Na puede sustituir parcialmente al K en funciones osmóticas cuando el K es escaso.<br><br><strong>Plantas halófilas:</strong> Esparraguera, espinaca, apio y remolacha toleran o incluso requieren ciertos niveles. En la mayoría de cultivos, sin embargo, el Na es perjudicial al competir con K, Ca y Mg y deteriorar la estructura del suelo.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(201,169,110,0.3);">Plantas C4</span><span class="etag" style="color:var(--tc);border-color:rgba(201,169,110,0.3);">Halófilas</span></div>
+    </div>
+    <div class="elem-card t3" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Co · Cobalto</p>
+      <h3 class="elem-name">Cobalto</h3>
+      <p class="elem-body"><strong>Fijación biológica de nitrógeno.</strong> El Co es componente de la vitamina B₁₂ (cobalamina), esencial para el metabolismo de Rhizobium y otros fijadores de N₂. Sin Co suficiente, los nódulos radiculares de leguminosas no pueden fijar nitrógeno atmosférico eficientemente.<br><br><strong>También:</strong> Inhibe la síntesis de etileno (prolonga la vida postcosecha) y mejora la tolerancia a la sequía al reducir la pérdida de agua. Dosis muy bajas: 20–50 g Co/ha vía foliar o suelo.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(201,169,110,0.3);">Fijación de N</span><span class="etag" style="color:var(--tc);border-color:rgba(201,169,110,0.3);">Vitamina B₁₂</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SECCIÓN 4 · ÁCIDOS
+═══════════════════════════════════════════════ -->
+<section class="section t4" id="s4">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num" style="color:var(--tc)">04</div>
+    <div>
+      <p class="section-label-sm" style="color:var(--tc)">// Ácidos en Agricultura</p>
+      <h2 class="section-title">Moléculas que Mueven el Suelo y la Planta</h2>
+      <p class="section-desc">Los ácidos orgánicos, aminoácidos y reguladores ácidos son mediadores clave entre el suelo, los microorganismos y la planta. Su manejo preciso potencia la eficiencia de todos los demás insumos.</p>
+    </div>
+  </div>
+
+  <div class="sub-divider" style="color:var(--tc)">▸ Ácidos Orgánicos del Suelo</div>
+  <div class="cards-grid-2">
+    <div class="group-card t4" style="border-color:var(--tc);">
+      <h4 class="group-title">Ácidos Húmicos</h4>
+      <p class="group-sub" style="color:var(--tc)">Fracción estable de la materia orgánica</p>
+      <ul class="group-list">
+        <li><strong>Estructura:</strong> Macromoléculas aromáticas de alto peso molecular (10,000–100,000 Da) insolubles a pH neutro/ácido.</li>
+        <li><strong>Función:</strong> Mejoran la CIC del suelo, quelatan micronutrientes (Fe, Zn, Mn), aumentan la permeabilidad de membranas radiculares y estimulan la actividad microbiana.</li>
+        <li><strong>Efecto en raíz:</strong> A dosis bajas (1–5 mg/L) estimulan el desarrollo radicular lateral hasta un 40% comparado con el control.</li>
+        <li><strong>Fuentes:</strong> Leonardita, compost maduro, vermicompost, extractos de lignito.</li>
+        <li><strong>Dosis:</strong> 5–20 kg/ha de ácidos húmicos puros equivalentes.</li>
+      </ul>
+    </div>
+    <div class="group-card t4" style="border-color:var(--tc);">
+      <h4 class="group-title">Ácidos Fúlvicos</h4>
+      <p class="group-sub" style="color:var(--tc)">Fracción activa y móvil de la materia orgánica</p>
+      <ul class="group-list">
+        <li><strong>Estructura:</strong> Peso molecular bajo (1,000–10,000 Da), solubles en todo rango de pH — más biodisponibles y reactivos que los húmicos.</li>
+        <li><strong>Función:</strong> Transportan nutrientes a través de la membrana celular, quelatan y transportan Fe, Ca, Mg. Activan enzimas del suelo y mejoran la absorción foliar de fertilizantes.</li>
+        <li><strong>Sinergia:</strong> Mezclar ácidos fúlvicos con fertilizantes foliares aumenta su absorción hasta un 30% por apertura de poros cuticulares.</li>
+        <li><strong>Dosis foliar:</strong> 1–3 L/ha de solución concentrada (3–8% fúlvicos).</li>
+      </ul>
+    </div>
+    <div class="group-card t4" style="border-color:rgba(224,123,84,0.5);">
+      <h4 class="group-title">Ácido Cítrico</h4>
+      <p class="group-sub" style="color:var(--tc)">Quelante natural y acidificante</p>
+      <ul class="group-list">
+        <li>Segregado por raíces para solubilizar P inorgánico bloqueado con Ca, Al o Fe.</li>
+        <li>Quelante de micronutrientes en soluciones nutritivas (hidroponía).</li>
+        <li>Acidifica ligeramente el agua de riego, mejorando la absorción de fertilizantes sensibles al pH.</li>
+        <li>Inhibe la formación de biofilms no deseados en sistemas de riego.</li>
+      </ul>
+    </div>
+    <div class="group-card t4" style="border-color:rgba(224,123,84,0.5);">
+      <h4 class="group-title">Ácido Málico y Oxálico</h4>
+      <p class="group-sub" style="color:var(--tc)">Intermediarios metabólicos y quelantes</p>
+      <ul class="group-list">
+        <li><strong>Málico:</strong> Intermediario del ciclo de Krebs. Las plantas lo secretan como respuesta a estrés por aluminio — forma complejos Al-malato no tóxicos. Mejora tolerancia a suelos ácidos con Al tóxico.</li>
+        <li><strong>Oxálico:</strong> Quelante potente de Ca. Las raíces lo excretan para movilizar P inmovilizado con Ca en suelos alcalinos. También protege tejidos de patógenos al crear un ambiente químico hostil.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-divider" style="color:var(--tc)">▸ Aminoácidos — Bioestimulación Directa</div>
+  <div class="cards-grid">
+    <div class="elem-card t4" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">AA · Glicina</p>
+      <h3 class="elem-name">Glicina</h3>
+      <p class="elem-body">El aminoácido más simple. Quelante natural de micronutrientes (glicina-Zn, glicina-Fe, glicina-Cu) con alta biodisponibilidad. Precursor de glutatión, el principal antioxidante vegetal. Estimula la síntesis de clorofila.</p>
+    </div>
+    <div class="elem-card t4" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">AA · Prolina</p>
+      <h3 class="elem-name">Prolina</h3>
+      <p class="elem-body"><strong>El escudo del estrés hídrico.</strong> Se acumula en células bajo déficit hídrico, actuando como osmoprotector que estabiliza proteínas y membranas. La aplicación exógena de prolina (50–200 mg/L foliar) mejora la tolerancia a sequía y heladas hasta un 25% en cultivos de verano.</p>
+    </div>
+    <div class="elem-card t4" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">AA · Ác. Glutámico</p>
+      <h3 class="elem-name">Ácido Glutámico</h3>
+      <p class="elem-body">Centro del metabolismo del nitrógeno vegetal. Receptor primario del NH₄⁺ absorbido (vía enzima GS/GOGAT). Precursor de todos los demás aminoácidos y de la clorofila. Su aplicación exógena mejora la eficiencia de uso del nitrógeno hasta un 20%.</p>
+    </div>
+    <div class="elem-card t4" style="border-top-color:rgba(224,123,84,0.5);">
+      <p class="elem-symbol" style="color:var(--tc)">AA · Alanina</p>
+      <h3 class="elem-name">Alanina</h3>
+      <p class="elem-body">Participa en el transporte de nitrógeno entre órganos. En condiciones de anaerobiosis (anegamiento), la fermentación alanina-específica protege la raíz del daño por falta de oxígeno. Estimula el crecimiento radicular en etapas tempranas.</p>
+    </div>
+    <div class="elem-card t4" style="border-top-color:rgba(224,123,84,0.5);">
+      <p class="elem-symbol" style="color:var(--tc)">AA · Lisina</p>
+      <h3 class="elem-name">Lisina</h3>
+      <p class="elem-body">Aminoácido esencial (para humanos y animales) limitante en cereales como maíz y trigo. Precursor de carnitina (transporte de ácidos grasos) y de la pared celular vegetal. Su aplicación mejora el valor nutricional de granos y la calidad proteica de forrajes.</p>
+    </div>
+  </div>
+
+  <div class="sub-divider" style="color:var(--tc)">▸ Ácidos del Metabolismo Vegetal</div>
+  <div class="cards-grid-2">
+    <div class="elem-card t4" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">SA · Ácido Salicílico</p>
+      <h3 class="elem-name">Ácido Salicílico</h3>
+      <p class="elem-body"><strong>La hormona de la defensa sistémica.</strong> El AS activa la Resistencia Sistémica Adquirida (SAR) — el sistema inmune de las plantas. Cuando un patógeno ataca una hoja, el AS se transporta por la planta activando genes de defensa (PR-proteins, quitinasas, glucanasas) en tejidos que aún no fueron infectados.<br><br><strong>Aplicación práctica:</strong> Aspersión foliar de AS (50–200 mg/L) antes de períodos de alta presión de hongos o bacterias reduce la severidad de enfermedades hasta 40–60%. También mejora tolerancia a estrés salino y metales pesados.</p>
+    </div>
+    <div class="elem-card t4" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">JA · Ácido Jasmónico</p>
+      <h3 class="elem-name">Ácido Jasmónico</h3>
+      <p class="elem-body"><strong>La alarma contra insectos y heridas.</strong> El AJ y su derivado metil-jasmonato se sintetizan cuando la planta sufre daño mecánico (mordeduras de insecto, granizo, viento). Activan genes que codifican para inhibidores de proteasas y otras defensas que hacen los tejidos indigestos o tóxicos para plagas.<br><br><strong>Efecto cascada:</strong> También inhibe el crecimiento vegetativo y acelera la maduración del fruto. La interacción AJ ↔ AS determina si la planta prioriza defensa contra insectos o contra patógenos.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SECCIÓN 5 · BIOESTIMULANTES
+═══════════════════════════════════════════════ -->
+<section class="section t5" id="s5">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num" style="color:var(--tc)">05</div>
+    <div>
+      <p class="section-label-sm" style="color:var(--tc)">// Bioestimulantes</p>
+      <h2 class="section-title">La Nueva Frontera de la Agronomía</h2>
+      <p class="section-desc">Sustancias que, en pequeñas cantidades, estimulan procesos fisiológicos naturales mejorando eficiencia nutricional, tolerancia a estrés y calidad sin ser fertilizantes ni pesticidas.</p>
+    </div>
+  </div>
+
+  <div class="sub-divider" style="color:var(--tc)">▸ De Origen Orgánico</div>
+  <div class="cards-grid-2">
+    <div class="group-card t5" style="border-color:var(--tc);">
+      <h4 class="group-title">Extractos de Algas Marinas</h4>
+      <p class="group-sub" style="color:var(--tc)">Ascophyllum nodosum y otros</p>
+      <ul class="group-list">
+        <li><strong>Composición:</strong> Citoquininas, betaínas, polisacáridos (alginatos, fucoidanos), mannitol, aminoácidos, vitaminas y minerales traza.</li>
+        <li><strong>Efectos documentados:</strong> Mejora germinación y enraizamiento (citoquininas), tolerancia a sequía (betaínas), absorción de nutrientes (alginatos que mejoran estructura del suelo) y calidad de fruto.</li>
+        <li><strong>Aplicación:</strong> Foliar 1–3 L/ha o vía fertirriego 3–5 L/ha. Incompatible con productos cúpricos.</li>
+        <li><strong>Especies clave:</strong> A. nodosum (mejor estudiada), Ecklonia maxima, Sargassum spp.</li>
+      </ul>
+    </div>
+    <div class="group-card t5" style="border-color:var(--tc);">
+      <h4 class="group-title">Humatos (Húmicos + Fúlvicos)</h4>
+      <p class="group-sub" style="color:var(--tc)">Extractos de materia orgánica estabilizada</p>
+      <ul class="group-list">
+        <li>La sinergia húmico + fúlvico es más efectiva que cada uno por separado.</li>
+        <li>Mejoran la CIC del suelo, la agregación de partículas y la actividad microbiana simultáneamente.</li>
+        <li>Reducen la fijación de P en suelos arcillosos hasta un 30%.</li>
+        <li>Quelatan y hacen biodisponibles Fe, Zn, Cu, Mn en suelos con pH problemático.</li>
+        <li><strong>Calidad:</strong> Exigir certificación de contenido real (% ácidos húmicos + fúlvicos solubles).</li>
+      </ul>
+    </div>
+    <div class="group-card t5" style="border-color:rgba(155,114,207,0.5);">
+      <h4 class="group-title">Aminoácidos Hidrolizados</h4>
+      <p class="group-sub" style="color:var(--tc)">Proteínas de origen animal o vegetal</p>
+      <ul class="group-list">
+        <li>Hidrólisis enzimática (mejor calidad) vs ácida (más económica pero menos L-aminoácidos).</li>
+        <li>L-aminoácidos son directamente absorbidos y utilizados por la planta — reducen el gasto energético de síntesis.</li>
+        <li>Estimulan la apertura de estomas y la actividad enzimática del suelo.</li>
+        <li><strong>Origen:</strong> Harina de pluma, colágeno, soja hidrolizada (mejor perfil aminoacídico).</li>
+      </ul>
+    </div>
+    <div class="group-card t5" style="border-color:rgba(155,114,207,0.5);">
+      <h4 class="group-title">Extractos Vegetales</h4>
+      <p class="group-sub" style="color:var(--tc)">Bioestimulantes de origen botánico</p>
+      <ul class="group-list">
+        <li><strong>Extracto de moringa:</strong> Rico en zeantina (citoquinina natural), estimula crecimiento y fructificación.</li>
+        <li><strong>Extracto de ortiga:</strong> Alto en silicio, K, N orgánico y flavonoides. Estimula la microbiota.</li>
+        <li><strong>Purín fermentado:</strong> Aminoácidos, ácidos orgánicos y microorganismos activos.</li>
+        <li><strong>Bocashi líquido:</strong> Mezcla compleja de metabolitos microbianos bioestimulantes.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-divider" style="color:var(--tc)">▸ Funcionales</div>
+  <div class="cards-grid">
+    <div class="elem-card t5" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Bioest. · Quitosano</p>
+      <h3 class="elem-name">Quitosano</h3>
+      <p class="elem-body">Derivado de la quitina de exoesqueletos de crustáceos. <strong>Elicitor de defensas vegetales</strong> — activa los mismos genes de defensa que el ácido salicílico. También inhibe directamente hongos patógenos al dañar sus membranas y actúa como promotor de enraizamiento.<br><br>Forma un film protector sobre frutos que reduce la transpiración y prolonga postcosecha. Dosis: 0.5–2 g/L en foliar.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(155,114,207,0.3);">Elicitor</span><span class="etag" style="color:var(--tc);border-color:rgba(155,114,207,0.3);">Antifúngico</span></div>
+    </div>
+    <div class="elem-card t5" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Bioest. · Vitaminas</p>
+      <h3 class="elem-name">Vitaminas Agrícolas</h3>
+      <p class="elem-body"><strong>B1 (Tiamina):</strong> Cofactor enzimático en el metabolismo del piruvato. Estimula el crecimiento radicular y la tolerancia a estrés abiótico. Dosis foliar: 1–5 mg/L.<br><br><strong>B6 (Piridoxina):</strong> Cofactor de transaminasas — esencial en síntesis de aminoácidos.<br><br><strong>C (Ácido ascórbico):</strong> Antioxidante potente, cofactor en síntesis de pared celular y quelante de Fe.<br><br><strong>E (Tocoferol):</strong> Protege membranas lipídicas del estrés oxidativo.</p>
+    </div>
+    <div class="elem-card t5" style="border-top-color:rgba(155,114,207,0.5);">
+      <p class="elem-symbol" style="color:var(--tc)">Bioest. · Polisacáridos</p>
+      <h3 class="elem-name">Polisacáridos</h3>
+      <p class="elem-body"><strong>Alginatos:</strong> Mejoran la retención de agua en suelo y estimulan bacterias del suelo.<br><br><strong>Beta-glucanos:</strong> Elicitores de respuesta inmune en plantas, similares al quitosano en mecanismo.<br><br><strong>Xantana y goma guar:</strong> Mejoran la adhesión de productos foliares a la cutícula, aumentando su eficacia. Usados como adyuvantes en mezclas de bioestimulantes.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SECCIÓN 6 · FITOHORMONAS
+═══════════════════════════════════════════════ -->
+<section class="section t6" id="s6">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num" style="color:var(--tc)">06</div>
+    <div>
+      <p class="section-label-sm" style="color:var(--tc)">// Fitohormonas</p>
+      <h2 class="section-title">Los Directores de Orquesta Vegetal</h2>
+      <p class="section-desc">Las fitohormonas son señales químicas producidas en nanogramos que coordinan el crecimiento, desarrollo, reproducción y respuesta al estrés. Su manejo preciso es la base de la agricultura de precisión fisiológica.</p>
+    </div>
+  </div>
+  <div class="cards-grid">
+    <div class="elem-card t6" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Fitoh. · AIA/ANA/AIB</p>
+      <h3 class="elem-name">Auxinas</h3>
+      <p class="elem-body"><strong>Arquitectos del enraizamiento.</strong> El ácido indolacético (AIA) es la auxina natural principal. Promueve la elongación celular, el tropismo (la planta "sigue" la luz y la gravedad), la dominancia apical y la iniciación de raíces adventicias.<br><br><strong>Aplicación:</strong> AIB (ácido indolbutírico) y ANA en esquejes (500–10,000 ppm en gel o polvo). Clave en propagación vegetativa de frutales, forestales y ornamentales. También inducen amarre de fruto en atomización durante floración.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(232,184,75,0.3);">Enraizamiento</span><span class="etag" style="color:var(--tc);border-color:rgba(232,184,75,0.3);">Dominancia apical</span></div>
+    </div>
+    <div class="elem-card t6" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Fitoh. · CK</p>
+      <h3 class="elem-name">Citoquininas</h3>
+      <p class="elem-body"><strong>El motor de la división celular.</strong> Las citoquininas (zeatina, kinetina, BAP) se sintetizan principalmente en las raíces y suben por el xilema hacia los brotes. Promueven la división celular, retrasan la senescencia foliar (hojas verdes más tiempo = más fotosíntesis) y estimulan la brotación lateral.<br><br><strong>Uso:</strong> BAP en rompimiento de dominancia apical, mejora del amarre de frutos pequeños (uva, cítricos), y en cultivos in vitro. Las algas marinas son ricas en zeatina natural.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(232,184,75,0.3);">División celular</span><span class="etag" style="color:var(--tc);border-color:rgba(232,184,75,0.3);">Anti-senescencia</span></div>
+    </div>
+    <div class="elem-card t6" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Fitoh. · GA</p>
+      <h3 class="elem-name">Giberelinas</h3>
+      <p class="elem-body"><strong>El acelerador del crecimiento.</strong> Las giberelinas (GA₃ la más usada) promueven la elongación de entrenudos, la germinación de semillas, la floración en plantas de día largo y el desarrollo del fruto partenocárpico (sin semilla).<br><br><strong>Usos clave:</strong> Alargamiento de racimos en uva (100–200 g GA₃/ha), producción de malta cervecera (inducción de amilasas en cebada), aumento de calibre en cítricos y mejora de germinación en semillas dormantes.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(232,184,75,0.3);">Elongación</span><span class="etag" style="color:var(--tc);border-color:rgba(232,184,75,0.3);">Partenocarpia</span></div>
+    </div>
+    <div class="elem-card t6" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Fitoh. · ABA</p>
+      <h3 class="elem-name">Ácido Abscísico (ABA)</h3>
+      <p class="elem-body"><strong>La hormona del estrés.</strong> Cuando la planta detecta déficit hídrico, el ABA se sintetiza en raíces y hojas, cerrando los estomas para reducir la pérdida de agua. También induce la dormancia de semillas y yemas, coordina la respuesta a frío y salinidad.<br><br><strong>Paradoja productiva:</strong> El ABA reduce la fotosíntesis al cerrar estomas, pero protege la planta. Inhibidores del ABA (como ciertos bioestimulantes) pueden mejorar productividad bajo estrés leve pero son contraproducentes bajo estrés severo.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(232,184,75,0.3);">Estrés hídrico</span><span class="etag" style="color:var(--tc);border-color:rgba(232,184,75,0.3);">Dormancia</span></div>
+    </div>
+    <div class="elem-card t6" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Fitoh. · ET</p>
+      <h3 class="elem-name">Etileno</h3>
+      <p class="elem-body"><strong>La hormona gaseosa de la maduración.</strong> Único regulador vegetal en estado gaseoso. Coordina la maduración de frutos climatéricos (mango, plátano, tomate, manzana), la abscisión de hojas y frutos, la respuesta a heridas y la inhibición del crecimiento bajo estrés.<br><br><strong>Uso agrícola:</strong> Ethephon (ácido 2-cloroetilfosfónico) libera etileno lentamente en planta — acelera la maduración homogénea de café, piña y tomate. El CO₂ y 1-MCP (inhibidor del receptor de etileno) prolongan la postcosecha.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(232,184,75,0.3);">Maduración</span><span class="etag" style="color:var(--tc);border-color:rgba(232,184,75,0.3);">Hormona gaseosa</span></div>
+    </div>
+  </div>
+  <div class="info-box t6" style="border-color:var(--tc);background:var(--tc3);margin-top:24px;">
+    <strong style="color:var(--tc)">⚖️ Balance Hormonal — La Clave</strong>
+    Las fitohormonas no actúan solas: la relación auxinas:citoquininas determina si un tejido produce raíces o brotes. La relación ABA:giberelinas controla dormancia vs crecimiento. El manejo agronómico (poda, riego, temperatura, bioestimulantes) siempre está modificando este balance, conscientemente o no.
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SECCIÓN 7 · BACTERIAS BENEFICIOSAS
+═══════════════════════════════════════════════ -->
+<section class="section t7" id="s7">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num" style="color:var(--tc)">07</div>
+    <div>
+      <p class="section-label-sm" style="color:var(--tc)">// Bacterias Beneficiosas</p>
+      <h2 class="section-title">El Ejército Invisible del Suelo</h2>
+      <p class="section-desc">Las bacterias beneficiosas realizan funciones que ningún fertilizante puede reemplazar completamente: fijan nitrógeno del aire, liberan fósforo inmovilizado y producen hormonas de crecimiento. Son el equipo de trabajo más eficiente del suelo.</p>
+    </div>
+  </div>
+
+  <div class="sub-divider" style="color:var(--tc)">▸ Fijadoras de Nitrógeno</div>
+  <div class="cards-grid">
+    <div class="elem-card t7" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Bact. · Symbiont</p>
+      <h3 class="elem-name">Rhizobium spp.</h3>
+      <p class="elem-body"><strong>La alianza más productiva de la naturaleza.</strong> Bacterias gram-negativas que infectan las raíces de leguminosas formando nódulos donde fijan N₂ atmosférico mediante la enzima nitrogenasa, convirtiéndolo en NH₄⁺ utilizable. Pueden fijar <strong>100–300 kg N/ha/año</strong> en condiciones óptimas.<br><br><strong>Especificidad:</strong> Cada especie de Rhizobium tiene su leguminosa ideal (Rhizobium leguminosarum → arveja/lenteja; Bradyrhizobium japonicum → soya). Inocular siempre con la cepa específica al cultivo.<br><br><strong>Condiciones:</strong> pH 6–7, Mo suficiente (cofactor de nitrogenasa), sin exceso de N mineral (inhibe nodulación).</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(93,190,163,0.3);">Simbiótico</span><span class="etag" style="color:var(--tc);border-color:rgba(93,190,163,0.3);">100–300 kg N/ha</span></div>
+    </div>
+    <div class="elem-card t7" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Bact. · PGPR</p>
+      <h3 class="elem-name">Azospirillum spp.</h3>
+      <p class="elem-body"><strong>Fijador libre asociativo.</strong> No forma nódulos pero coloniza la rizósfera y la superficie radicular de gramíneas (maíz, arroz, trigo, caña). Fija 15–40 kg N/ha/año y produce abundantes auxinas (AIA), citoquininas y giberelinas que estimulan el crecimiento radicular hasta un 30–50%.<br><br><strong>Efecto PGPR dominante:</strong> En muchos casos, el beneficio de Azospirillum viene más de su producción de fitohormonas que de la fijación de N. Compatibilidad alta con fungicidas; media con bactericidas.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(93,190,163,0.3);">Gramíneas</span><span class="etag" style="color:var(--tc);border-color:rgba(93,190,163,0.3);">Produce auxinas</span></div>
+    </div>
+    <div class="elem-card t7" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Bact. · Free-living</p>
+      <h3 class="elem-name">Azotobacter spp.</h3>
+      <p class="elem-body"><strong>El fijador libre aeróbico más eficiente.</strong> Bacteria de vida libre con la tasa de respiración más alta conocida (para proteger la nitrogenasa del O₂). Fija 10–25 kg N/ha/año. Produce auxinas, giberelinas, citoquininas y vitaminas B.<br><br><strong>Ventaja extra:</strong> Produce polisacáridos que mejoran la agregación del suelo y tiene actividad antifúngica por producción de antibióticos (azoficina, lipoquinona). Requiere pH &gt;6 y materia orgánica suficiente como fuente de carbono.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(93,190,163,0.3);">Vida libre</span><span class="etag" style="color:var(--tc);border-color:rgba(93,190,163,0.3);">Antifúngico</span></div>
+    </div>
+  </div>
+
+  <div class="sub-divider" style="color:var(--tc)">▸ Solubilizadoras de Fósforo</div>
+  <div class="cards-grid">
+    <div class="elem-card t7" style="border-top-color:rgba(93,190,163,0.6);">
+      <p class="elem-symbol" style="color:var(--tc)">Bact. · PSB</p>
+      <h3 class="elem-name">Bacillus subtilis</h3>
+      <p class="elem-body"><strong>El soldado multipropósito del suelo.</strong> Produce ácidos orgánicos (glucónico, oxálico, cítrico) que disuelven el P inorgánico inmovilizado con Ca, Al y Fe. También produce iturina, surfactina y fengicina — antibióticos lipopeptídicos con actividad antifúngica de amplio espectro contra Fusarium, Rhizoctonia y Pythium.<br><br>Forma endosporas que soportan desecación, calor y almacenamiento prolongado. Es una de las bacterias más usadas en bioinsumos comerciales. Compatible con la mayoría de fertilizantes y fungicidas a dosis bajas.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(93,190,163,0.3);">Antifúngico</span><span class="etag" style="color:var(--tc);border-color:rgba(93,190,163,0.3);">Solubiliza P</span><span class="etag" style="color:var(--tc);border-color:rgba(93,190,163,0.3);">Endospora</span></div>
+    </div>
+    <div class="elem-card t7" style="border-top-color:rgba(93,190,163,0.6);">
+      <p class="elem-symbol" style="color:var(--tc)">Bact. · PSB</p>
+      <h3 class="elem-name">Bacillus megaterium</h3>
+      <p class="elem-body"><strong>Especialista en P orgánico.</strong> Produce fosfatasas que mineralizan el P orgánico del suelo (fitatos, fosfolípidos) que los cultivos no pueden acceder. Puede movilizar 30–50 kg P₂O₅/ha/año del reservorio orgánico del suelo.<br><br>También produce giberelinas y auxinas. Forma esporas que resisten condiciones adversas. Especialmente valioso en suelos con alta materia orgánica pero con P disponible bajo.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(93,190,163,0.3);">P orgánico</span><span class="etag" style="color:var(--tc);border-color:rgba(93,190,163,0.3);">Fosfatasas</span></div>
+    </div>
+    <div class="elem-card t7" style="border-top-color:rgba(93,190,163,0.6);">
+      <p class="elem-symbol" style="color:var(--tc)">Bact. · PSB+PGPR</p>
+      <h3 class="elem-name">Pseudomonas fluorescens</h3>
+      <p class="elem-body"><strong>El defensor de la rizósfera.</strong> Coloniza agresivamente la raíz formando un biofilm protector y produciendo 2,4-diacetilfluoroglucinol (2,4-DAPG) — antifúngico que suprime patógenos de suelo como Pythium, Phytophthora y Gaeumannomyces. También produce sideróforos que secuestran Fe, privando a los patógenos de este nutriente esencial.<br><br>Solubiliza P y produce AIA. Induce resistencia sistémica (ISR) en la planta. Sensible a algunos fungicidas — consultar compatibilidad.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(93,190,163,0.3);">Biocontrol</span><span class="etag" style="color:var(--tc);border-color:rgba(93,190,163,0.3);">Sideróforos</span><span class="etag" style="color:var(--tc);border-color:rgba(93,190,163,0.3);">ISR</span></div>
+    </div>
+  </div>
+
+  <div class="info-box t7" style="border-color:var(--tc);background:var(--tc3);margin-top:24px;">
+    <strong style="color:var(--tc)">🔬 Consorcio vs. Monocultivo Bacteriano</strong>
+    Aplicar un consorcio de bacterias (Rhizobium + Azospirillum + Bacillus subtilis + Pseudomonas) produce resultados superiores al uso de cada una por separado. La complementariedad funcional — fijación de N + solubilización de P + producción hormonal + biocontrol — replica mejor las condiciones de un suelo biológicamente diverso.
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SECCIÓN 8 · HONGOS BENEFICIOSOS
+═══════════════════════════════════════════════ -->
+<section class="section t8" id="s8">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num" style="color:var(--tc)">08</div>
+    <div>
+      <p class="section-label-sm" style="color:var(--tc)">// Hongos Beneficiosos</p>
+      <h2 class="section-title">La Red Silenciosa Bajo el Suelo</h2>
+      <p class="section-desc">Los hongos benéficos forman redes miceliales que conectan plantas, solubilizan nutrientes y protegen contra patógenos. Son la infraestructura invisible más sofisticada del agroecosistema.</p>
+    </div>
+  </div>
+
+  <div class="sub-divider" style="color:var(--tc)">▸ Micorrizas</div>
+  <div class="cards-grid-2">
+    <div class="elem-card t8" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Hongo · AM</p>
+      <h3 class="elem-name">Glomus spp. (Micorrizas AM)</h3>
+      <p class="elem-body"><strong>La simbiosis más extendida del planeta.</strong> Los hongos formadores de micorrizas arbusculares (AM) colonizan el 80–85% de las plantas terrestres. Sus hifas extrarradiculares pueden extenderse hasta 15 cm del eje de la raíz, ampliando la zona de absorción hasta <strong>700 veces</strong>.<br><br><strong>Beneficios documentados:</strong>
+      <br>→ Absorción de P: aumenta hasta 80% del P total absorbido por la planta
+      <br>→ Agua: mejora la tolerancia a sequía por mayor exploración del suelo
+      <br>→ Patógenos: efecto barrera física contra Fusarium, Phytophthora y nematodos
+      <br>→ Metales pesados: reducen la absorción de elementos tóxicos (Cd, Pb)<br><br><strong>Condiciones para inoculación efectiva:</strong> P disponible bajo (&lt;30 ppm Bray), evitar fungicidas sistémicos 15 días antes/después, suelo con algo de humedad. Especies principales: Rhizophagus irregularis (antes Glomus intraradices), Glomus mosseae, Funneliformis spp.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(212,130,106,0.3);">700× zona absorción</span><span class="etag" style="color:var(--tc);border-color:rgba(212,130,106,0.3);">Simbiosis</span></div>
+    </div>
+    <div class="group-card t8" style="border-color:var(--tc);">
+      <h4 class="group-title">Trichoderma harzianum</h4>
+      <p class="group-sub" style="color:var(--tc)">Control biológico y promotor de crecimiento</p>
+      <ul class="group-list">
+        <li><strong>Micoparasitismo:</strong> Reconoce, envuelve y digiere físicamente las hifas de hongos patógenos (Fusarium, Botrytis, Sclerotinia, Rhizoctonia). Es literalmente un depredador fúngico.</li>
+        <li><strong>Antibióticos:</strong> Produce trichodermina, gliotoxina y harzianopiridona que inhiben el crecimiento de patógenos en la rizósfera.</li>
+        <li><strong>Inducción de resistencia:</strong> Activa genes de defensa en la planta (ISR), similar a las bacterias PGPR.</li>
+        <li><strong>Promoción de crecimiento:</strong> Solubiliza Zn, P y Fe. Produce auxinas y giberelinas. Aumenta biomasa radicular hasta 40%.</li>
+        <li><strong>Dosis:</strong> 1–2 kg/ha (10⁸ UFC/g) al suelo o semilla.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub-divider" style="color:var(--tc)">▸ Trichoderma viride y Endófitos</div>
+  <div class="cards-grid">
+    <div class="elem-card t8" style="border-top-color:rgba(212,130,106,0.6);">
+      <p class="elem-symbol" style="color:var(--tc)">Hongo · Biocontrol</p>
+      <h3 class="elem-name">Trichoderma viride</h3>
+      <p class="elem-body">Prima del T. harzianum con perfil complementario. Especialmente eficaz contra patógenos de la madera (Fusarium oxysporum en frutales, Armillaria) y en descomposición de residuos celulósicos del suelo (produce celulasas potentes). Ideal en suelos con alta presión de Fusarium vascular.</p>
+    </div>
+    <div class="elem-card t8" style="border-top-color:rgba(212,130,106,0.6);">
+      <p class="elem-symbol" style="color:var(--tc)">Hongo · Endófito+</p>
+      <h3 class="elem-name">Beauveria bassiana</h3>
+      <p class="elem-body"><strong>El doble agente.</strong> Actúa como <strong>entomopatógeno</strong> (mata insectos plagas — trips, mosca blanca, ácaros, gusanos) cuando está en la superficie de la planta, pero también como <strong>endófito beneficioso</strong> cuando coloniza los tejidos internos, induciendo resistencia sistémica sin dañar a la planta.<br><br>Compatible con la mayoría de insecticidas biológicos. Sensible a la radiación UV directa — aplicar al atardecer.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(212,130,106,0.3);">Entomopatógeno</span><span class="etag" style="color:var(--tc);border-color:rgba(212,130,106,0.3);">Endófito</span></div>
+    </div>
+    <div class="elem-card t8" style="border-top-color:rgba(212,130,106,0.6);">
+      <p class="elem-symbol" style="color:var(--tc)">Hongo · Entomopat.</p>
+      <h3 class="elem-name">Metarhizium anisopliae</h3>
+      <p class="elem-body"><strong>Especialista en plagas de suelo.</strong> Altamente eficaz contra larvas de coleópteros (gallina ciega, escarabajos rinocerontes), chinches de suelo y termitas. Sus conidios germinan sobre la cutícula del insecto, penetran y lo matan por invasión fúngica y producción de toxinas (destruxinas).<br><br>Persiste en suelo hasta 18 meses en condiciones favorables. Puede integrarse con nematodos entomopatógenos para control sinérgico.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(212,130,106,0.3);">Plagas de suelo</span><span class="etag" style="color:var(--tc);border-color:rgba(212,130,106,0.3);">Destruxinas</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SECCIÓN 9 · MINERALES Y SALES
+═══════════════════════════════════════════════ -->
+<section class="section t9" id="s9">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num" style="color:var(--tc)">09</div>
+    <div>
+      <p class="section-label-sm" style="color:var(--tc)">// Minerales y Sales Agrícolas</p>
+      <h2 class="section-title">La Farmacia del Fertirriego</h2>
+      <p class="section-desc">Las sales minerales son los vehículos más concentrados y eficientes para entregar nutrientes. Su selección correcta depende del cultivo, el pH del agua, la etapa fenológica y el sistema de aplicación.</p>
+    </div>
+  </div>
+  <div class="cards-grid">
+    <div class="elem-card t9" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Fert. · Ca(NO₃)₂</p>
+      <h3 class="elem-name">Nitrato de Calcio</h3>
+      <p class="elem-body">La única fuente de Ca totalmente soluble y compatible con el fertirriego. Aporta Ca²⁺ (19%) y N-NO₃⁻ (15.5%). Alcaliniza ligeramente el agua.<br><br><strong>Indispensable en:</strong> tomate, pimiento, fresa, lechuga — cultivos sensibles a deficiencia de Ca. Previene blossom-end rot y tip-burn. Aplicar fraccionado — el Ca solo se mueve con la corriente de transpiración, no por difusión.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(122,176,212,0.3);">Ca 19% · N 15.5%</span><span class="etag" style="color:var(--tc);border-color:rgba(122,176,212,0.3);">Soluble 100%</span></div>
+    </div>
+    <div class="elem-card t9" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Fert. · KNO₃</p>
+      <h3 class="elem-name">Nitrato de Potasio</h3>
+      <p class="elem-body">El fertilizante premium del engorde y maduración. Aporta K (38%) y N-NO₃ (13%) sin cloro — ideal para cultivos Cl-sensibles (tabaco, papa, fresa, cítricos de calidad). Solubilidad alta (316 g/L a 20°C).<br><br><strong>Estrategia:</strong> Reducir a la mitad la dosis en llenado de fruto y subir K para mejorar calidad (brix, firmeza, color). También usado en fertirrigación de cultivos hidropónicos en todas sus fases.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(122,176,212,0.3);">K 38% · N 13%</span><span class="etag" style="color:var(--tc);border-color:rgba(122,176,212,0.3);">Sin cloro</span></div>
+    </div>
+    <div class="elem-card t9" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Fert. · K₂SO₄</p>
+      <h3 class="elem-name">Sulfato de Potasio</h3>
+      <p class="elem-body">Aporta K (50%) y S (18%) sin cloro. Menor índice de salinidad que el KCl, ideal para suelos salinos o cultivos muy sensibles. El azufre que aporta tiene efecto acidificante leve en suelos alcalinos.<br><br><strong>El más caro del grupo</strong> pero indispensable en cultivos premium: berries, flores de corte, uva de mesa, tabaco. Menor solubilidad que KCl (110 g/L) — disolver bien antes de aplicar.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(122,176,212,0.3);">K 50% · S 18%</span><span class="etag" style="color:var(--tc);border-color:rgba(122,176,212,0.3);">Bajo IE salinidad</span></div>
+    </div>
+    <div class="elem-card t9" style="border-top-color:rgba(122,176,212,0.6);">
+      <p class="elem-symbol" style="color:var(--tc)">Fert. · MgSO₄</p>
+      <h3 class="elem-name">Sulfato de Magnesio</h3>
+      <p class="elem-body">Fuente de Mg (9.8%) y S (13%), conocida como "sal Epsom". Alta solubilidad, compatible con la mayoría de fertilizantes. Ideal para corrección foliar rápida de deficiencia de Mg (2–4 kg/200L/ha).<br><br><strong>Cuidado:</strong> Aplicar solo cuando la relación Ca:Mg en suelo sea mayor a 6:1. No mezclar directamente con Ca(NO₃)₂ en solución concentrada — precipita. Aplicar en tanques separados.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(122,176,212,0.3);">Mg 9.8% · S 13%</span><span class="etag" style="color:var(--tc);border-color:rgba(122,176,212,0.3);">Sal Epsom</span></div>
+    </div>
+    <div class="elem-card t9" style="border-top-color:rgba(122,176,212,0.6);">
+      <p class="elem-symbol" style="color:var(--tc)">Fert. · MAP</p>
+      <h3 class="elem-name">Fosfato Monoamónico (MAP)</h3>
+      <p class="elem-body">Aporta P₂O₅ (52%) y N-NH₄ (12%). Alta solubilidad y reacción ácida en solución (pH ~4.5) — excelente para alcalinizar el fósforo en suelos o aguas calcáreas.<br><br><strong>Usos:</strong> Arranque en siembra (estimula raíz), fertirriego en suelos alcalinos donde el P se inmoviliza, y como fuente de P en hidroponía. Incompatible con Ca y Mg en solución concentrada — precipita fosfatos insolubles.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(122,176,212,0.3);">P 52% · N 12%</span><span class="etag" style="color:var(--tc);border-color:rgba(122,176,212,0.3);">pH ácido en solución</span></div>
+    </div>
+    <div class="elem-card t9" style="border-top-color:rgba(122,176,212,0.6);">
+      <p class="elem-symbol" style="color:var(--tc)">Fert. · DAP</p>
+      <h3 class="elem-name">Fosfato Diamónico (DAP)</h3>
+      <p class="elem-body">Aporta P₂O₅ (46%) y N-NH₄ (18%). Reacción básica en solución (pH ~8) — aumenta la alcalinidad local alrededor del gránulo, lo que puede inmovilizar el P en suelos ya alcalinos.<br><br><strong>Mejor uso:</strong> Suelos ácidos o neutros donde la alcalinidad local mejora la disponibilidad del P. En suelos alcalinos preferir MAP o fertilizantes fluidos ácidos. Cuidado con la volatilización de NH₃ al mezclar con cal.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(122,176,212,0.3);">P 46% · N 18%</span><span class="etag" style="color:var(--tc);border-color:rgba(122,176,212,0.3);">pH básico en solución</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     SECCIÓN 10 · OTROS COMPUESTOS CLAVE
+═══════════════════════════════════════════════ -->
+<section class="section t10" id="s10">
+<div class="container">
+  <div class="section-header">
+    <div class="section-num" style="color:var(--tc)">10</div>
+    <div>
+      <p class="section-label-sm" style="color:var(--tc)">// Otros Compuestos Clave</p>
+      <h2 class="section-title">Fisiología Vegetal y Protección Natural</h2>
+      <p class="section-desc">Compuestos funcionales que actúan en la osmorregulación, el transporte de nutrientes y la protección fitosanitaria a través de mecanismos naturales y bioquímicamente elegantes.</p>
+    </div>
+  </div>
+
+  <div class="sub-divider" style="color:var(--tc)">▸ Polialcoholes y Osmoprotectores</div>
+  <div class="cards-grid-2">
+    <div class="elem-card t10" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Comp. · Poliol</p>
+      <h3 class="elem-name">Sorbitol y Manitol</h3>
+      <p class="elem-body"><strong>Los transportadores del floema.</strong> Los polialcoholes son formas de transporte de carbono en el floema de muchas especies frutales (manzana, pera, durazno, cereza transportan sorbitol en lugar de sacarosa).<br><br><strong>Uso agrícola como vehículo:</strong> El sorbitol es ampliamente usado en fertilizantes foliares como agente complejante de Ca, Mg, Zn y B. Mejora la movilidad de estos nutrientes en el floema hasta 3–5× comparado con las sales simples. Un fertilizante "Ca-sorbitol" llega al fruto; el Ca(NO₃)₂ foliar no.<br><br><strong>Osmoprotección:</strong> El manitol se acumula en tejidos bajo estrés salino y sequía, protegiendo enzimas y membranas por osmosis compatible.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(168,200,106,0.3);">Transporte floema</span><span class="etag" style="color:var(--tc);border-color:rgba(168,200,106,0.3);">Quelante foliar</span></div>
+    </div>
+    <div class="elem-card t10" style="border-top-color:var(--tc);">
+      <p class="elem-symbol" style="color:var(--tc)">Comp. · Betaína</p>
+      <h3 class="elem-name">Betaínas (Glicina-Betaína)</h3>
+      <p class="elem-body"><strong>El osmoprotector universal de las plantas.</strong> Las betaínas se acumulan en los cloroplastos bajo estrés hídrico, salino y térmico, protegiendo el aparato fotosintético. Son osmolitos compatibles: alcanzan concentraciones muy altas sin inhibir enzimas (a diferencia de las sales).<br><br><strong>Fuentes agrícolas:</strong> Extractos de Ascophyllum nodosum (alga) y remolacha azucarera son ricos en glicina-betaína. Su aplicación exógena (2–5 L/ha de extracto de alga) mejora la tolerancia a sequía un 15–25% y recupera la fotosíntesis más rápidamente post-estrés.<br><br>También protegen la integridad de las membranas de microorganismos beneficiosos inoculados en condiciones de estrés.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(168,200,106,0.3);">Osmolito compatible</span><span class="etag" style="color:var(--tc);border-color:rgba(168,200,106,0.3);">Estrés salino/sequía</span></div>
+    </div>
+  </div>
+
+  <div class="sub-divider" style="color:var(--tc)">▸ Protección Vegetal Natural</div>
+  <div class="cards-grid">
+    <div class="elem-card t10" style="border-top-color:rgba(168,200,106,0.7);">
+      <p class="elem-symbol" style="color:var(--tc)">Botán. · Neem</p>
+      <h3 class="elem-name">Extracto de Neem (Azadirachta indica)</h3>
+      <p class="elem-body"><strong>El insecticida botánico más completo.</strong> El aceite de neem contiene azadiractina, el compuesto activo más estudiado en bioinsecticidas. Actúa como:<br><br>→ <strong>Ecdisona inhibidor:</strong> bloquea la muda de insectos inmaduros (larvas y ninfas no pueden completar su ciclo)<br>→ <strong>Antialimentario:</strong> los insectos dejan de comer tejido tratado<br>→ <strong>Repelente:</strong> aleja plagas adultas<br>→ <strong>Antifúngico suave:</strong> reduce Oidio, Botrytis en aplicaciones preventivas<br><br>No afecta a polinizadores si se aplica fuera de las horas de vuelo. Biodegradable en 3–7 días. Dosis: 2–5 mL/L de aceite emulsionado.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(168,200,106,0.3);">Azadiractina</span><span class="etag" style="color:var(--tc);border-color:rgba(168,200,106,0.3);">IGR natural</span></div>
+    </div>
+    <div class="elem-card t10" style="border-top-color:rgba(168,200,106,0.7);">
+      <p class="elem-symbol" style="color:var(--tc)">Botán. · Ajo</p>
+      <h3 class="elem-name">Extracto de Ajo (Allium sativum)</h3>
+      <p class="elem-body"><strong>La alicina: antibiótico natural de amplio espectro.</strong> La alicina (alil 2-propenotiosulfinato) se forma cuando el ajo se tritura — no existe como tal en el bulto intacto. Tiene actividad:<br><br>→ <strong>Bactericida:</strong> inhibe enzimas de síntesis de cisteína en bacterias<br>→ <strong>Antifúngica:</strong> interfiere con la síntesis de ergosterol en hongos<br>→ <strong>Nematicida:</strong> repelente y tóxico para nematodos fitopatógenos<br>→ <strong>Insectífugo:</strong> repelente de pulgones, mosca blanca y trips<br><br>El extracto acuoso fermentado (1 litro de ajo licuado en 10L de agua, fermentado 5 días) es la preparación artesanal más efectiva. Aplicar 1L/20L de agua en foliar.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(168,200,106,0.3);">Alicina</span><span class="etag" style="color:var(--tc);border-color:rgba(168,200,106,0.3);">Amplio espectro</span></div>
+    </div>
+    <div class="elem-card t10" style="border-top-color:rgba(168,200,106,0.7);">
+      <p class="elem-symbol" style="color:var(--tc)">Comp. · Aceites</p>
+      <h3 class="elem-name">Aceites Agrícolas</h3>
+      <p class="elem-body"><strong>Mecanismo físico, no químico.</strong> Los aceites minerales y vegetales (canola, girasol, soya) actúan asfixiando insectos de cuerpo blando (pulgones, ácaros, cochinillas, escamas) al obstruir sus espiráculos respiratorios y disolver su cutícula cerosa.<br><br><strong>Usos clave:</strong> Control de huevos de insectos en invierno (aceites minerales de verano/invierno), mezcla con fungicidas para mejorar adhesión y cobertura, adyuvantes en formulaciones de azufre y cobre. Cuidado con fitotoxicidad en temperaturas &gt;30°C o en plantas jóvenes con cutícula delgada.</p>
+      <div class="elem-tags"><span class="etag" style="color:var(--tc);border-color:rgba(168,200,106,0.3);">Mecanismo físico</span><span class="etag" style="color:var(--tc);border-color:rgba(168,200,106,0.3);">Adyuvante</span></div>
+    </div>
+  </div>
+
+  <div class="info-box t10" style="border-color:var(--tc);background:var(--tc3);margin-top:28px;">
+    <strong style="color:var(--tc)">🌿 La Sinfonía del Agroecosistema</strong>
+    Todos los compuestos de esta biblioteca trabajan en red. Los ácidos húmicos potencian la absorción de micronutrientes. Las micorrizas necesitan P bajo para colonizar. Las bacterias necesitan Mo para fijar N. El silicio protege a las plantas que producen más azadiractina. El quitosano activa las mismas rutas que el ácido salicílico. Comprender estas conexiones — y no solo cada molécula aislada — es la diferencia entre un agricultor técnico y un agrónomo sistémico.
+  </div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-firma">
+    <span style="font-size:1.7rem;animation:wolfPulse 3s ease-in-out infinite;display:inline-block;">🐺</span>
+    <div>
+      <span class="firma-name">Lobo/DeyFz</span>
+      <span class="firma-sub-text">Biblioteca Agrícola Profesional · 2026</span>
+    </div>
+  </div>
+  <p>
+    <strong>Biblioteca Técnica Agrícola</strong><br>
+    Macronutrientes · Micronutrientes · Bioestimulantes · Organismos Benéficos · Compuestos Especiales<br>
+    Referencias: FAO · USDA · CIAT · Marschner (Mineral Nutrition of Higher Plants) · Taiz & Zeiger (Plant Physiology) · UCR · CIMMYT<br><br>
+    <span style="font-size:0.72rem;opacity:0.4;">© 2026 · Lobo/DeyFz · Información de referencia técnica · Siempre validar con análisis de laboratorio y asesoría local</span>
+  </p>
+</footer>
+
+<script>
+// Accordion
+function toggleAcc(header){
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.acc-arrow');
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.acc-body').forEach(b=>b.classList.remove('open'));
+  document.querySelectorAll('.acc-arrow').forEach(a=>a.classList.remove('open'));
+  if(!isOpen){body.classList.add('open');arrow.classList.add('open');}
+}
+
+// Smooth nav highlight on scroll
+const sections = document.querySelectorAll('.section');
+const pills = document.querySelectorAll('.nav-pill');
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const id = entry.target.id;
+      pills.forEach(p=>{
+        p.style.opacity = p.getAttribute('href')==='#'+id ? '1' : '0.45';
+        p.style.transform = p.getAttribute('href')==='#'+id ? 'translateY(-2px)' : '';
+      });
+    }
+  });
+},{threshold:0.3});
+sections.forEach(s=>observer.observe(s));
+</script>
+</body>
+</html>

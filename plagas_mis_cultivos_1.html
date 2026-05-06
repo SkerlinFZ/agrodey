@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plagas y Enfermedades · Lobo/DeyFz · Mis Cultivos</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --bg:#0c0906;--bg-card:#181208;--bg-card2:#1e1608;
+  --text:#c8b898;--text-muted:#7a6850;--border:rgba(200,155,55,0.13);
+  --gold:#c8881e;--gold-light:#e0a835;
+}
+/* PALETA POR CULTIVO */
+.c-chile   {--tc:#e8504a;--tc2:rgba(232,80,74,0.13);}
+.c-maracuya{--tc:#d4826a;--tc2:rgba(212,130,106,0.13);}
+.c-culantro{--tc:#6abf6a;--tc2:rgba(106,191,106,0.13);}
+.c-vainica {--tc:#7ab0d4;--tc2:rgba(122,176,212,0.13);}
+.c-frijol  {--tc:#c8a04a;--tc2:rgba(200,160,74,0.13);}
+.c-chayote {--tc:#5dbea3;--tc2:rgba(93,190,163,0.13);}
+.c-berenjena{--tc:#9b72cf;--tc2:rgba(155,114,207,0.13);}
+.c-cas     {--tc:#e8b84b;--tc2:rgba(232,184,75,0.13);}
+.c-maiz    {--tc:#d4b86a;--tc2:rgba(212,184,106,0.13);}
+.c-limon   {--tc:#a8d46a;--tc2:rgba(168,212,106,0.13);}
+
+body{font-family:'Source Serif 4',Georgia,serif;background:var(--bg);color:var(--text);line-height:1.75;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:0.025;pointer-events:none;z-index:9999;}
+
+/* HERO */
+.hero{background:#080604;background-image:radial-gradient(ellipse 65% 60% at 25% 45%,rgba(232,80,74,0.1) 0%,transparent 65%),radial-gradient(ellipse 50% 65% at 75% 55%,rgba(168,212,106,0.08) 0%,transparent 60%);padding:76px 40px 66px;text-align:center;border-bottom:1px solid var(--border);}
+.hero-label{font-family:'JetBrains Mono',monospace;font-size:0.65rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;opacity:0.85;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,6vw,4.5rem);font-weight:900;line-height:1.05;letter-spacing:-0.02em;color:#e8d8b0;margin-bottom:14px;}
+.hero h1 em{font-style:italic;color:#e8504a;}
+.hero-sub{font-size:0.95rem;font-weight:300;color:rgba(200,184,152,0.6);max-width:540px;margin:0 auto 28px;line-height:1.7;}
+.cultivos-pills{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:28px;}
+.cpill{font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;padding:5px 12px;border-radius:2px;border:1px solid;background:transparent;}
+.firma-hero{display:inline-flex;align-items:center;gap:10px;background:rgba(200,136,30,0.07);border:1px solid rgba(200,136,30,0.2);padding:9px 20px 9px 14px;border-radius:3px;}
+.firma-wolf{font-size:1.5rem;animation:wolfPulse 3s ease-in-out infinite;display:inline-block;}
+@keyframes wolfPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}
+.firma-name{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:900;font-style:italic;color:var(--gold-light);letter-spacing:0.04em;display:block;line-height:1.1;}
+.firma-sub-small{font-family:'JetBrains Mono',monospace;font-size:0.56rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(200,136,30,0.45);display:block;}
+
+/* NAV */
+.nav-index{background:rgba(12,9,6,0.96);border-bottom:1px solid var(--border);padding:14px 0;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+.nav-inner{max-width:980px;margin:0 auto;padding:0 20px;display:flex;flex-wrap:wrap;gap:5px;justify-content:center;}
+.nav-pill{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;padding:5px 11px;border-radius:2px;border:1px solid;cursor:pointer;text-decoration:none;transition:all 0.2s;background:transparent;}
+.nav-pill:hover{transform:translateY(-1px);opacity:0.9;}
+
+/* LAYOUT */
+.cultivo-section{padding:62px 0;border-bottom:1px solid var(--border);}
+.container{max-width:980px;margin:0 auto;padding:0 26px;}
+
+/* ENCABEZADO DE CULTIVO */
+.cultivo-header{display:flex;align-items:center;gap:18px;margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+.cultivo-icon{font-size:3rem;line-height:1;flex-shrink:0;}
+.cultivo-label{font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:6px;opacity:0.8;}
+.cultivo-title{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,3vw,2rem);font-weight:700;color:#e8d8b0;line-height:1.2;}
+.cultivo-desc{font-size:0.86rem;color:var(--text-muted);margin-top:6px;max-width:560px;line-height:1.6;}
+
+/* CARDS GRID */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:13px;}
+.cards-wide{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:13px;}
+
+/* TARJETA DE PLAGA */
+.pest-card{background:var(--bg-card2);border:1px solid var(--border);border-left:3px solid;padding:20px 18px;border-radius:2px;transition:transform 0.22s,box-shadow 0.22s;position:relative;overflow:hidden;}
+.pest-card:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(0,0,0,0.45);}
+.pest-card::after{content:'';position:absolute;top:0;right:0;width:70px;height:70px;border-radius:50%;transform:translate(28px,-28px);opacity:0.06;}
+
+.pest-emoji{font-size:1.6rem;display:block;margin-bottom:8px;line-height:1;}
+.pest-name{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:#e0d0b0;margin-bottom:2px;}
+.pest-sci{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.08em;font-style:italic;margin-bottom:10px;opacity:0.5;}
+.pest-body{font-size:0.83rem;color:var(--text-muted);line-height:1.65;}
+.pest-body strong{color:var(--text);}
+
+/* CONTROL BOX */
+.control-box{margin-top:11px;background:rgba(0,0,0,0.2);border-left:2px solid;padding:10px 12px;border-radius:0 2px 2px 0;}
+.control-box p{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:6px;opacity:0.7;}
+.control-box ul{list-style:none;display:flex;flex-direction:column;gap:4px;}
+.control-box ul li{font-size:0.8rem;color:var(--text-muted);padding-left:12px;position:relative;line-height:1.4;}
+.control-box ul li::before{content:'→';position:absolute;left:0;font-family:'JetBrains Mono',monospace;font-size:0.65rem;opacity:0.6;}
+.control-box ul li strong{color:var(--text);}
+
+/* TAGS */
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px;}
+.ptag{font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;padding:2px 7px;border-radius:2px;border:1px solid;}
+.risk-high{background:rgba(220,50,30,0.12);border-color:rgba(220,50,30,0.35);color:#e07060;}
+.risk-med {background:rgba(230,160,20,0.12);border-color:rgba(230,160,20,0.35);color:#d4a030;}
+.risk-low {background:rgba(80,180,80,0.1);border-color:rgba(80,180,80,0.3);color:#70b860;}
+
+/* SUB DIVIDER */
+.sub-div{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--text-muted);padding:11px 0 9px;border-top:1px solid var(--border);margin:24px 0 13px;}
+
+/* CALENDARIO */
+.cal-wrap{background:var(--bg-card);padding:22px;border-radius:3px;border:1px solid var(--border);margin-top:18px;overflow-x:auto;}
+.cal-title{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.cal-table{width:100%;border-collapse:collapse;font-size:0.76rem;min-width:560px;}
+.cal-table th{font-family:'JetBrains Mono',monospace;font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;padding:6px 5px;text-align:center;background:var(--bg-card2);color:var(--text-muted);border-bottom:1px solid var(--border);}
+.cal-table td{padding:6px 7px;border-bottom:1px solid rgba(200,155,55,0.04);font-size:0.78rem;}
+.cal-table tr:last-child td{border-bottom:none;}
+.cal-table td:first-child{font-weight:600;color:#d8c8a0;font-size:0.8rem;white-space:nowrap;}
+.cm{text-align:center;font-size:0.62rem;border-radius:2px;padding:3px 2px;}
+.cm-high{background:rgba(220,50,30,0.3);color:#f08878;}
+.cm-med {background:rgba(230,160,20,0.25);color:#d4a830;}
+.cm-low {background:rgba(80,180,80,0.15);color:#70b860;}
+.cm-no  {color:var(--text-muted);opacity:0.3;}
+
+/* INFO BOX */
+.info-box{border-left:3px solid;padding:13px 17px;border-radius:0 3px 3px 0;margin:18px 0;font-size:0.84rem;line-height:1.7;}
+.info-box strong{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;display:block;margin-bottom:5px;}
+
+/* FOOTER */
+footer{background:#070604;padding:42px 26px;text-align:center;border-top:1px solid var(--border);}
+.footer-firma{display:inline-flex;align-items:center;gap:10px;background:rgba(200,136,30,0.08);border:1px solid rgba(200,136,30,0.18);padding:10px 22px 10px 16px;border-radius:3px;margin-bottom:20px;}
+footer p{font-size:0.77rem;color:var(--text-muted);line-height:1.9;}
+footer strong{font-family:'Playfair Display',serif;color:var(--gold-light);font-style:italic;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.hero h1,.hero-sub{animation:fadeUp 0.65s ease both;}
+.hero-sub{animation-delay:0.1s;}
+
+@media(max-width:640px){
+  .hero{padding:54px 20px 48px;}
+  .cultivo-header{flex-direction:column;gap:10px;align-items:flex-start;}
+  .cultivo-icon{font-size:2.2rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="container">
+    <p class="hero-label">🌿 Guía Personalizada · Sanidad Vegetal · Costa Rica · 2026</p>
+    <h1>Mis Cultivos,<br><em>Mis Plagas</em></h1>
+    <p class="hero-sub">Guía técnica enfocada exclusivamente en los 10 cultivos del finca — identificación, ciclo de ataque y manejo integrado específico para cada uno.</p>
+    <div class="cultivos-pills">
+      <span class="cpill" style="color:#e8504a;border-color:rgba(232,80,74,0.3);">🌶 Chile Dulce</span>
+      <span class="cpill" style="color:#d4826a;border-color:rgba(212,130,106,0.3);">🌸 Maracuyá</span>
+      <span class="cpill" style="color:#6abf6a;border-color:rgba(106,191,106,0.3);">🌿 Culantro</span>
+      <span class="cpill" style="color:#7ab0d4;border-color:rgba(122,176,212,0.3);">🫘 Vainica</span>
+      <span class="cpill" style="color:#c8a04a;border-color:rgba(200,160,74,0.3);">🫘 Frijol Tierno</span>
+      <span class="cpill" style="color:#5dbea3;border-color:rgba(93,190,163,0.3);">🥬 Chayote</span>
+      <span class="cpill" style="color:#9b72cf;border-color:rgba(155,114,207,0.3);">🍆 Berenjena</span>
+      <span class="cpill" style="color:#e8b84b;border-color:rgba(232,184,75,0.3);">🍈 Cas</span>
+      <span class="cpill" style="color:#d4b86a;border-color:rgba(212,184,106,0.3);">🌽 Maíz Dulce</span>
+      <span class="cpill" style="color:#a8d46a;border-color:rgba(168,212,106,0.3);">🍋 Limón Ácido</span>
+    </div>
+    <div class="firma-hero">
+      <span class="firma-wolf">🐺</span>
+      <div>
+        <span class="firma-name">Lobo/DeyFz</span>
+        <span class="firma-sub-small">Finca Propia · CR · 2026</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav-index">
+  <div class="nav-inner">
+    <a class="nav-pill" href="#chile"    style="color:#e8504a;border-color:rgba(232,80,74,0.3);">🌶 Chile</a>
+    <a class="nav-pill" href="#maracuya" style="color:#d4826a;border-color:rgba(212,130,106,0.3);">🌸 Maracuyá</a>
+    <a class="nav-pill" href="#culantro" style="color:#6abf6a;border-color:rgba(106,191,106,0.3);">🌿 Culantro</a>
+    <a class="nav-pill" href="#vainica"  style="color:#7ab0d4;border-color:rgba(122,176,212,0.3);">🫘 Vainica</a>
+    <a class="nav-pill" href="#frijol"   style="color:#c8a04a;border-color:rgba(200,160,74,0.3);">🫘 Frijol</a>
+    <a class="nav-pill" href="#chayote"  style="color:#5dbea3;border-color:rgba(93,190,163,0.3);">🥬 Chayote</a>
+    <a class="nav-pill" href="#berenjena"style="color:#9b72cf;border-color:rgba(155,114,207,0.3);">🍆 Berenjena</a>
+    <a class="nav-pill" href="#cas"      style="color:#e8b84b;border-color:rgba(232,184,75,0.3);">🍈 Cas</a>
+    <a class="nav-pill" href="#maiz"     style="color:#d4b86a;border-color:rgba(212,184,106,0.3);">🌽 Maíz</a>
+    <a class="nav-pill" href="#limon"    style="color:#a8d46a;border-color:rgba(168,212,106,0.3);">🍋 Limón</a>
+  </div>
+</nav>
+
+<!-- ═══════ 1. CHILE DULCE ═══════ -->
+<section class="cultivo-section c-chile" id="chile">
+<div class="container">
+  <div class="cultivo-header">
+    <span class="cultivo-icon">🌶️</span>
+    <div>
+      <p class="cultivo-label" style="color:var(--tc)">// 01 · Capsicum annuum</p>
+      <h2 class="cultivo-title">Chile Dulce</h2>
+      <p class="cultivo-desc">Cultivo de alto valor y alta presión fitosanitaria en CR. La combinación de mosca blanca + geminivirus es su mayor amenaza — puede destruir un lote entero en 3 semanas sin manejo preventivo.</p>
+    </div>
+  </div>
+
+  <div class="sub-div" style="color:var(--tc)">▸ Plagas Insectiles</div>
+  <div class="cards-grid">
+    <div class="pest-card c-chile" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🪰</span>
+      <h3 class="pest-name">Mosca Blanca</h3>
+      <p class="pest-sci">Bemisia tabaci biótipo B</p>
+      <p class="pest-body"><strong>Amenaza #1 del chile en CR.</strong> Colonias en el envés succionan savia y transmiten Geminivirus (PYLCV, PepYLCV) que causan amarillamiento y enanismo irreversible. Una planta con virus no se cura — eliminarla inmediatamente.<br><br><strong>Señales:</strong> Adultos harinosos blancos al sacudir la planta, fumagina negra en hojas, hojas rizadas y amarillas con virus.</p>
+      <div class="control-box c-chile" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Mallas antiáfido <strong>50 mesh</strong> en semillero obligatorio</li>
+          <li><strong>Mulch plateado reflectivo</strong> repele adultos en campo</li>
+          <li>Trampas amarillas (monitoreo semanal) — umbral: 5 adultos/trampa/día = actuar</li>
+          <li>Biológico: <strong>Beauveria bassiana</strong> o <em>Isaria fumosorosea</em> en horas frescas</li>
+          <li>Químico: rotar spirotetramat → flupyradifurone → afidopyropen (nunca el mismo 2 veces seguidas)</li>
+          <li>Eliminar inmediatamente plantas con síntomas virales</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">CRÍTICO</span><span class="ptag" style="color:var(--tc);border-color:rgba(232,80,74,0.3);">Vector viral</span><span class="ptag" style="color:var(--tc);border-color:rgba(232,80,74,0.3);">Todo el año</span></div>
+    </div>
+
+    <div class="pest-card c-chile" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🦟</span>
+      <h3 class="pest-name">Trips del Chile</h3>
+      <p class="pest-sci">Frankliniella occidentalis / Scirtothrips dorsalis</p>
+      <p class="pest-body"><strong>Doble daño: directo + viral.</strong> El raspado en flores y frutos tiernos deja cicatrices de corcho que deprecian calidad. <em>F. occidentalis</em> transmite TSWV (Tospovirus) causando manchas necróticas y bronceado foliar.<br><br><strong>Se ocultan</strong> dentro de flores y meristemos — los contactos los alcanzan mal. Aplicar en horas frescas cuando las flores están abiertas.</p>
+      <div class="control-box c-chile" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Trampas azules pegajosas para monitoreo (trips prefieren azul)</li>
+          <li><strong>Spinosad</strong> o spinetoram en floración — respeta abejas si se aplica al atardecer</li>
+          <li><strong>Amblyseius cucumeris</strong> (ácaro depredador de trips) en liberaciones semanales</li>
+          <li>Aceite de neem 3 mL/L preventivo en brotes tiernos</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">ALTO</span><span class="ptag" style="color:var(--tc);border-color:rgba(232,80,74,0.3);">Vector TSWV</span></div>
+    </div>
+
+    <div class="pest-card c-chile" style="border-left-color:rgba(232,80,74,0.55);">
+      <span class="pest-emoji">🐜</span>
+      <h3 class="pest-name">Áfidos del Chile</h3>
+      <p class="pest-sci">Myzus persicae / Aphis gossypii</p>
+      <p class="pest-body"><strong>Vectores rápidísimos de virus no persistentes</strong> (PVY, CMV, TEV). Incluso un áfido que "prueba" la planta por segundos puede transmitir el virus. El control químico no protege contra transmisión — se mata el áfido después del picazo.<br><br><strong>Estrategia real:</strong> aceites minerales o vegetales foliares crean barrera que dificulta el aterrizaje y la inoculación viral. Más efectivo que insecticidas para este propósito.</p>
+      <div class="control-box c-chile" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li><strong>Aceite mineral o de canola</strong> 5–8 mL/L foliar — barrera antiviral</li>
+          <li>Favorecer parasitoides: <em>Aphidius colemani</em> (no aplicar insecticidas de amplio espectro)</li>
+          <li>Barrera de maíz alrededor del lote reduce entrada de áfidos alados</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">ALTO</span><span class="ptag" style="color:var(--tc);border-color:rgba(232,80,74,0.3);">Vector PVY/CMV</span></div>
+    </div>
+  </div>
+
+  <div class="sub-div" style="color:var(--tc)">▸ Enfermedades</div>
+  <div class="cards-grid">
+    <div class="pest-card c-chile" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🍄</span>
+      <h3 class="pest-name">Phytophthora del Chile</h3>
+      <p class="pest-sci">Phytophthora capsici</p>
+      <p class="pest-body"><strong>Podredumbre de cuello, raíz y frutos.</strong> En suelos con mal drenaje o riego excesivo, aparece pudrición acuosa en el cuello de la planta — esta colapsa en horas. En frutos: lesiones acuosas que avanzan rápido con esporulación blanca en condiciones húmedas.<br><br><strong>Crítico en zonas lluviosas de CR.</strong> El primer caso en un lote puede destruir el 40% en una semana si no se actúa.</p>
+      <div class="control-box c-chile" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li><strong>Camas altas y drenaje</strong> — la prevención #1, el Phytophthora ama el agua estancada</li>
+          <li>Metalaxil + mancozeb preventivo al suelo en época de lluvias</li>
+          <li><strong>Fosetil-Al</strong> sistémico aplicado al follaje o drench en raíz</li>
+          <li>Trichoderma harzianum al trasplante en el hoyo</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">CRÍTICO</span><span class="ptag" style="color:var(--tc);border-color:rgba(232,80,74,0.3);">Lluvia/Suelo</span></div>
+    </div>
+
+    <div class="pest-card c-chile" style="border-left-color:rgba(232,80,74,0.55);">
+      <span class="pest-emoji">🍄</span>
+      <h3 class="pest-name">Antracnosis del Chile</h3>
+      <p class="pest-sci">Colletotrichum acutatum / C. gloeosporioides</p>
+      <p class="pest-body"><strong>La ruina en frutos maduros.</strong> Infección latente en frutos verdes que explota en la maduración — manchas hundidas circulares con masas rosadas o naranja de esporas. Invalida la producción para mercado fresco.<br><br>El período crítico es el cuaje de frutos pequeños — ahí concentrar el control preventivo.</p>
+      <div class="control-box c-chile" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Cobre (oxicloruro) preventivo desde cuaje, cada 7–10 días en lluvia</li>
+          <li>Azoxistrobina + difenoconazol en períodos de alta presión</li>
+          <li>No dejar frutos maduros en planta — fuente de inóculo</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">ALTO</span><span class="ptag" style="color:var(--tc);border-color:rgba(232,80,74,0.3);">Frutos</span></div>
+    </div>
+
+    <div class="pest-card c-chile" style="border-left-color:rgba(232,80,74,0.55);">
+      <span class="pest-emoji">🦠</span>
+      <h3 class="pest-name">Mancha Bacteriana</h3>
+      <p class="pest-sci">Xanthomonas euvesicatoria</p>
+      <p class="pest-body"><strong>Explosiva en época lluviosa con calor.</strong> Manchas acuosas que se tornan pardas con halo amarillo en hojas y frutos. Las lesiones en frutos deprecian calidad y abren puerta a hongos secundarios.<br><br>Aplicar cobre <strong>antes</strong> de la lluvia, no después — el cobre protege pero no cura.</p>
+      <div class="control-box c-chile" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Hidróxido de cobre preventivo cada 5–7 días en lluvias continuas</li>
+          <li><strong>Bacillus subtilis</strong> (QST 713) como alternativa biológica en ciclos rotados</li>
+          <li>Semilla certificada + desinfección de herramientas con hipoclorito 1%</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-med">MEDIO-ALTO</span><span class="ptag" style="color:var(--tc);border-color:rgba(232,80,74,0.3);">Época lluviosa</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════ 2. MARACUYÁ ═══════ -->
+<section class="cultivo-section c-maracuya" id="maracuya">
+<div class="container">
+  <div class="cultivo-header">
+    <span class="cultivo-icon">🌸</span>
+    <div>
+      <p class="cultivo-label" style="color:var(--tc)">// 02 · Passiflora edulis</p>
+      <h2 class="cultivo-title">Maracuyá</h2>
+      <p class="cultivo-desc">Cultivo trepador de alto potencial en CR. Sus principales problemas son fúngicos en el follaje y virales transmitidos por insectos. La poda y ventilación son claves para reducir la presión de enfermedades.</p>
+    </div>
+  </div>
+  <div class="cards-grid">
+    <div class="pest-card c-maracuya" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🍄</span>
+      <h3 class="pest-name">Roña del Maracuyá</h3>
+      <p class="pest-sci">Cladosporium cladosporioides / Alternaria passiflorae</p>
+      <p class="pest-body"><strong>El problema más común en CR.</strong> Manchas pardas corchosas en frutos jóvenes que reducen el valor comercial aunque no afecten la pulpa. En hojas causa manchas necróticas con halo amarillo. Alta presión en época lluviosa y zonas con alta humedad relativa (&gt;80%).</p>
+      <div class="control-box c-maracuya" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Poda de apertura del dosel — ventilación reduce humedad foliar</li>
+          <li>Cobre preventivo en floración y frutos pequeños</li>
+          <li>Difenoconazol o tebuconazol en presión moderada-alta</li>
+          <li>Evitar mojar el follaje en riego — usar goteo</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">ALTO</span><span class="ptag" style="color:var(--tc);border-color:rgba(212,130,106,0.3);">Frutos/Hojas</span></div>
+    </div>
+
+    <div class="pest-card c-maracuya" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🍄</span>
+      <h3 class="pest-name">Fusariosis del Maracuyá</h3>
+      <p class="pest-sci">Fusarium oxysporum f.sp. passiflorae</p>
+      <p class="pest-body"><strong>Marchitez vascular sin retorno.</strong> El hongo coloniza el xilema — la planta se marchita aunque el suelo esté húmedo. Sección del tallo revela decoloración vascular parda. Persiste en suelo por años. Las plantas jóvenes son las más vulnerables en las primeras 6 semanas post-trasplante.</p>
+      <div class="control-box c-maracuya" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li><strong>Trichoderma harzianum</strong> al hoyo de siembra — coloniza antes que el Fusarium</li>
+          <li>No resembrar en lotes con historial de Fusarium sin solarización previa</li>
+          <li>Injerto sobre portainjertos resistentes donde esté disponible</li>
+          <li>Eliminar y destruir (quemar) plantas muertas — no compostar</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">CRÍTICO</span><span class="ptag" style="color:var(--tc);border-color:rgba(212,130,106,0.3);">Sin cura</span></div>
+    </div>
+
+    <div class="pest-card c-maracuya" style="border-left-color:rgba(212,130,106,0.6);">
+      <span class="pest-emoji">🧬</span>
+      <h3 class="pest-name">Woodiness Virus (PWV)</h3>
+      <p class="pest-sci">Passionfruit Woodiness Virus — vector: áfidos</p>
+      <p class="pest-body"><strong>El virus más destructivo del maracuyá.</strong> Frutos pequeños, deformes, con cáscara leñosa y poca pulpa — "maracuyá de madera". Mosaico y distorsión foliar severa. Transmitido por al menos 20 especies de áfidos de manera no persistente. Una planta infectada nunca se recupera.</p>
+      <div class="control-box c-maracuya" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Control agresivo de áfidos con aceite mineral (barrera, no solo insecticida)</li>
+          <li>Eliminar plantas con síntomas inmediatamente — son fuente de inóculo</li>
+          <li>Usar material de siembra certificado y libre de virus</li>
+          <li>Barreras de maíz en perímetro del cultivo</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">ALTO</span><span class="ptag" style="color:var(--tc);border-color:rgba(212,130,106,0.3);">Sin cura</span><span class="ptag" style="color:var(--tc);border-color:rgba(212,130,106,0.3);">Vector: áfidos</span></div>
+    </div>
+
+    <div class="pest-card c-maracuya" style="border-left-color:rgba(212,130,106,0.6);">
+      <span class="pest-emoji">🐛</span>
+      <h3 class="pest-name">Abejón del Maracuyá / Chinche</h3>
+      <p class="pest-sci">Agraulis vanillae (mariposa) / Leptoglossus zonatus (chinche)</p>
+      <p class="pest-body"><strong>Mariposa:</strong> Las orugas de <em>Agraulis vanillae</em> devoran el follaje — una eclosión masiva puede defoliar completamente una planta en 3–4 días. Revisar envés de hojas para huevos amarillos brillantes.<br><br><strong>Chinche:</strong> Succiona frutos tiernos causando deformación y caída prematura.</p>
+      <div class="control-box c-maracuya" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Recolección manual de huevos y larvas pequeñas</li>
+          <li><strong>Bacillus thuringiensis</strong> (Bt) contra orugas jóvenes</li>
+          <li>Spinosad en infestaciones moderadas-altas</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-med">MEDIO</span><span class="ptag" style="color:var(--tc);border-color:rgba(212,130,106,0.3);">Follaje/Frutos</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════ 3. CULANTRO ═══════ -->
+<section class="cultivo-section c-culantro" id="culantro">
+<div class="container">
+  <div class="cultivo-header">
+    <span class="cultivo-icon">🌿</span>
+    <div>
+      <p class="cultivo-label" style="color:var(--tc)">// 03 · Eryngium foetidum (culantro coyote) / Coriandrum sativum</p>
+      <h2 class="cultivo-title">Culantro</h2>
+      <p class="cultivo-desc">Ciclo corto y mercado constante. Sus principales problemas son fúngicos foliares favorecidos por la humedad y el exceso de nitrógeno, más insectos masticadores en el follaje comercial.</p>
+    </div>
+  </div>
+  <div class="cards-grid">
+    <div class="pest-card c-culantro" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🍄</span>
+      <h3 class="pest-name">Mancha Foliar / Tizón</h3>
+      <p class="pest-sci">Cercospora coriandri / Alternaria dauci</p>
+      <p class="pest-body"><strong>La causa más frecuente de rechazo del culantro en mercado.</strong> Manchas pardas o amarillas en las hojas que se expanden rápidamente con humedad y lluvia. Las hojas afectadas no son comercializables. El culantro muy denso o con exceso de N es especialmente vulnerable.</p>
+      <div class="control-box c-culantro" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Densidad de siembra adecuada — aireación entre plantas</li>
+          <li>Riego por goteo o en la mañana para que el follaje seque</li>
+          <li>Cobre preventivo en época lluviosa cada 8–10 días</li>
+          <li><strong>Bacillus subtilis</strong> foliar como preventivo biológico</li>
+          <li>No exceder 80 kg N/ha — el exceso favorece tejido tierno susceptible</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">ALTO</span><span class="ptag" style="color:var(--tc);border-color:rgba(106,191,106,0.3);">Calidad comercial</span></div>
+    </div>
+
+    <div class="pest-card c-culantro" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🐛</span>
+      <h3 class="pest-name">Gusano Medidor / Spodoptera</h3>
+      <p class="pest-sci">Spodoptera frugiperda / Chrysodeixis includens</p>
+      <p class="pest-body"><strong>Comedores de follaje de ciclo corto.</strong> Las larvas nocturnas consumen las hojas comerciales dejando huecos y heces sobre el producto. Una infestación en la semana previa a la cosecha arruina el lote completo.</p>
+      <div class="control-box c-culantro" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Revisión nocturna — las larvas se alimentan de noche</li>
+          <li><strong>Bt kurstaki</strong> aplicado al atardecer contra larvas pequeñas</li>
+          <li>Spinosad en larvas medianas — respetar período de carencia antes de cosecha</li>
+          <li>Trampas de luz para monitorear vuelo de adultos</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-med">MEDIO</span><span class="ptag" style="color:var(--tc);border-color:rgba(106,191,106,0.3);">Follaje</span></div>
+    </div>
+
+    <div class="pest-card c-culantro" style="border-left-color:rgba(106,191,106,0.6);">
+      <span class="pest-emoji">🍄</span>
+      <h3 class="pest-name">Damping-off en Semillero</h3>
+      <p class="pest-sci">Pythium spp. / Rhizoctonia solani</p>
+      <p class="pest-body"><strong>Volcamiento de plántulas</strong> antes y después de la emergencia. En siembra directa con exceso de humedad puede perder el 30–60% de la germinación. El culantro tiene semilla pequeña y plántula débil — muy vulnerable en los primeros 15 días.</p>
+      <div class="control-box c-culantro" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Sustrato bien drenado — coco fiber o tierra + cascarilla 50:50</li>
+          <li><strong>Trichoderma</strong> aplicado al sustrato 3 días antes de siembra</li>
+          <li>No regar en exceso en los primeros 10 días</li>
+          <li>Camas elevadas con buen drenaje</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-med">MEDIO</span><span class="ptag" style="color:var(--tc);border-color:rgba(106,191,106,0.3);">Semillero</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════ 4. VAINICA ═══════ -->
+<section class="cultivo-section c-vainica" id="vainica">
+<div class="container">
+  <div class="cultivo-header">
+    <span class="cultivo-icon">🫘</span>
+    <div>
+      <p class="cultivo-label" style="color:var(--tc)">// 04 · Phaseolus vulgaris (cosecha tierna)</p>
+      <h2 class="cultivo-title">Vainica</h2>
+      <p class="cultivo-desc">Cultivo de ciclo corto con alta demanda en mercados locales y exportación. Las enfermedades foliares y los insectos chupadores son su mayor problema, especialmente en cosecha tierna donde los químicos tienen restricciones de carencia.</p>
+    </div>
+  </div>
+  <div class="cards-grid">
+    <div class="pest-card c-vainica" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🍄</span>
+      <h3 class="pest-name">Antracnosis de la Vainica</h3>
+      <p class="pest-sci">Colletotrichum lindemuthianum</p>
+      <p class="pest-body"><strong>La enfermedad más temida en vainica.</strong> Manchas hundidas oscuras en vainas que las inutilizan para el mercado. También ataca hojas y tallos con manchas angulosas. Se disemina explosivamente con lluvia y rocío. Semilla infectada es la fuente primaria de ingreso al lote.</p>
+      <div class="control-box c-vainica" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li><strong>Semilla certificada</strong> libre de Colletotrichum — inversión clave</li>
+          <li>Cobre preventivo desde los 15 días de siembra, cada 8 días en lluvia</li>
+          <li>Azoxistrobina o trifloxistrobina en cuaje de vainas</li>
+          <li>No laborar en el cultivo con follaje mojado (disemina el hongo)</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">CRÍTICO</span><span class="ptag" style="color:var(--tc);border-color:rgba(122,176,212,0.3);">Vainas</span></div>
+    </div>
+
+    <div class="pest-card c-vainica" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🍄</span>
+      <h3 class="pest-name">Mancha Angular</h3>
+      <p class="pest-sci">Phaeoisariopsis griseola (= Pseudocercospora griseola)</p>
+      <p class="pest-body"><strong>Manchas foliares con forma angular</strong> limitadas por las venas de la hoja — señal diagnóstica clave. Defoliación severa reduce el rendimiento y la calidad de vainas. Muy prevalente en las zonas cafetaleras y hortícolas del Valle Central de CR.</p>
+      <div class="control-box c-vainica" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Variedades con resistencia parcial (consultar INTA-CR)</li>
+          <li>Mancozeb o clorotalonil preventivo en épocas lluviosas</li>
+          <li>Destrucción de rastrojos post-cosecha — elimina inóculo para el próximo ciclo</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">ALTO</span><span class="ptag" style="color:var(--tc);border-color:rgba(122,176,212,0.3);">Follaje</span></div>
+    </div>
+
+    <div class="pest-card c-vainica" style="border-left-color:rgba(122,176,212,0.6);">
+      <span class="pest-emoji">🪲</span>
+      <h3 class="pest-name">Tortuguilla / Diabrótica</h3>
+      <p class="pest-sci">Diabrotica balteata / D. undecimpunctata</p>
+      <p class="pest-body"><strong>El escarabajito más dañino de las leguminosas en CR.</strong> Los adultos perforan hojas y flores. Las larvas atacan raíces en suelo — daño invisible que se manifiesta como estrés hídrico y nutrición deficiente. Muy polífago: también ataca maíz, pepino, cucurbitáceas.</p>
+      <div class="control-box c-vainica" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Monitoreo visual semanal de adultos en flores y hojas</li>
+          <li>Kaolín en polvo sobre hojas — crea superficie irritante para adultos</li>
+          <li><strong>Metarhizium anisopliae</strong> al suelo contra larvas</li>
+          <li>Spinosad o carbaryl solo si supera umbral (10+ adultos por planta)</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-med">MEDIO</span><span class="ptag" style="color:var(--tc);border-color:rgba(122,176,212,0.3);">Raíz/Follaje</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════ 5. FRIJOL TIERNO ═══════ -->
+<section class="cultivo-section c-frijol" id="frijol">
+<div class="container">
+  <div class="cultivo-header">
+    <span class="cultivo-icon">🫘</span>
+    <div>
+      <p class="cultivo-label" style="color:var(--tc)">// 05 · Phaseolus vulgaris (cosecha en grano tierno)</p>
+      <h2 class="cultivo-title">Frijol Tierno</h2>
+      <p class="cultivo-desc">Similar a la vainica en sus problemas, pero con el reto adicional de la mustia hilachosa en zonas bajas húmedas y mayor presión de mosca blanca como vector viral. El INTA-CR tiene variedades mejoradas adaptadas a las condiciones locales.</p>
+    </div>
+  </div>
+  <div class="cards-grid">
+    <div class="pest-card c-frijol" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🍄</span>
+      <h3 class="pest-name">Mustia Hilachosa</h3>
+      <p class="pest-sci">Thanatephorus cucumeris (estado anamórfico: Rhizoctonia solani AG-4)</p>
+      <p class="pest-body"><strong>La enfermedad más destructiva del frijol en zonas bajas de CR.</strong> El micelio blanco-grisáceo cubre el follaje y las vainas como una telaraña, avanzando desde el suelo hacia arriba. En condiciones de alta humedad y temperatura (&gt;25°C) puede destruir el 100% de un lote en 10 días.<br><br>Zonas de riesgo: Guanacaste, zona norte, Caribe, Parrita.</p>
+      <div class="control-box c-frijol" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li><strong>Variedades resistentes</strong> del INTA: Bribri, Telire, Caribeño — adaptadas a zonas húmedas</li>
+          <li>No sembrar en suelos compactados o encharcados</li>
+          <li>Thiram o iprodione al suelo en siembra como preventivo</li>
+          <li>Trichoderma + Bacillus subtilis aplicados al suelo en siembra</li>
+          <li>Densidad de siembra no excesiva — ventilación basal es clave</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">CRÍTICO zonas bajas</span><span class="ptag" style="color:var(--tc);border-color:rgba(200,160,74,0.3);">Zona húmeda</span></div>
+    </div>
+
+    <div class="pest-card c-frijol" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🧬</span>
+      <h3 class="pest-name">Virus del Mosaico Dorado</h3>
+      <p class="pest-sci">Bean Golden Mosaic Virus (BGMV) — vector: Bemisia tabaci</p>
+      <p class="pest-body"><strong>El virus más devastador del frijol en CR.</strong> Produce mosaico dorado-amarillo intenso, enanismo y deformación severa de hojas y vainas. Las plantas infectadas antes de floración producen cero. Endémico en zonas bajas cálidas (&lt;800 msnm) donde la mosca blanca es abundante todo el año.</p>
+      <div class="control-box c-frijol" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li><strong>Variedades resistentes INTA:</strong> Bribri (resistente BGMV), Telire</li>
+          <li>Control intensivo de mosca blanca desde la siembra</li>
+          <li>Siembra en épocas de menor presión de mosca blanca (inicio de lluvias)</li>
+          <li>Eliminar plantas con síntomas inmediatamente</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">CRÍTICO</span><span class="ptag" style="color:var(--tc);border-color:rgba(200,160,74,0.3);">Vector: mosca blanca</span></div>
+    </div>
+
+    <div class="pest-card c-frijol" style="border-left-color:rgba(200,160,74,0.6);">
+      <span class="pest-emoji">🐛</span>
+      <h3 class="pest-name">Lorito Verde / Empoasca</h3>
+      <p class="pest-sci">Empoasca kraemeri</p>
+      <p class="pest-body"><strong>El "hopperburn" del frijol.</strong> Este saltahojas inyecta toxinas al alimentarse en el envés — las hojas se enrollan, se tornan amarillas con los bordes quemados (hopperburn) y caen prematuramente. Una planta con hopperburn severo pierde el 30–50% de su área fotosintética en floración.</p>
+      <div class="control-box c-frijol" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Monitoreo con redazo semanal (umbral: 2 ninfas por trifolio)</li>
+          <li>Imidacloprid en tratamiento de semilla como protección temprana</li>
+          <li>Spinosad o thiamethoxam foliar al superar umbral</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">ALTO</span><span class="ptag" style="color:var(--tc);border-color:rgba(200,160,74,0.3);">Hopperburn</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════ 6. CHAYOTE ═══════ -->
+<section class="cultivo-section c-chayote" id="chayote">
+<div class="container">
+  <div class="cultivo-header">
+    <span class="cultivo-icon">🥬</span>
+    <div>
+      <p class="cultivo-label" style="color:var(--tc)">// 06 · Sechium edule</p>
+      <h2 class="cultivo-title">Chayote</h2>
+      <p class="cultivo-desc">Cultivo emblemático de Costa Rica — Cot y Llano Grande en Cartago son el corazón productor mundial. El microclima frío y húmedo de estas zonas favorece enormemente el desarrollo de enfermedades fúngicas.</p>
+    </div>
+  </div>
+  <div class="cards-grid">
+    <div class="pest-card c-chayote" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🍄</span>
+      <h3 class="pest-name">Antracnosis del Chayote</h3>
+      <p class="pest-sci">Colletotrichum gloeosporioides</p>
+      <p class="pest-body"><strong>El problema #1 del chayote exportable desde Cartago.</strong> Manchas hundidas sobre los frutos que los invalidan para exportación a EEUU y Europa. Las infecciones latentes viajan en los frutos aparentemente sanos y estallan en destino, generando devoluciones y pérdidas de mercado.<br><br>El período crítico: cuaje + fruto pequeño (primeras 3 semanas de desarrollo).</p>
+      <div class="control-box c-chayote" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Programa preventivo desde cuaje: cobre alternado con estrobirulinas cada 7 días</li>
+          <li>Poda de regulación para mejorar ventilación del dosel</li>
+          <li>Thiabendazol postcosecha en agua de lavado reduce infección latente</li>
+          <li>No cosechar con rocío — el agua facilita infección en puntos de corte</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">CRÍTICO exportación</span><span class="ptag" style="color:var(--tc);border-color:rgba(93,190,163,0.3);">Frutos</span></div>
+    </div>
+
+    <div class="pest-card c-chayote" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🍄</span>
+      <h3 class="pest-name">Mildiu Velloso</h3>
+      <p class="pest-sci">Pseudoperonospora cubensis</p>
+      <p class="pest-body"><strong>Epidémico en zonas frías y nubladas.</strong> Manchas angulosas amarillas en el haz y crecimiento grisáceo-violáceo en el envés. Avanza muy rápido con temperatures de 15–20°C y alta humedad — condiciones típicas de Cot y Llano Grande. Puede defoliar en 2 semanas sin control.</p>
+      <div class="control-box c-chayote" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Mancozeb + cimoxanil preventivo en temporada de lluvias</li>
+          <li>Ametoctradina + dimetomorf como curativos de mildius</li>
+          <li>Poda para reducir densidad del follaje</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">ALTO</span><span class="ptag" style="color:var(--tc);border-color:rgba(93,190,163,0.3);">Zonas altas CR</span></div>
+    </div>
+
+    <div class="pest-card c-chayote" style="border-left-color:rgba(93,190,163,0.6);">
+      <span class="pest-emoji">🕷️</span>
+      <h3 class="pest-name">Ácaro Blanco del Chayote</h3>
+      <p class="pest-sci">Polyphagotarsonemus latus</p>
+      <p class="pest-body"><strong>Deformación de brotes y frutos tiernos.</strong> El ácaro blanco (200 micras, invisible) ataca los tejidos meristemáticos causando bronceado, deformación y endurecimiento de brotes y frutos pequeños — síntoma confundible con daño viral o fitotoxicidad.<br><br>Explosión de poblaciones en época seca o bajo plástico.</p>
+      <div class="control-box c-chayote" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Azufre mojable al 0.3% — preventivo y curativo contra ácaros</li>
+          <li>Abamectina o spiromesifeno en infestaciones establecidas</li>
+          <li>No confundir con síntomas virales antes de tratar</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-med">MEDIO</span><span class="ptag" style="color:var(--tc);border-color:rgba(93,190,163,0.3);">Brotes/Frutos tiernos</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════ 7. BERENJENA ═══════ -->
+<section class="cultivo-section c-berenjena" id="berenjena">
+<div class="container">
+  <div class="cultivo-header">
+    <span class="cultivo-icon">🍆</span>
+    <div>
+      <p class="cultivo-label" style="color:var(--tc)">// 07 · Solanum melongena</p>
+      <h2 class="cultivo-title">Berenjena</h2>
+      <p class="cultivo-desc">Solanácea de calor que comparte muchos problemas con el chile y el tomate. La araña roja en época seca y el tizón por Phytophthora en lluvias son sus enemigos más serios en el contexto costarricense.</p>
+    </div>
+  </div>
+  <div class="cards-grid">
+    <div class="pest-card c-berenjena" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🕷️</span>
+      <h3 class="pest-name">Araña Roja</h3>
+      <p class="pest-sci">Tetranychus urticae / T. cinnabarinus</p>
+      <p class="pest-body"><strong>La plaga más destructiva de la berenjena en época seca.</strong> Colonias masivas broncean y matan el follaje en 2–3 semanas. Los frutos pierden brillo y desarrollan russeting (rugosidad plateada) que los deprecia. La berenjena es uno de los hospederos preferidos de la araña roja — las poblaciones explotan muy rápido.</p>
+      <div class="control-box c-berenjena" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Monitoreo semanal de envés de hojas con lupa 10× — umbral: 5 ácaros/hoja</li>
+          <li><strong>Phytoseiulus persimilis</strong> o <em>Neoseiulus californicus</em> — ácaros depredadores</li>
+          <li>Azufre mojable 0.3% preventivo en época seca</li>
+          <li>Rotar: abamectina → spiromesifeno → bifenazate (nunca repetir grupo)</li>
+          <li>Humidificación del microclima reduce explosión de ácaros</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">CRÍTICO época seca</span><span class="ptag" style="color:var(--tc);border-color:rgba(155,114,207,0.3);">Resistente</span></div>
+    </div>
+
+    <div class="pest-card c-berenjena" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🐛</span>
+      <h3 class="pest-name">Taladrador del Brote y Fruto</h3>
+      <p class="pest-sci">Leucinodes orbonalis</p>
+      <p class="pest-body"><strong>El peor insecto de la berenjena en trópicos.</strong> Las larvas perforan primero los brotes tiernos (causando "brote muerto" o deadheart) y luego taladran los frutos por el cáliz — invisibles desde afuera hasta que el fruto está completamente destruido por dentro.<br><br>Una sola larva puede destruir 3–5 frutos en su ciclo.</p>
+      <div class="control-box c-berenjena" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Retirar y destruir brotes muertos inmediatamente</li>
+          <li>Trampas con feromona sexual para monitoreo de adultos</li>
+          <li><strong>Spinosad</strong> aplicado en floración — cubre el período de oviposición</li>
+          <li>Chlorantraniliprole (Rynaxypyr) — muy efectivo y bajo impacto en beneficiosos</li>
+          <li>Cosechar frutos a tiempo — no dejar frutos maduros en planta</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">ALTO</span><span class="ptag" style="color:var(--tc);border-color:rgba(155,114,207,0.3);">Frutos/Brotes</span></div>
+    </div>
+
+    <div class="pest-card c-berenjena" style="border-left-color:rgba(155,114,207,0.6);">
+      <span class="pest-emoji">🍄</span>
+      <h3 class="pest-name">Verticilium y Fusarium</h3>
+      <p class="pest-sci">Verticillium dahliae / Fusarium oxysporum f.sp. melongenae</p>
+      <p class="pest-body"><strong>Marchiteces vasculares del suelo.</strong> Síntomas similares: marchitez que avanza de un lado de la planta, decoloración vascular parda en el tallo. El Verticillium es más frecuente en zonas frescas; el Fusarium en zonas cálidas. Ambos persisten décadas en suelo.</p>
+      <div class="control-box c-berenjena" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Rotación mínima 3 años con gramíneas (maíz, sorgo)</li>
+          <li>Solarización 6–8 semanas antes de trasplante</li>
+          <li>Trichoderma harzianum en hoyo de siembra</li>
+          <li>Injerto sobre portainjertos resistentes (disponibles en CR para berenjena)</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">ALTO</span><span class="ptag" style="color:var(--tc);border-color:rgba(155,114,207,0.3);">Sin cura</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════ 8. CAS ═══════ -->
+<section class="cultivo-section c-cas" id="cas">
+<div class="container">
+  <div class="cultivo-header">
+    <span class="cultivo-icon">🍈</span>
+    <div>
+      <p class="cultivo-label" style="color:var(--tc)">// 08 · Psidium friedrichsthalianum</p>
+      <h2 class="cultivo-title">Cas</h2>
+      <p class="cultivo-desc">Frutal nativo costarricense con mercado creciente en frescos y procesados. Relativamente rústico, pero susceptible a la mosca del mediterráneo, cochinillas y enfermedades fungosas en frutos durante la lluvia.</p>
+    </div>
+  </div>
+  <div class="cards-grid">
+    <div class="pest-card c-cas" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🪰</span>
+      <h3 class="pest-name">Mosca del Mediterráneo</h3>
+      <p class="pest-sci">Ceratitis capitata</p>
+      <p class="pest-body"><strong>La plaga que más limita la comercialización del cas.</strong> La hembra oviposita dentro del fruto maduro; las larvas se desarrollan en la pulpa causando su fermentación y caída prematura. Los frutos con larvas son invendibles y se convierten en reservorio de la plaga para todo el lote y fincas vecinas.<br><br>El cas maduro es uno de los hospederos más atractivos para la mosca en CR.</p>
+      <div class="control-box c-cas" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li><strong>Trampas McPhail</strong> con proteína hidrolizada — monitoreo y captura masiva de hembras</li>
+          <li>Trampas con trimedlure para captura masiva de machos</li>
+          <li>Recolección diaria de frutos caídos — eliminar del lote o enterrar &gt;50 cm</li>
+          <li>Cosecha en pintón (antes de maduración completa en árbol)</li>
+          <li>Cebo tóxico (spinosad + atrayente proteico) en aplicación localizada</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">CRÍTICO</span><span class="ptag" style="color:var(--tc);border-color:rgba(232,184,75,0.3);">Frutos maduros</span></div>
+    </div>
+
+    <div class="pest-card c-cas" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🐜</span>
+      <h3 class="pest-name">Cochinilla Harinosa</h3>
+      <p class="pest-sci">Planococcus citri / Ferrisia virgata</p>
+      <p class="pest-body"><strong>Colonias en brotes, flores y frutos tiernos.</strong> Las cochinillas producen melaza que genera fumagina (hongo negro) y reduce la fotosíntesis y la calidad visual. Las hormigas las pastorean activamente, protegiéndolas de depredadores naturales — controlar hormigas es parte del manejo.<br><br>También vector de virus en algunas especies de Psidium.</p>
+      <div class="control-box c-cas" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Control de hormigas con cebos (gel de fipronil en base de árbol)</li>
+          <li>Jabón potásico al 1% + aceite de neem — rompe la cobertura cerosa</li>
+          <li>Liberación de <em>Cryptolaemus montrouzieri</em> (coccinélido depredador de cochinillas)</li>
+          <li>Imidacloprid sistémico drench en infestaciones severas</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-med">MEDIO</span><span class="ptag" style="color:var(--tc);border-color:rgba(232,184,75,0.3);">Brotes/Frutos</span></div>
+    </div>
+
+    <div class="pest-card c-cas" style="border-left-color:rgba(232,184,75,0.6);">
+      <span class="pest-emoji">🍄</span>
+      <h3 class="pest-name">Antracnosis del Cas</h3>
+      <p class="pest-sci">Colletotrichum gloeosporioides</p>
+      <p class="pest-body"><strong>Manchas hundidas en frutos en maduración.</strong> Las lluvias de la temporada húmeda activan las infecciones latentes — los frutos se manchan y pudren antes de alcanzar madurez comercial. El follaje también puede infectarse con manchas foliares en años de alta presión.</p>
+      <div class="control-box c-cas" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Poda de apertura anual — dosel abierto reduce humedad y esporulación</li>
+          <li>Cobre preventivo en inicio de época lluviosa y en floración</li>
+          <li>Azoxistrobina en fruto pequeño durante las lluvias</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-med">MEDIO</span><span class="ptag" style="color:var(--tc);border-color:rgba(232,184,75,0.3);">Época lluviosa</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════ 9. MAÍZ DULCE ═══════ -->
+<section class="cultivo-section c-maiz" id="maiz">
+<div class="container">
+  <div class="cultivo-header">
+    <span class="cultivo-icon">🌽</span>
+    <div>
+      <p class="cultivo-label" style="color:var(--tc)">// 09 · Zea mays var. saccharata</p>
+      <h2 class="cultivo-title">Maíz Dulce</h2>
+      <p class="cultivo-desc">El maíz dulce tiene las mismas plagas del maíz de grano pero con mayor urgencia en el manejo porque la ventana de cosecha es muy estrecha (7–10 días) y el mercado exige mazorcas perfectas sin ningún daño visible.</p>
+    </div>
+  </div>
+  <div class="cards-grid">
+    <div class="pest-card c-maiz" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🐛</span>
+      <h3 class="pest-name">Cogollero</h3>
+      <p class="pest-sci">Spodoptera frugiperda</p>
+      <p class="pest-body"><strong>La plaga #1 del maíz en Costa Rica.</strong> Las larvas pequeñas raspan hojas; las grandes taladran el cogollo y la mazorca. En maíz dulce, una larva en la mazorca arruina completamente el producto para el mercado fresco — daño cero es el estándar comercial.<br><br>Registrar la fecha de emergencia + 14 días = momento crítico de infestación del cogollo.</p>
+      <div class="control-box c-maiz" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li><strong>Bt aizawai o kurstaki</strong> en cogollo desde los 15 días de emergencia</li>
+          <li><strong>Chlorantraniliprole</strong> en aplicación al cogollo — muy efectivo, selectivo</li>
+          <li>Spinosad en larvas pequeñas (L1–L2) — perder efectividad en larvas grandes</li>
+          <li>Aceite mineral 3 mL directamente en el cogollo contra larvas pequeñas (método tradicional efectivo)</li>
+          <li>Monitoreo 2× semana desde emergencia hasta mazorca</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">CRÍTICO</span><span class="ptag" style="color:var(--tc);border-color:rgba(212,184,106,0.3);">Cogollero/Mazorca</span></div>
+    </div>
+
+    <div class="pest-card c-maiz" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🐛</span>
+      <h3 class="pest-name">Gusano del Elote</h3>
+      <p class="pest-sci">Helicoverpa zea</p>
+      <p class="pest-body"><strong>El gusano que ataca directamente por la punta de la mazorca.</strong> La hembra oviposita en los estigmas (pelos) de la mazorca y la larva baja comiendo los granos desde la punta hacia adentro. En maíz dulce, cualquier gusano visible en la mazorca = rechazo en mercado fresco.<br><br>Período crítico: emisión de estigmas hasta su marchitez natural (5–8 días).</p>
+      <div class="control-box c-maiz" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Aplicación de <strong>Bt o spinosad directamente sobre los estigmas</strong> cada 2 días durante emisión</li>
+          <li>Aceite mineral + Bt en los estigmas — método de bajo costo muy efectivo</li>
+          <li>Liberación de <em>Trichogramma</em> durante floración</li>
+          <li>Trampas de feromona para monitorear vuelo de adultos</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">ALTO</span><span class="ptag" style="color:var(--tc);border-color:rgba(212,184,106,0.3);">Mazorca</span></div>
+    </div>
+
+    <div class="pest-card c-maiz" style="border-left-color:rgba(212,184,106,0.6);">
+      <span class="pest-emoji">🍄</span>
+      <h3 class="pest-name">Tizón Foliar del Norte</h3>
+      <p class="pest-sci">Exserohilum turcicum</p>
+      <p class="pest-body"><strong>Lesiones foliares alargadas que reducen la fotosíntesis.</strong> Manchas elípticas grisáceas o pardas de 5–15 cm de largo, empezando en hojas inferiores y subiendo. En años de alta presión con lluvia y viento puede reducir el rendimiento 20–30% al comprometer la fotosíntesis durante el llenado de mazorca.</p>
+      <div class="control-box c-maiz" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Variedades con resistencia parcial (consultar proveedor de semilla)</li>
+          <li>Propiconazol o trifloxistrobina en bandereo si la infección supera la hoja de la mazorca</li>
+          <li>Densidad de siembra no excesiva — ventilación reduce humedad foliar</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-med">MEDIO</span><span class="ptag" style="color:var(--tc);border-color:rgba(212,184,106,0.3);">Follaje</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════ 10. LIMÓN ÁCIDO ═══════ -->
+<section class="cultivo-section c-limon" id="limon">
+<div class="container">
+  <div class="cultivo-header">
+    <span class="cultivo-icon">🍋</span>
+    <div>
+      <p class="cultivo-label" style="color:var(--tc)">// 10 · Citrus aurantifolia / C. latifolia (clase Mandarina)</p>
+      <h2 class="cultivo-title">Limón Ácido</h2>
+      <p class="cultivo-desc">Los cítricos tienen un complejo fitosanitario específico y bien documentado. En Costa Rica, la principal amenaza es el HLB (Huanglongbing), enfermedad bacteriana sin cura que requiere vigilancia constante. SENASA mantiene alerta oficial.</p>
+    </div>
+  </div>
+  <div class="cards-grid">
+    <div class="pest-card c-limon" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🧬</span>
+      <h3 class="pest-name">HLB — Huanglongbing (Dragón Amarillo)</h3>
+      <p class="pest-sci">Candidatus Liberibacter asiaticus — vector: Diaphorina citri (psílido asiático)</p>
+      <p class="pest-body"><strong>La enfermedad más devastadora de los cítricos en el mundo. Sin cura.</strong> Una planta infectada no se recupera — eventualmente muere y produce frutos pequeños, deformes, amargos e inútiles. El vector, el psílido asiático (<em>Diaphorina citri</em>), está presente en Costa Rica.<br><br><strong>Síntoma diagnóstico:</strong> "Moteado asimétrico" — amarillamiento irregular que no sigue el patrón de deficiencias nutricionales. Hojas con zonas verdes y amarillas aleatorias en el mismo limbo.<br><br><strong>SENASA mantiene programa de vigilancia activo — cualquier sospecha debe reportarse al MAG inmediatamente.</strong></p>
+      <div class="control-box c-limon" style="border-color:var(--tc);">
+        <p>// Control (preventivo — no hay cura)</p>
+        <ul>
+          <li>Control intensivo de <strong>Diaphorina citri</strong> (psílido vector) con imidacloprid sistémico</li>
+          <li>Comprar material de propagación <strong>solo de viveros certificados SENASA</strong></li>
+          <li>Monitoreo visual mensual de brotes nuevos (el psílido oviposita en brotes tiernos)</li>
+          <li>Eliminar y destruir plantas confirmadas — no hay tratamiento</li>
+          <li>Reportar sospechas al MAG/SENASA inmediatamente</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">CRÍTICO — Alerta Nacional</span><span class="ptag" style="color:var(--tc);border-color:rgba(168,212,106,0.3);">Sin cura</span><span class="ptag" style="color:var(--tc);border-color:rgba(168,212,106,0.3);">Reportar SENASA</span></div>
+    </div>
+
+    <div class="pest-card c-limon" style="border-left-color:var(--tc);">
+      <span class="pest-emoji">🍄</span>
+      <h3 class="pest-name">Gomosis / Pudrición del Pie</h3>
+      <p class="pest-sci">Phytophthora parasitica / P. citrophthora</p>
+      <p class="pest-body"><strong>La enfermedad más seria del tronco en cítricos de CR.</strong> Pudrición húmeda con exudado de goma en la base del tronco y cuello de la raíz. El árbol amarillea, pierde hojas y muere progresivamente. Muy favorecida por suelos con mal drenaje y riegos frecuentes que mantienen el cuello húmedo.<br><br>El portainjerto Citrumelo o Carrizo (resistentes) reduce drásticamente el riesgo.</p>
+      <div class="control-box c-limon" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>No enterrar el punto de injerto — debe quedar 15–20 cm sobre el suelo</li>
+          <li>Drenaje adecuado del suelo — nunca regar directamente al tronco</li>
+          <li><strong>Fosetil-Al</strong> sistémico vía foliar o drench preventivo en época de lluvias</li>
+          <li>Raspar tejido enfermo y aplicar pasta bordelesa + metalaxil en la herida</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-high">ALTO</span><span class="ptag" style="color:var(--tc);border-color:rgba(168,212,106,0.3);">Tronco/Raíz</span></div>
+    </div>
+
+    <div class="pest-card c-limon" style="border-left-color:rgba(168,212,106,0.6);">
+      <span class="pest-emoji">🍄</span>
+      <h3 class="pest-name">Melanosis / Sarna de los Cítricos</h3>
+      <p class="pest-sci">Diaporthe citri / Elsinoë fawcettii</p>
+      <p class="pest-body"><strong>Deprecian la calidad externa del fruto.</strong> La melanosis produce puntitos pardos-rojizos en frutos jóvenes que se vuelven corchosos — no afectan la pulpa pero reducen el valor en mercado fresco. La sarna produce lesiones corchosas elevadas en frutos y hojas. Ambas son favorecidas por lluvias frecuentes en el período de fruto pequeño.</p>
+      <div class="control-box c-limon" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Cobre (oxicloruro o hidróxido) preventivo desde caída de pétalos hasta fruto de 3 cm</li>
+          <li>Poda de ramas secas — Diaporthe esporula en madera muerta</li>
+          <li>Carbendazim o tiabendazol curativos en presión moderada</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-med">MEDIO</span><span class="ptag" style="color:var(--tc);border-color:rgba(168,212,106,0.3);">Calidad externa</span></div>
+    </div>
+
+    <div class="pest-card c-limon" style="border-left-color:rgba(168,212,106,0.6);">
+      <span class="pest-emoji">🐛</span>
+      <h3 class="pest-name">Minador de los Cítricos</h3>
+      <p class="pest-sci">Phyllocnistis citrella</p>
+      <p class="pest-body"><strong>Galerías plateadas en hojas tiernas.</strong> Las larvas minan el mesófilo de hojas nuevas dejando galerías serpenteantes brillantes. Las hojas afectadas se enrollan y no desarrollan normalmente. Problema principalmente en árboles jóvenes y en nuevos brotes post-poda.<br><br>Los brotes tiernos son la única parte del árbol que ataca — sincronizar los controles con los brotes nuevos.</p>
+      <div class="control-box c-limon" style="border-color:var(--tc);">
+        <p>// Control</p>
+        <ul>
+          <li>Imidacloprid sistémico en brote — protege por 3–4 semanas</li>
+          <li>Aceite de neem en spray sobre brotes tiernos cada 7 días</li>
+          <li>En árboles adultos el daño es menor — enfocar en árboles jóvenes (&lt;3 años)</li>
+        </ul>
+      </div>
+      <div class="tags"><span class="ptag risk-med">MEDIO</span><span class="ptag" style="color:var(--tc);border-color:rgba(168,212,106,0.3);">Brotes tiernos</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- CALENDARIO GENERAL -->
+<section style="padding:50px 0;border-bottom:1px solid var(--border);">
+<div class="container">
+  <p style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">// Resumen Visual</p>
+  <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:#e8d8b0;margin-bottom:6px;">Calendario de Presión por Cultivo · Mis 10 Cultivos</h2>
+  <p style="font-size:0.84rem;color:var(--text-muted);margin-bottom:20px;">Presión fitosanitaria general por mes en Costa Rica según condiciones climáticas típicas.</p>
+  <div class="cal-wrap">
+    <p class="cal-title">Presión fitosanitaria mensual estimada por cultivo</p>
+    <div style="overflow-x:auto;">
+    <table class="cal-table">
+      <thead>
+        <tr>
+          <th>Cultivo / Problema Principal</th>
+          <th>ENE</th><th>FEB</th><th>MAR</th><th>ABR</th>
+          <th>MAY</th><th>JUN</th><th>JUL</th><th>AGO</th>
+          <th>SET</th><th>OCT</th><th>NOV</th><th>DIC</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>🌶 Chile · Mosca Blanca+Virus</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td>
+          <td class="cm cm-med">●</td><td class="cm cm-low">●</td><td class="cm cm-low">●</td><td class="cm cm-low">●</td>
+          <td class="cm cm-med">●</td><td class="cm cm-med">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td></tr>
+        <tr><td>🌶 Chile · Phytophthora</td>
+          <td class="cm cm-no">–</td><td class="cm cm-no">–</td><td class="cm cm-no">–</td><td class="cm cm-low">●</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-med">●</td><td class="cm cm-no">–</td></tr>
+        <tr><td>🌸 Maracuyá · Fusariosis/Roña</td>
+          <td class="cm cm-low">●</td><td class="cm cm-low">●</td><td class="cm cm-low">●</td><td class="cm cm-med">●</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-med">●</td><td class="cm cm-low">●</td></tr>
+        <tr><td>🌿 Culantro · Manchas Foliares</td>
+          <td class="cm cm-low">●</td><td class="cm cm-low">●</td><td class="cm cm-low">●</td><td class="cm cm-med">●</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-med">●</td><td class="cm cm-low">●</td></tr>
+        <tr><td>🫘 Vainica · Antracnosis</td>
+          <td class="cm cm-low">●</td><td class="cm cm-low">●</td><td class="cm cm-low">●</td><td class="cm cm-med">●</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-med">●</td><td class="cm cm-low">●</td></tr>
+        <tr><td>🫘 Frijol · Mustia/BGMV</td>
+          <td class="cm cm-med">●</td><td class="cm cm-med">●</td><td class="cm cm-med">●</td><td class="cm cm-med">●</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-med">●</td><td class="cm cm-med">●</td></tr>
+        <tr><td>🥬 Chayote · Antracnosis</td>
+          <td class="cm cm-low">●</td><td class="cm cm-low">●</td><td class="cm cm-low">●</td><td class="cm cm-med">●</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-med">●</td><td class="cm cm-low">●</td></tr>
+        <tr><td>🍆 Berenjena · Araña Roja</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td>
+          <td class="cm cm-med">●</td><td class="cm cm-low">●</td><td class="cm cm-low">●</td><td class="cm cm-low">●</td>
+          <td class="cm cm-low">●</td><td class="cm cm-med">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td></tr>
+        <tr><td>🍈 Cas · Mosca del Mediterráneo</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td>
+          <td class="cm cm-med">●</td><td class="cm cm-med">●</td><td class="cm cm-med">●</td><td class="cm cm-med">●</td>
+          <td class="cm cm-med">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td></tr>
+        <tr><td>🌽 Maíz · Cogollero/Elote</td>
+          <td class="cm cm-med">●</td><td class="cm cm-med">●</td><td class="cm cm-med">●</td><td class="cm cm-med">●</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td>
+          <td class="cm cm-high">●</td><td class="cm cm-med">●</td><td class="cm cm-med">●</td><td class="cm cm-med">●</td></tr>
+        <tr><td>🍋 Limón · HLB / Psílido</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td>
+          <td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td><td class="cm cm-high">●</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:0.74rem;color:var(--text-muted);">
+      <span><span style="color:#f08878;">●</span> Alta presión</span>
+      <span><span style="color:#d4a830;">●</span> Presión media</span>
+      <span><span style="color:#70b860;">●</span> Presión baja</span>
+      <span><span style="opacity:0.3;">–</span> Sin presión significativa</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-firma">
+    <span style="font-size:1.6rem;animation:wolfPulse 3s ease-in-out infinite;display:inline-block;">🐺</span>
+    <div>
+      <span class="firma-name">Lobo/DeyFz</span>
+      <span class="firma-sub-small">Mis Cultivos · Finca Propia · CR · 2026</span>
+    </div>
+  </div>
+  <p>
+    <strong>Guía Personalizada de Plagas y Enfermedades</strong><br>
+    Chile Dulce · Maracuyá · Culantro · Vainica · Frijol Tierno · Chayote · Berenjena · Cas · Maíz Dulce · Limón Ácido<br>
+    Referencias: SENASA · MAG-CR · INTA-CR · UCR-CIA · CATIE · CORBANA · Programa Nacional de Cítricos<br><br>
+    <span style="font-size:0.68rem;opacity:0.32;">© 2026 · Lobo/DeyFz · Para diagnóstico definitivo consultar laboratorio oficial SENASA o UCR · Respetar períodos de carencia de todos los productos aplicados</span>
+  </p>
+</footer>
+
+<script>
+const sections = document.querySelectorAll('section[id]');
+const pills = document.querySelectorAll('.nav-pill');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      const id = e.target.id;
+      pills.forEach(p => {
+        const active = p.getAttribute('href') === '#' + id;
+        p.style.opacity = active ? '1' : '0.38';
+        p.style.transform = active ? 'translateY(-2px)' : '';
+      });
+    }
+  });
+},{threshold:0.2});
+sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
